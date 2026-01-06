@@ -1,0 +1,371 @@
+/* ======================================================= */
+/* 泛用基礎樣式 - 應用於所有頁面（最小限度） */
+/* ======================================================= */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif, 'Microsoft JhengHei', 'PingFang TC', sans-serif;
+    background-color: #1a1a1a; /* 深灰/接近黑色背景 */
+    color: #f0f0f0; /* 淺色文字 */
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+}
+
+/* ======================================================= */
+/* 通用返回按鈕樣式 */
+/* ======================================================= */
+.back-to-menu-btn {
+    display: inline-block;
+    background-color: #ffcc00; /* 鮮豔點綴色 */
+    color: #1a1a1a; /* 深色文字 */
+    padding: 12px 25px; /* 增大 padding */
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: bold;
+    margin: 20px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    font-size: 1.1em; /* 增大字體 */
+}
+
+.back-to-menu-btn:hover {
+    background-color: #ffde54; /* 懸停時顏色變亮 */
+    transform: translateY(-3px);
+}
+
+/* ======================================================= */
+/* 主選單頁面樣式 (`index.html`) */
+/* ======================================================= */
+.main-menu {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh; /* 確保佔滿整個視窗高度 */
+    padding: 20px;
+    background-color: #1a1a1a; /* 沿用深色背景 */
+    color: #f0f0f0;
+    text-align: center;
+}
+
+.main-menu h1 {
+    font-size: 3.5em; /* 主選單標題更大 */
+    color: #ffde54; /* 鮮豔點綴色 */
+    margin-bottom: 10px;
+    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.6);
+}
+
+.main-menu .description {
+    font-size: 1.5em;
+    color: #ccc;
+    margin-bottom: 50px;
+    max-width: 700px;
+}
+
+.main-menu .game-cards-container {
+    display: flex;
+    flex-wrap: wrap; /* 讓卡片換行 */
+    justify-content: center;
+    gap: 30px; /* 卡片之間的間距 */
+}
+
+.main-menu .game-card {
+    background: linear-gradient(145deg, #2a2a2a, #1a1a1a); /* 漸層背景 */
+    border-radius: 20px; /* 更大圓角 */
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6); /* 更深陰影 */
+    padding: 30px;
+    width: 300px; /* 固定卡片寬度 */
+    text-decoration: none; /* 移除連結下劃線 */
+    color: inherit; /* 繼承文字顏色 */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* 內容上下撐開 */
+    min-height: 200px; /* 最小高度 */
+}
+
+.main-menu .game-card:hover {
+    transform: translateY(-10px) scale(1.03); /* 懸停時上浮與輕微放大 */
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.8);
+}
+
+.main-menu .game-card h2 {
+    font-size: 2.2em;
+    color: #4CAF50; /* 卡片標題色 */
+    margin-top: 0;
+    margin-bottom: 15px;
+}
+
+.main-menu .game-card p {
+    font-size: 1.1em;
+    color: #bbb;
+    margin-bottom: 10px;
+}
+
+.main-menu .game-card .short-description {
+    font-size: 0.9em;
+    color: #888;
+}
+
+/* 手機版適應 (主選單) */
+@media (max-width: 768px) {
+    .main-menu h1 {
+        font-size: 2.5em;
+    }
+
+    .main-menu .description {
+        font-size: 1.2em;
+        margin-bottom: 30px;
+    }
+
+    .main-menu .game-card {
+        width: 90%; /* 手機上卡片佔大部分寬度 */
+        padding: 25px;
+        min-height: 180px;
+    }
+
+    .main-menu .game-card h2 {
+        font-size: 2em;
+    }
+
+    .main-menu .game-card p {
+        font-size: 1em;
+    }
+}
+
+/* ======================================================= */
+/* 大排檔頁面樣式 (`dai_pai_dong.html`) */
+/* ======================================================= */
+.dpd-page-wrapper {
+    /* 可以放一些大排檔頁面整體特有嘅基礎樣式 */
+}
+
+.dpd-page-wrapper #dpd-main-header {
+    background: linear-gradient(135deg, #333 0%, #000 100%); /* 漸層背景 */
+    padding: 40px 20px;
+    text-align: center;
+    border-bottom: 2px solid #ffcc00; /* 鮮豔點綴色邊框 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+    position: relative; /* 為了讓返回按鈕可以相對定位 */
+}
+
+.dpd-page-wrapper #dpd-main-header .back-to-menu-btn {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    margin: 0; /* 移除通用 margin */
+    padding: 10px 20px; /* 調整為較大的尺寸 */
+    font-size: 1em; /* 調整為較大的字體 */
+}
+
+.dpd-page-wrapper .dpd-main-content {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 0 20px;
+}
+
+.dpd-page-wrapper #dpd-main-header h1 {
+    font-size: 3em;
+    color: #ffde54; /* 鮮豔點綴色 */
+    margin-bottom: 10px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.dpd-page-wrapper #dpd-main-header p {
+    font-size: 1.2em;
+    color: #ccc;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.dpd-page-wrapper #dpd-basic-rules {
+    background-color: #2a2a2a;
+    padding: 30px;
+    margin-bottom: 30px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.dpd-page-wrapper #dpd-basic-rules h2 {
+    color: #ffcc00;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.dpd-page-wrapper #dpd-basic-rules ul {
+    list-style: none;
+    padding: 0;
+    text-align: center;
+}
+
+.dpd-page-wrapper #dpd-basic-rules ul li {
+    font-size: 1.1em;
+    margin-bottom: 10px;
+}
+
+.dpd-page-wrapper #dpd-card-rules h2 {
+    color: #ffde54;
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 2em;
+}
+
+.dpd-page-wrapper .dpd-card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 25px;
+    margin-bottom: 50px;
+}
+
+.dpd-page-wrapper .dpd-card-item {
+    background-color: #2a2a2a;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.dpd-page-wrapper .dpd-card-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.7);
+}
+
+.dpd-page-wrapper .dpd-card-item h3 {
+    color: #4CAF50;
+    font-size: 1.5em;
+    margin-top: 0;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.dpd-page-wrapper .dpd-card-item p {
+    color: #ddd;
+    font-size: 1em;
+}
+
+.dpd-page-wrapper #dpd-draw-card-section {
+    text-align: center;
+    padding: 30px 20px;
+    background-color: #2a2a2a;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    margin-top: 50px;
+}
+
+.dpd-page-wrapper #dpd-draw-card-section h2 {
+    color: #ffcc00;
+    margin-bottom: 30px;
+}
+
+.dpd-page-wrapper #dpd-draw-card-btn, .dpd-page-wrapper #dpd-reset-game-btn {
+    background-color: #ffcc00;
+    color: #1a1a1a;
+    border: none;
+    padding: 15px 40px;
+    font-size: 1.8em;
+    font-weight: bold;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    margin: 10px;
+    min-width: 250px;
+}
+
+.dpd-page-wrapper #dpd-draw-card-btn:hover, .dpd-page-wrapper #dpd-reset-game-btn:hover {
+    background-color: #ffde54;
+    transform: translateY(-3px);
+}
+
+.dpd-page-wrapper #dpd-draw-card-btn:active, .dpd-page-wrapper #dpd-reset-game-btn:active {
+    transform: translateY(0);
+}
+
+.dpd-page-wrapper #dpd-drawn-card-display {
+    margin-top: 40px;
+    padding: 20px;
+    background-color: #333;
+    border-radius: 10px;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+    min-height: 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.dpd-page-wrapper #dpd-drawn-card-title {
+    font-size: 2.5em;
+    color: #f0f0f0;
+    margin-bottom: 10px;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+.dpd-page-wrapper #dpd-drawn-card-rule {
+    font-size: 1.2em;
+    color: #ccc;
+    max-width: 600px;
+}
+
+/* 抽牌計數顯示 */
+.dpd-page-wrapper #dpd-card-count-display {
+    margin-top: 20px;
+    font-size: 1.2em;
+    color: #ffcc00;
+    background-color: #333;
+    padding: 10px 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.dpd-page-wrapper #dpd-current-card-count, .dpd-page-wrapper #dpd-total-card-count {
+    font-weight: bold;
+    color: #fff;
+}
+
+/* 手機版適應 (大排檔頁面) */
+@media (max-width: 768px) {
+    .dpd-page-wrapper #dpd-main-header .back-to-menu-btn {
+        top: 10px;
+        left: 10px;
+        font-size: 0.9em; /* 適應手機字體 */
+        padding: 8px 15px; /* 適應手機內邊距 */
+    }
+
+    .dpd-page-wrapper #dpd-main-header {
+        padding: 30px 15px;
+        padding-top: 50px; /* 為返回按鈕預留空間 */
+    }
+
+    .dpd-page-wrapper #dpd-main-header h1 {
+        font-size: 2.5em;
+    }
+
+    .dpd-page-wrapper #dpd-main-header p {
+        font-size: 1em;
+    }
+
+    .dpd-page-wrapper .dpd-card-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .dpd-page-wrapper .dpd-card-item {
+        padding: 20px;
+    }
+
+    .dpd-page-wrapper #dpd-draw-card-btn, .dpd-page-wrapper #dpd-reset-game-btn {
+        font-size: 1.5em;
+        padding: 12px 30px;
+        min-width: unset;
+        width: 80%;
+        margin-bottom: 15px;
+    }
+
+    .dpd-page-wrapper #dpd-drawn-card-title {
+        font-size: 2em;
+    }
+}
+
+/* 平板版適應 (大排檔頁面) */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .dpd-page-wrapper .dpd-card-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}

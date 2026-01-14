@@ -1,32 +1,68 @@
+:root {
+    /* 大排檔頁面專用顏色變數 */
+    --dpd-bg-dark: #1d1d1d; /* 大排檔頁面主背景深灰 */
+    --dpd-text-light: #f0f0f0; /* 大排檔頁面主要淺色文字 */
+    --dpd-card-bg-darker: #2a2a2a; /* 大排檔卡片/區塊較深背景 */
+    --dpd-border-gray: #4d4d4d; /* 大排檔卡片/區塊邊框灰 */
+
+    --accent-dark-green: #1b5e20; /* 大排檔深綠點綴 */
+    --accent-warm-yellow: #fbc02d; /* 重點暖黃點綴 */
+    --button-green: #2e7d32; /* 按鈕深灰綠 */
+    --button-green-hover: #3d8f43; /* 按鈕深灰綠 hover */
+    --warm-orange: #e67e22; /* 暖橙色 (原紅色重點字) */
+}
+
 /* ======================================================= */
 /* 泛用基礎樣式 - 應用於所有頁面（最小限度） */
 /* ======================================================= */
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif, 'Microsoft JhengHei', 'PingFang TC', sans-serif;
-    background-color: #1a1a1a; /* 深灰/接近黑色背景 */
-    color: #f0f0f0; /* 淺色文字 */
     line-height: 1.6;
     margin: 0;
     padding: 0;
+    background-color: var(--dpd-bg-dark); /* 將整體背景設定為深灰 */
+    color: var(--dpd-text-light); /* 將基礎文字顏色設定為淺色 */
+}
+
+/* 移除重複的背景設定，讓body控制整體 */
+.dpd-header, .dpd-main-content {
+    /* background-color: var(--dpd-bg-dark); */
+    /* color: var(--dpd-text-light); */
+}
+
+/* 確保大排檔頁面文字顏色正確應用 */
+.dpd-main-content p, .dpd-main-content ul li {
+    color: var(--dpd-text-light);
+}
+
+/* 確保大排檔頁面文字顏色正確應用 */
+.dpd-main-content p, .dpd-main-content ul li {
+    color: var(--dpd-text-light);
 }
 
 /* ======================================================= */
 /* 通用返回按鈕樣式 */
 /* ======================================================= */
-.back-to-menu-btn {
+.back-button, .back-to-home-btn {
     display: inline-block;
-    background-color: #ffcc00; /* 鮮豔點綴色 */
+    background-color: #ffcc00; /* 黃色 */
     color: #1a1a1a; /* 深色文字 */
-    padding: 12px 25px; /* 增大 padding */
+    padding: 10px 20px;
     border-radius: 50px;
     text-decoration: none;
     font-weight: bold;
-    margin: 20px;
     transition: background-color 0.3s ease, transform 0.2s ease;
-    font-size: 1.1em; /* 增大字體 */
+    font-size: 1em;
 }
 
-.back-to-menu-btn:hover {
+.back-button {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    margin: 0;
+}
+
+.back-button:hover, .back-to-home-btn:hover {
     background-color: #ffde54; /* 懸停時顏色變亮 */
     transform: translateY(-3px);
 }
@@ -132,22 +168,28 @@ body {
 }
 
 /* ======================================================= */
-/* 大排檔頁面樣式 (`dai_pai_dong.html`) */
+/* 真心話大冒險頁面樣式 (`truth_or_dare.html`) */
 /* ======================================================= */
-.dpd-page-wrapper {
-    /* 可以放一些大排檔頁面整體特有嘅基礎樣式 */
-}
-
-.dpd-page-wrapper #dpd-main-header {
-    background: linear-gradient(135deg, #333 0%, #000 100%); /* 漸層背景 */
-    padding: 40px 20px;
+.game-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 20px;
+    background-color: #1a1a1a;
+    color: #f0f0f0;
     text-align: center;
-    border-bottom: 2px solid #ffcc00; /* 鮮豔點綴色邊框 */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
-    position: relative; /* 為了讓返回按鈕可以相對定位 */
 }
 
-.dpd-page-wrapper #dpd-main-header .back-to-menu-btn {
+.game-container h1 {
+    font-size: 3em;
+    color: #ffde54;
+    margin-bottom: 10px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.game-container .back-button {
     position: absolute;
     top: 20px;
     left: 20px;
@@ -156,216 +198,767 @@ body {
     font-size: 1em; /* 調整為較大的字體 */
 }
 
-.dpd-page-wrapper .dpd-main-content {
-    max-width: 1200px;
-    margin: 20px auto;
-    padding: 0 20px;
-}
-
-.dpd-page-wrapper #dpd-main-header h1 {
-    font-size: 3em;
-    color: #ffde54; /* 鮮豔點綴色 */
-    margin-bottom: 10px;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-}
-
-.dpd-page-wrapper #dpd-main-header p {
-    font-size: 1.2em;
-    color: #ccc;
-    max-width: 800px;
-    margin: 0 auto;
-}
-
-.dpd-page-wrapper #dpd-basic-rules {
-    background-color: #2a2a2a;
+.truth-dare-game-area {
+    background: linear-gradient(145deg, #2a2a2a, #1a1a1a);
+    border-radius: 20px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
     padding: 30px;
-    margin-bottom: 30px;
-    border-radius: 10px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-}
-
-.dpd-page-wrapper #dpd-basic-rules h2 {
-    color: #ffcc00;
-    text-align: center;
-    margin-bottom: 20px;
-}
-
-.dpd-page-wrapper #dpd-basic-rules ul {
-    list-style: none;
-    padding: 0;
-    text-align: center;
-}
-
-.dpd-page-wrapper #dpd-basic-rules ul li {
-    font-size: 1.1em;
-    margin-bottom: 10px;
-}
-
-.dpd-page-wrapper #dpd-card-rules h2 {
-    color: #ffde54;
-    text-align: center;
-    margin-bottom: 30px;
-    font-size: 2em;
-}
-
-.dpd-page-wrapper .dpd-card-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 25px;
-    margin-bottom: 50px;
-}
-
-.dpd-page-wrapper .dpd-card-item {
-    background-color: #2a2a2a;
-    padding: 25px;
-    border-radius: 15px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.dpd-page-wrapper .dpd-card-item:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.7);
-}
-
-.dpd-page-wrapper .dpd-card-item h3 {
-    color: #4CAF50;
-    font-size: 1.5em;
-    margin-top: 0;
-    margin-bottom: 15px;
-    text-align: center;
-}
-
-.dpd-page-wrapper .dpd-card-item p {
-    color: #ddd;
-    font-size: 1em;
-}
-
-.dpd-page-wrapper #dpd-draw-card-section {
-    text-align: center;
-    padding: 30px 20px;
-    background-color: #2a2a2a;
-    border-radius: 10px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-    margin-top: 50px;
-}
-
-.dpd-page-wrapper #dpd-draw-card-section h2 {
-    color: #ffcc00;
+    width: 90%;
+    max-width: 700px;
     margin-bottom: 30px;
 }
 
-.dpd-page-wrapper #dpd-draw-card-btn, .dpd-page-wrapper #dpd-reset-game-btn {
-    background-color: #ffcc00;
-    color: #1a1a1a;
-    border: none;
-    padding: 15px 40px;
+.ai-question-generator-section {
+    background: linear-gradient(145deg, #2a2a2a, #1a1a1a);
+    border-radius: 20px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.6);
+    padding: 30px;
+    width: 90%;
+    max-width: 700px;
+    margin-bottom: 30px;
+    color: #f0f0f0;
+    text-align: left;
+}
+
+.ai-question-generator-section h2 {
+    color: #fbc02d; /* Warm yellow accent */
+    text-align: center;
+    margin-bottom: 25px;
     font-size: 1.8em;
+    border-bottom: 2px solid #1b5e20; /* Dark green accent */
+    padding-bottom: 10px;
+    display: inline-block;
+    width: auto;
+    max-width: 100%;
+}
+
+.ai-question-generator-section .input-group {
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+}
+
+.ai-question-generator-section label {
+    font-size: 1.1em;
+    margin-bottom: 8px;
+    color: #ccc;
     font-weight: bold;
-    border-radius: 50px;
+}
+
+.ai-question-generator-section select,
+.ai-question-generator-section .custom-input {
+    width: 100%;
+    padding: 10px 15px;
+    border-radius: 8px;
+    border: 1px solid #4d4d4d;
+    background-color: #333;
+    color: #f0f0f0;
+    font-size: 1em;
+    box-sizing: border-box; /* Include padding in width */
+}
+
+.ai-question-generator-section .custom-input {
+    margin-top: 5px; /* Space between select and custom input */
+}
+
+#generate-ai-questions-btn.game-button {
+    background-color: #f39c12; /* Orange for generate button */
+    color: #fff;
+    width: 100%;
+    margin-top: 20px;
+    border: none;
+    padding: 12px 25px;
+    font-size: 1.3em;
+    font-weight: bold;
+    border-radius: 25px;
     cursor: pointer;
     transition: background-color 0.3s ease, transform 0.2s ease;
-    margin: 10px;
-    min-width: 250px;
 }
 
-.dpd-page-wrapper #dpd-draw-card-btn:hover, .dpd-page-wrapper #dpd-reset-game-btn:hover {
-    background-color: #ffde54;
-    transform: translateY(-3px);
+#generate-ai-questions-btn.game-button:hover {
+    background-color: #e67e22;
+    transform: translateY(-2px);
 }
 
-.dpd-page-wrapper #dpd-draw-card-btn:active, .dpd-page-wrapper #dpd-reset-game-btn:active {
-    transform: translateY(0);
+#generate-ai-questions-btn.game-button:disabled {
+    background-color: #666;
+    cursor: not-allowed;
+    transform: none;
 }
 
-.dpd-page-wrapper #dpd-drawn-card-display {
-    margin-top: 40px;
-    padding: 20px;
+.status-message {
+    text-align: center;
+    margin-top: 15px;
+    font-size: 1em;
+    font-weight: bold;
+}
+
+/* Mobile adjustments for AI generator */
+@media (max-width: 768px) {
+    .ai-question-generator-section,
+    .truth-dare-game-area {
+        padding: 20px;
+    }
+
+    .ai-question-generator-section h2 {
+        font-size: 1.5em;
+    }
+
+    .ai-question-generator-section label {
+        font-size: 1em;
+    }
+
+    .ai-question-generator-section select,
+    .ai-question-generator-section .custom-input,
+    #generate-ai-questions-btn.game-button {
+        font-size: 0.9em;
+        padding: 10px;
+    }
+}
+
+.ai-question-generator-section {
+    background: linear-gradient(145deg, #2a2a2a, #1a1a1a);
+    border-radius: 20px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.6);
+    padding: 30px;
+    width: 90%;
+    max-width: 700px;
+    margin-bottom: 30px;
+    color: #f0f0f0;
+    text-align: left;
+}
+
+.ai-question-generator-section h2 {
+    color: #fbc02d; /* Warm yellow accent */
+    text-align: center;
+    margin-bottom: 25px;
+    font-size: 1.8em;
+    border-bottom: 2px solid #1b5e20; /* Dark green accent */
+    padding-bottom: 10px;
+    display: inline-block;
+    width: auto;
+    max-width: 100%;
+}
+
+.ai-question-generator-section .input-group {
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+}
+
+.ai-question-generator-section label {
+    font-size: 1.1em;
+    margin-bottom: 8px;
+    color: #ccc;
+    font-weight: bold;
+}
+
+.ai-question-generator-section select,
+.ai-question-generator-section .custom-input {
+    width: 100%;
+    padding: 10px 15px;
+    border-radius: 8px;
+    border: 1px solid #4d4d4d;
     background-color: #333;
-    border-radius: 10px;
-    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
-    min-height: 100px;
+    color: #f0f0f0;
+    font-size: 1em;
+    box-sizing: border-box; /* Include padding in width */
+}
+
+.ai-question-generator-section .custom-input {
+    margin-top: 5px; /* Space between select and custom input */
+}
+
+#generate-ai-questions-btn.game-button {
+    background-color: #f39c12; /* Orange for generate button */
+    color: #fff;
+    width: 100%;
+    margin-top: 20px;
+    border: none;
+    padding: 12px 25px;
+    font-size: 1.3em;
+    font-weight: bold;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+#generate-ai-questions-btn.game-button:hover {
+    background-color: #e67e22;
+    transform: translateY(-2px);
+}
+
+#generate-ai-questions-btn.game-button:disabled {
+    background-color: #666;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.status-message {
+    text-align: center;
+    margin-top: 15px;
+    font-size: 1em;
+    font-weight: bold;
+}
+
+/* Mobile adjustments for AI generator */
+@media (max-width: 768px) {
+    .ai-question-generator-section,
+    .truth-dare-game-area {
+        padding: 20px;
+    }
+
+    .ai-question-generator-section h2 {
+        font-size: 1.5em;
+    }
+
+    .ai-question-generator-section label {
+        font-size: 1em;
+    }
+
+    .ai-question-generator-section select,
+    .ai-question-generator-section .custom-input,
+    #generate-ai-questions-btn.game-button {
+        font-size: 0.9em;
+        padding: 10px;
+    }
+}
+
+/* Truth or Dare Game Styling Update */
+.mode-selection {
+    display: flex;
+    justify-content: center;
+    gap: 15px; /* Increased gap */
+    margin-bottom: 20px;
+    padding: 0 10px;
+    flex-wrap: wrap; /* Allow buttons to wrap */
+}
+
+.mode-button {
+    background-color: #e0e0e0;
+    color: #333;
+    border: 1px solid #ccc;
+    padding: 12px 25px; /* Increased padding */
+    font-size: 1.1em; /* Increased font size */
+    font-weight: bold;
+    border-radius: 30px; /* More rounded */
+    cursor: pointer;
+    transition: all 0.3s ease;
+    /* Removed width restrictions */
+    white-space: normal; /* Allow potential wrap inside if needed but mostly want full text */
+}
+
+.mode-button:hover {
+    background-color: #d0d0d0;
+}
+
+.mode-button.active {
+    background-color: #2e7d32; /* Active green color */
+    color: #fff;
+    border-color: #1b5e20;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.question-display {
+    min-height: 200px; /* Slightly taller */
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    background-color: #333;
+    border-radius: 15px;
+    padding: 30px;
+    margin-bottom: 20px;
+    box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.6);
 }
 
-.dpd-page-wrapper #dpd-drawn-card-title {
-    font-size: 2.5em;
+.type-text {
+    font-size: 1.5em; /* Adjusted size */
+    font-weight: bold;
+    margin-bottom: 20px;
+    padding: 8px 20px;
+    border-radius: 20px;
+    color: #fff;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+/* Specific colors for Truth/Dare labels */
+.type-truth {
+    background-color: #1976d2; /* Deeper blue */
+}
+
+.type-dare {
+    background-color: #d32f2f; /* Deeper red */
+}
+
+.question-content {
+    font-size: 1.8em; /* Larger question text */
     color: #f0f0f0;
-    margin-bottom: 10px;
-    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+    margin: 0;
+    font-weight: 500;
+    line-height: 1.4;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
 }
 
-.dpd-page-wrapper #dpd-drawn-card-rule {
-    font-size: 1.2em;
-    color: #ccc;
-    max-width: 600px;
+/* Fade in animation state */
+.type-text.fade-in,
+.question-content.fade-in {
+    opacity: 1;
+    transform: translateY(0);
 }
 
-/* 抽牌計數顯示 */
-.dpd-page-wrapper #dpd-card-count-display {
-    margin-top: 20px;
+@media (max-width: 768px) {
+    .mode-selection {
+        flex-direction: row; 
+        flex-wrap: wrap; /* Ensure buttons wrap on small mobile screens */
+        gap: 10px;
+        justify-content: center; /* Center buttons when wrapped */
+    }
+    
+    .mode-button {
+        font-size: 1em; /* Keep readable size on mobile */
+        padding: 10px 15px; /* Comfortable touch area */
+        flex: 0 1 auto; /* Allow buttons to size based on content */
+        min-width: 120px; /* Minimum width for touch targets */
+    }
+
+    .question-content {
+        font-size: 1.4em;
+    }
+}
+
+.type-truth {
+    background-color: #3498db; /* 藍色 */
+}
+
+.type-dare {
+    background-color: #e74c3c; /* 紅色 */
+}
+
+.question-content {
+    font-size: 1.5em;
+    color: #f0f0f0;
+    margin: 0;
+}
+
+.question-count {
     font-size: 1.2em;
     color: #ffcc00;
-    background-color: #333;
-    padding: 10px 20px;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    margin-bottom: 30px;
 }
 
-.dpd-page-wrapper #dpd-current-card-count, .dpd-page-wrapper #dpd-total-card-count {
-    font-weight: bold;
+.game-controls {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.game-button {
+    background-color: #4CAF50; /* 綠色 */
     color: #fff;
+    border: none;
+    padding: 15px 30px;
+    font-size: 1.5em;
+    font-weight: bold;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.game-button:hover {
+    background-color: #6dcc70;
+    transform: translateY(-3px);
+}
+
+.game-button:active {
+    transform: translateY(0);
+}
+
+#restart-button {
+    background-color: #f39c12; /* 橘色 */
+}
+
+#restart-button:hover {
+    background-color: #f7b154;
+}
+
+/* 手機版適應 (真心話大冒險頁面) */
+@media (max-width: 768px) {
+    .game-container h1 {
+        font-size: 2.5em;
+    }
+
+    .game-container .back-button {
+        top: 10px;
+        left: 10px;
+        font-size: 0.9em;
+        padding: 8px 15px;
+    }
+
+    .truth-dare-game-area {
+        padding: 20px;
+    }
+
+    .question-display {
+        min-height: 120px;
+    }
+
+    .type-text {
+        font-size: 1.5em;
+    }
+
+    .question-content {
+        font-size: 1.2em;
+    }
+
+    .question-count {
+        font-size: 1em;
+    }
+
+    .game-controls {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .game-button {
+        width: 80%;
+        font-size: 1.2em;
+        padding: 12px 20px;
+    }
+}
+
+
+/* ======================================================= */
+/* 大排檔頁面樣式 (`dai_pai_dong.html`) */
+/* ======================================================= */
+.dpd-header {
+    /* background-color 和 color 已在上層 .dpd-header, .dpd-main-content 設定 */
+    padding: 40px 20px;
+    text-align: center;
+    position: relative;
+    border-bottom: 5px solid var(--accent-dark-green); /* 深綠色邊框 */
+}
+
+.dpd-header h1 {
+    font-family: '標楷體', 'DFKai-SB', serif; /* 懷舊字體 */
+    font-size: 3.5em;
+    color: var(--accent-warm-yellow); /* 暖黃色標題 */
+    margin-top: 0;
+    margin-bottom: 10px;
+    text-shadow: 3px 3px 6px rgba(27, 94, 32, 0.5); /* 陰影使用綠色，更融入 */
+}
+
+.dpd-header .dpd-intro {
+    font-size: 1.2em;
+    color: var(--dpd-text-light);
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.dpd-main-content {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 0 20px;
+    background-color: var(--dpd-bg-dark); /* 確保內容區塊背景色正確 */
+    border-radius: 10px; /* 增加圓角以區分 */
+}
+
+.basic-rules {
+    background-color: var(--dpd-card-bg-darker); /* 較深灰背景 */
+    padding: 30px;
+    margin-bottom: 30px;
+    border-radius: 10px;
+    border: 1px solid var(--dpd-border-gray); /* 細線深灰邊框 */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3); /* 輕微陰影 */
+}
+
+.basic-rules h2 {
+    color: var(--accent-warm-yellow); /* 改為暖黃色，與主頁標題氛圍一致 */
+    text-align: center;
+    margin-bottom: 20px;
+    border-bottom: 2px solid var(--accent-dark-green); /* 深綠色底線 */
+    padding-bottom: 10px;
+    display: inline-block;
+}
+
+.basic-rules ul {
+    list-style: none;
+    padding: 0;
+    text-align: left; /* 左對齊，更好閱讀 */
+}
+
+.basic-rules ul li {
+    font-size: 1.1em;
+    margin-bottom: 10px;
+    color: var(--dpd-text-light); /* 確保文字顏色正確 */
+}
+
+.card-rules h2 {
+    color: var(--accent-warm-yellow); /* 改為暖黃色，與主頁標題氛圍一致 */
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 2em;
+    border-bottom: 2px solid var(--accent-dark-green); /* 深綠色底線 */
+    padding-bottom: 10px;
+    display: inline-block;
+}
+
+.card-rules-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.game-rule-card {
+    background-color: var(--dpd-card-bg-darker); /* 較深灰背景 */
+    border: 1px solid var(--dpd-border-gray); /* 細線深灰邊框 */
+    border-radius: 15px;
+    padding: 25px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); /* 輕微陰影 */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    color: var(--dpd-text-light); /* 淺色文字 */
+}
+
+.game-rule-card:hover {
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4); /* 調整陰影 */
+}
+
+.game-rule-card h3 {
+    color: var(--accent-warm-yellow); /* 暖黃色小標題 */
+    font-size: 1.8em;
+    margin-top: 0;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.game-rule-card p {
+    font-size: 1.1em;
+    line-height: 1.8;
+}
+
+.game-play-section {
+    background-color: var(--dpd-card-bg-darker); /* 較深灰背景 */
+    padding: 30px;
+    margin-top: 30px;
+    border-radius: 10px;
+    border: 1px solid var(--dpd-border-gray); /* 細線深灰邊框 */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3); /* 輕微陰影 */
+    text-align: center;
+}
+
+.game-play-section h2 {
+    color: var(--accent-dark-green); /* 深綠色標題 */
+    margin-bottom: 25px;
+    border-bottom: 2px solid var(--accent-dark-green); /* 深綠色底線 */
+    padding-bottom: 10px;
+    display: inline-block;
+}
+
+.card-display-area {
+    display: grid;
+    grid-template-columns: 1fr 2fr; /* Two columns for card face and description */
+    gap: 20px;
+    min-height: 150px; /* Adjust min-height as needed */
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    background-color: #333; /* 較深灰色背景 */
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.5); /* 深陰影 */
+}
+
+.card-face-display {
+    background-color: #1a1a1a; /* 深色背景 */
+    border: 3px solid var(--accent-warm-yellow); /* 暖黃色邊框 */
+    border-radius: 10px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    aspect-ratio: 2 / 3; /* Standard playing card aspect ratio */
+    max-width: 150px; /* Max width for the card */
+    margin: 0 auto; /* Center the card face */
+}
+
+.card-symbol {
+    font-size: 3em; /* Larger symbol */
+    line-height: 1;
+}
+
+.card-rank {
+    font-size: 4em; /* Larger rank */
+    font-weight: bold;
+    line-height: 1;
+}
+
+.red-suit {
+    color: var(--warm-orange); /* Warm orange for hearts and diamonds */
+}
+
+.card-description-display {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    text-align: left;
+}
+
+#card-description {
+    font-size: 1.2em;
+    color: var(--dpd-text-light);
+    margin: 0;
+}
+
+/* Mobile adjustments for card display */
+@media (max-width: 768px) {
+    .card-display-area {
+        grid-template-columns: 1fr; /* Stack vertically on small screens */
+        text-align: center;
+    }
+
+    .card-face-display {
+        max-width: 120px;
+        aspect-ratio: unset; /* Remove fixed aspect ratio on mobile if it looks bad */
+    }
+
+    .card-symbol {
+        font-size: 2.5em;
+    }
+
+    .card-rank {
+        font-size: 3.5em;
+    }
+
+    .card-description-display {
+        text-align: center;
+    }
+
+    #card-description {
+        font-size: 1em;
+    }
+}
+
+.drawn-card-count {
+    font-size: 1.2em;
+    color: var(--dpd-text-light); /* 淺色文字 */
+    margin-bottom: 30px;
+}
+
+.game-actions {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.dpd-game-button {
+    background-color: var(--button-green); /* 深灰綠色 */
+    color: #fff;
+    border: none;
+    padding: 15px 30px;
+    font-size: 1.5em;
+    font-weight: bold;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.dpd-game-button:hover {
+    background-color: var(--button-green-hover); /* 更亮深灰綠色 */
+    transform: translateY(-3px);
+}
+
+.dpd-game-button.secondary {
+    background-color: var(--dpd-border-gray); /* 深灰背景 */
+    color: var(--dpd-text-light);
+}
+
+.dpd-game-button.secondary:hover {
+    background-color: #555555; /* 略深淺灰色 */
 }
 
 /* 手機版適應 (大排檔頁面) */
 @media (max-width: 768px) {
-    .dpd-page-wrapper #dpd-main-header .back-to-menu-btn {
-        top: 10px;
-        left: 10px;
-        font-size: 0.9em; /* 適應手機字體 */
-        padding: 8px 15px; /* 適應手機內邊距 */
-    }
+.dpd-header {
+    background-color: var(--dpd-bg-dark); /* 明確設定header背景 */
+    color: var(--dpd-text-light); /* 明確設定header文字顏色 */
+    padding: 40px 20px;
+    text-align: center;
+    position: relative;
+    border-bottom: 5px solid var(--accent-dark-green); /* 深綠色邊框 */
+}
 
-    .dpd-page-wrapper #dpd-main-header {
-        padding: 30px 15px;
-        padding-top: 50px; /* 為返回按鈕預留空間 */
-    }
-
-    .dpd-page-wrapper #dpd-main-header h1 {
-        font-size: 2.5em;
-    }
-
-    .dpd-page-wrapper #dpd-main-header p {
+    .dpd-header .dpd-intro {
         font-size: 1em;
     }
 
-    .dpd-page-wrapper .dpd-card-grid {
+    .back-to-home-btn {
+        margin: 10px;
+        padding: 8px 15px;
+        font-size: 0.9em;
+    }
+
+    .dpd-main-content {
+        padding: 0 15px;
+    }
+
+    .basic-rules-grid {
+        display: block;
+    }
+
+    .basic-rules ul {
+        text-align: left;
+    }
+
+    .card-rules-grid {
         grid-template-columns: 1fr;
     }
 
-    .dpd-page-wrapper .dpd-card-item {
+    .game-rule-card {
         padding: 20px;
     }
 
-    .dpd-page-wrapper #dpd-draw-card-btn, .dpd-page-wrapper #dpd-reset-game-btn {
+    .game-rule-card h3 {
         font-size: 1.5em;
-        padding: 12px 30px;
-        min-width: unset;
-        width: 80%;
-        margin-bottom: 15px;
     }
 
-    .dpd-page-wrapper #dpd-drawn-card-title {
-        font-size: 2em;
+    .game-rule-card p {
+        font-size: 1em;
+    }
+
+    #card-description {
+        font-size: 1em; /* 在移動設備上調整字體大小 */
+    }
+
+    .dpd-game-button {
+        font-size: 1.2em;
+        padding: 12px 20px;
+    }
+
+     .game-actions {
+        flex-direction: column;
+        gap: 15px;
     }
 }
 
 /* 平板版適應 (大排檔頁面) */
 @media (min-width: 769px) and (max-width: 1024px) {
-    .dpd-page-wrapper .dpd-card-grid {
-        grid-template-columns: repeat(2, 1fr);
+    .card-rules-grid {
+        grid-template-columns: repeat(2, 1fr); /* 兩列排版 */
+    }
+
+    .basic-rules-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr; /* 兩列排版 */
+        gap: 20px;
+    }
+
+    .basic-rules ul {
+        text-align: left;
     }
 }

@@ -3,110 +3,121 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>買醉遊戲推介 —— 大排檔</title>
-    <!-- 連結 style.css：這是樣式表檔案，負責設定網頁外觀 -->
+    <title>大排檔遊戲 - 規則</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="dpd-page-wrapper">
-        <!-- 網站標題區 -->
-        <header id="dpd-main-header">
-             <a href="index.html" class="back-to-menu-btn">返回主選單</a>
-            <h1>買醉遊戲推介 —— 大排檔</h1>
-            <p>🃏劈酒遊戲推介，點少得「大排檔」呢個飲到你懷疑人生嘅經典遊戲！🔥 呢個遊戲絕對係劈酒界嘅王者，玩過嘅人都話刺激到停唔到手！可能有啲朋友已經係高手，熟悉哂所有規則，但唔識玩嘅朋友都唔使擔心，快啲分享畀佢哋，等大家一齊挑戰極限，劈到盡興！🍻 準備好未？今晚就開局啦！</p>
-        </header>
+    <header class="dpd-header">
+        <a href="index.html" class="back-to-home-btn">返回遊戲主頁</a>
+        <h1>大排檔點玩？</h1>
+        <p class="dpd-intro">🃏劈酒遊戲又點少得「大排檔」呢個必玩項目！可能你已經係老手，但係身邊總有啲朋友仔未識玩？快啲Share俾佢哋，一齊劈酒劈到天光啦！🍻</p>
+    </header>
 
-        <main class="dpd-main-content">
-
-            <!-- 基本規則區 -->
-            <section id="dpd-basic-rules">
-                <h2>基本規則</h2>
+    <main class="dpd-main-content">
+        <section class="game-play-section">
+            <h2>開始抽牌！</h2>
+            <div id="drawn-card-container" class="card-display-area">
+                <div class="card-face-display">
+                    <span id="card-symbol" class="card-symbol"></span>
+                    <span id="card-rank" class="card-rank"></span>
+                </div>
+                <div class="card-description-display">
+                    <p id="card-description">點擊抽牌按鈕開始遊戲！</p>
+                </div>
+            </div>
+            <p class="drawn-card-count">已抽 <span id="current-card-count">0</span> / 54 張</p>
+            <div class="game-actions">
+                <button id="draw-card-btn" class="dpd-game-button">抽牌</button>
+                <button id="reset-game-btn" class="dpd-game-button secondary">再來一局</button>
+            </div>
+        </section>
+        
+        <section class="basic-rules">
+            <h2>基本玩法</h2>
+            <div class="basic-rules-grid">
                 <ul>
-                    <li>🔷 遊戲以啤牌為主，每一個數字有相應嘅遊戲或獎勵</li>
-                    <li>🔷 玩家輪流抽牌，進行牌上嘅遊戲或獎勵</li>
+                    <li>🔷 成個遊戲都係圍繞啤牌轉，每張牌都有佢獨特嘅玩法或者大懲罰等緊你！</li>
+                    <li>🔷 玩法好簡單，大家輪流抽牌，抽到咩牌就跟住指示做，唔好走數呀！</li>
                 </ul>
-            </section>
+            </div>
+        </section>
 
-            <!-- 各張牌規則的列表區 -->
-            <section id="dpd-card-rules">
-                <h2>📌 抽到唔同牌相應要進行嘅動作：</h2>
-                <div class="dpd-card-grid">
-                    <div class="dpd-card-item">
-                        <h3>A - 指人飲</h3>
-                        <p>指定任意一個人飲一啖</p>
-                    </div>
-                    <div class="dpd-card-item">
-                        <h3>2 - 陪飲</h3>
-                        <p>無論邊個玩家要飲，抽到陪飲嘅人都要同佢一齊飲，直到下一個人抽到 2 為止</p>
-                    </div>
-                    <div class="dpd-card-item">
-                        <h3>3 - 大細波</h3>
-                        <p>玩家用手做出大波嘅動作，要講「細波」，相反做出細波嘅動作，就要講「大波」，做錯嘅玩家飲一啖</p>
-                    </div>
-                    <div class="dpd-card-item">
-                        <h3>4 - 開規矩</h3>
-                        <p>自定一個規則，例如「唔比講『我』字」，遊戲期間講「我」字嘅玩家就要飲一啖。之後抽到 4 嘅玩家可以繼續開新嘅規矩（都可以取消之前嘅規矩），直到遊戲結束</p>
-                    </div>
-                    <div class="dpd-card-item">
-                        <h3>5 - 圍枚</h3>
-                        <p>一人出一隻手，打開嘅係 5，唔開就唔計數，輪到估哩一 round 有幾多人打開手（5、10、15……/1隻、2隻、3隻）並嗌出數字，可以自定規則要邊個飲，例如嗌中嘅人下家飲、嗌唔中嘅人都要飲</p>
-                    </div>
-                    <div class="dpd-card-item">
-                        <h3>6 - 開 TOPIC</h3>
-                        <p>自定一個 Topic 話題，例如「澳門有咩酒吧」，玩家要輪流一人講出一間澳門酒吧嘅名，講唔出或者講重複就要飲一啖</p>
-                    </div>
-                    <div class="dpd-card-item">
-                        <h3>7 - 拍柒</h3>
-                        <p>玩家隨機講出一個數字，要跟順序，例如上家嗌 9，下家就要跟住嗌 10。當有 7 或者係 7 嘅倍數嘅數字出現就要用拍手代替，並且輪翻到上家繼續嗌。當嗌到數字 7 或者 7 嘅倍數唔有拍手嘅玩家，要飲一啖</p>
-                    </div>
-                    <div class="dpd-card-item">
-                        <h3>8 - 去廁所</h3>
-                        <p>抽到哩張牌嘅玩家可以 keep 住，等需要去廁所嘅時候用</p>
-                    </div>
-                    <div class="dpd-card-item">
-                        <h3>9 - 撞機</h3>
-                        <p>所有玩家任意由 1 開始數數，同時講出相同數字嘅玩家、重複已經講過嘅數字或者講出最後一個數字嘅玩家飲一啖</p>
-                    </div>
-                    <div class="dpd-card-item">
-                        <h3>10 - 癡線佬</h3>
-                        <p>抽中 10 嘅玩家就係「癡線佬」，其他玩家如果答「癡線佬」講嘅嘢就要飲一啖</p>
-                    </div>
-                    <div class="dpd-card-item">
-                        <h3>J - 上家飲</h3>
-                        <p>抽到哩張牌嘅上一個玩家飲一啖</p>
-                    </div>
-                    <div class="dpd-card-item">
-                        <h3>Q - 下家飲</h3>
-                        <p>抽到哩張牌嘅下一個玩家飲一啖</p>
-                    </div>
-                    <div class="dpd-card-item">
-                        <h3>K - 自己飲</h3>
-                        <p>抽到哩張牌嘅玩家要自己飲一啖</p>
-                    </div>
-                    <div class="dpd-card-item">
-                        <h3>JOKER - 免飲</h3>
-                    </div>
+        <section class="card-rules">
+            <h2>📌 抽到咩牌？即刻睇實！</h2>
+            <div class="card-rules-grid">
+                <div class="game-rule-card">
+                    <h3>A.指個一人飲</h3>
+                    <p>抽到呢張牌，你可以公開點名一位玩家，叫對方即刻飲一啖或一杯。</p>
                 </div>
-            </section>
 
-            <!-- 抽牌互動區 -->
-            <section id="dpd-draw-card-section">
-                <h2>隨機抽牌！</h2>
-                <div>
-                    <button id="dpd-draw-card-btn">抽牌</button>
-                    <button id="dpd-reset-game-btn">再嚟一鋪</button>
+                <div class="game-rule-card">
+                    <h3>2.陪飲員</h3>
+                    <p>抽到呢張牌，你暫時變成陪飲員：之後無論邊個玩家要飲，你都要一齊跟飲，直到下一個人再抽到 2 先解除。</p>
                 </div>
-                <div id="dpd-drawn-card-display">
-                    <h3 id="dpd-drawn-card-title"></h3>
-                    <p id="dpd-drawn-card-rule"></p>
+
+                <div class="game-rule-card">
+                    <h3>3.大細波</h3>
+                    <p>抽到呢張牌，開始玩大細波：做大波手勢要講『細波』，做細波手勢要講『大波』。動作同講嘢唔一致，或者反應太慢嗰位要飲一啖。</p>
                 </div>
-                <div id="dpd-card-count-display">已抽：<span id="dpd-current-card-count">0</span> / <span id="dpd-total-card-count">54</span> 張</div>
-            </section>
 
-        </main>
-    </div>
+                <div class="game-rule-card">
+                    <h3>4.開規矩</h3>
+                    <p>抽到呢張牌，你可以加一條新規矩入遊戲。其後犯規嘅玩家都要飲一啖。之後再有人抽到 4，可以選擇新增規矩，或者修改／取消之前嘅規矩。</p>
+                </div>
 
-    <!-- 連結 script.js：這是 JavaScript 檔案，負責處理網頁互動功能 -->
+                <div class="game-rule-card">
+                    <h3>5.圍枚</h3>
+                    <p>抽到呢張牌，全枱即刻玩一局圍枚（玩法由大家事先講清楚），輸嘅嗰位要飲一啖。</p>
+                </div>
+
+                <div class="game-rule-card">
+                    <h3>6.開topic（開心反埋黎）</h3>
+                    <p>抽到呢張牌，你要出一個 Topic，然後玩家輪流回答。講唔出、講重複或者離題太遠嗰位，要飲一啖。</p>
+                </div>
+
+                <div class="game-rule-card">
+                    <h3>7.拍7</h3>
+                    <p>抽到呢張牌，開始玩拍 7：玩家輪流報數，遇到包含『7』或者係 7 嘅倍數嘅數字，要以拍手代替唔可以講出口，並且輪回上一位繼續。報錯、唔拍手或者時機錯咗嗰位，要飲一啖。</p>
+                </div>
+
+                <div class="game-rule-card">
+                    <h3>8.廁所卡</h3>
+                    <p>抽到呢張牌，就攞到一張廁所通行證，可以保留；之後想去廁所時，用呢張牌報備，其餘冇牌嘅人理論上唔可以隨便離枱，除非大家同意。</p>
+                </div>
+
+                <div class="game-rule-card">
+                    <h3>9.撞機</h3>
+                    <p>抽到呢張牌，大家由 1 開始報數。有人同時講同一個數字、重複講過嘅數字，或者變成最後一個先開口嗰位，都要飲一啖。</p>
+                </div>
+
+                <div class="game-rule-card">
+                    <h3>10.癡線佬</h3>
+                    <p>抽到呢張牌，你變成癡線佬，之後期間你講嘅嘢其他玩家都唔應該正面回應；一旦有人忍唔住應你，就要飲一啖。</p>
+                </div>
+
+                <div class="game-rule-card">
+                    <h3>J.上家飲</h3>
+                    <p>抽到呢張牌，你上一位抽牌嗰個玩家要飲一杯。</p>
+                </div>
+
+                <div class="game-rule-card">
+                    <h3>Q.下家飲</h3>
+                    <p>抽到呢張牌，你下一位準備抽牌嗰個玩家要先飲一啖。</p>
+                </div>
+
+                <div class="game-rule-card">
+                    <h3>K.自己飲</h3>
+                    <p>抽到呢張牌，簡單直接由你自己飲一啖或一杯。</p>
+                </div>
+
+                <div class="game-rule-card">
+                    <h3>Joker.免飲一次</h3>
+                    <p>抽到呢張牌可以當「免死牌」，保留一次免飲機會，需要用嘅時候攞出嚟豁免一個懲罰。</p>
+                </div>
+            </div>
+        </section>
+    </main>
     <script src="script.js"></script>
+
 </body>
 </html>

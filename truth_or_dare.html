@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>真心話大冒險</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="game-container">
+        <a href="index.html" class="back-button">返回遊戲主頁</a>
+        <h1>真心話大冒險</h1>
+        
+        <div class="ai-question-generator-section">
+            <h2>AI 自訂題目（開發中）</h2>
+            <div class="input-group">
+                <label for="age-group-select">年齡層:</label>
+                <select id="age-group-select">
+                    <option value="13–15">13–15</option>
+                    <option value="16–18">16–18</option>
+                    <option value="19–23">19–23</option>
+                    <option value="24–30">24–30</option>
+                    <option value="custom">自訂</option>
+                </select>
+                <input type="text" id="custom-age-group" class="custom-input" placeholder="請輸入自訂年齡描述" style="display:none;">
+            </div>
+            <div class="input-group">
+                <label for="relationship-select">關係類型:</label>
+                <select id="relationship-select">
+                    <option value="中學同學">中學同學</option>
+                    <option value="大學／學院同學">大學／學院同學</option>
+                    <option value="公司同事">公司同事</option>
+                    <option value="情侶／拍拖中">情侶／拍拖中</option>
+                    <option value="教會／團契／小組">教會／團契／小組</option>
+                    <option value="custom">自訂</option>
+                </select>
+                <input type="text" id="custom-relationship" class="custom-input" placeholder="請輸入自訂關係描述" style="display:none;">
+            </div>
+            <div class="input-group">
+                <label for="occasion-select">場合:</label>
+                <select id="occasion-select">
+                    <option value="生日局">生日局</option>
+                    <option value="公司聚會／Team building">公司聚會／Team building</option>
+                    <option value="K 房／唱 K">K 房／唱 K</option>
+                    <option value="輕鬆酒局（有飲酒）">輕鬆酒局（有飲酒）</option>
+                    <option value="不飲酒聚會／零酒精活動">不飲酒聚會／零酒精活動</option>
+                    <option value="露營／留營活動">露營／留營活動</option>
+                    <option value="custom">自訂</option>
+                </select>
+                <input type="text" id="custom-occasion" class="custom-input" placeholder="請輸入自訂場合描述" style="display:none;">
+            </div>
+            <button id="generate-ai-questions-btn" class="game-button primary">生成題目（暫未接 AI）</button>
+            <p id="ai-status-message" class="status-message" style="display:none;"></p>
+        </div>
+        
+        <div class="mode-selection">
+            <button id="mode-truth" class="game-button mode-button">真心話模式</button>
+            <button id="mode-dare" class="game-button mode-button">大冒險模式</button>
+            <button id="mode-random" class="game-button mode-button active">隨機模式</button>
+        </div>
+
+        <div class="truth-dare-game-area">
+            <div class="question-display">
+                <p id="question-type" class="type-text"></p>
+                <p id="question-text" class="question-content">點擊「抽題目」開始遊戲！</p>
+            </div>
+            
+            <div class="game-controls">
+                <button id="draw-button" class="game-button">抽題目</button>
+                <button id="restart-button" class="game-button">重新開始</button>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

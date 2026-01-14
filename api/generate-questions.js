@@ -28,11 +28,11 @@ module.exports = async (req, res) => {
             return;
         }
 
-        // --- Integrate with AI API (DeepSeek example) ---
-        const DEEPSEEK_API_KEY = process.env.DEEPSEEK_API_KEY; // Store API key securely as environment variable
-        if (!DEEPSEEK_API_KEY) {
-            console.error('DEEPSEEK_API_KEY is not set.');
-            res.status(500).json({ error: 'Internal Server Error', message: 'AI API key not configured. Please set DEEPSEEK_API_KEY environment variable.' });
+        // --- Integrate with AI API (OpenRouter example) ---
+        const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY; // Store API key securely as environment variable
+        if (!OPENROUTER_API_KEY) {
+            console.error('OPENROUTER_API_KEY is not set.');
+            res.status(500).json({ error: 'Internal Server Error', message: 'AI API key not configured. Please set OPENROUTER_API_KEY environment variable.' });
             return;
         }
 
@@ -53,14 +53,16 @@ type 為 \'dare\' 時，題目偏向安全、無危險行為、唔涉及財物�
 ]
 不要加任何多餘文字或註解，只輸出 JSON。`;
 
-        const aiResponse = await fetch('https://api.deepseek.com/chat/completions', { // DeepSeek Chat API endpoint
+        const aiResponse = await fetch('https://openrouter.ai/api/v1/chat/completions', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${DEEPSEEK_API_KEY}`
+                'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
+                'HTTP-Referer': req.headers.referer || '', // Optional, for OpenRouter analytics
+                'X-Title': 'Dai Pai Dong Game AI Questions', // Optional, for OpenRouter analytics
             },
             body: JSON.stringify({
-                model: 'deepseek-chat', // Use an appropriate model
+                model: 'deepseek/deepseek-r1-0528:free', // OpenRouter model
                 messages: [{ role: 'user', content: prompt }],
                 max_tokens: 2000, // Adjust based on expected output length
                 temperature: 0.7 // Adjust for creativity vs. consistency

@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>一夜狼人殺 - 啤牌酒Game 平台</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="onenight-container">
+        <h1>一夜狼人殺 (One Night Ultimate Werewolf)</h1>
+
+        <section class="section">
+            <h2>一、遊戲基本資料</h2>
+            <p><strong>遊戲名稱：</strong>一夜狼人殺</p>
+            <p><strong>遊戲人數：</strong>3–10 人</p>
+            <p><strong>遊戲時間：</strong>10–30 分鐘</p>
+            <p><strong>遊戲配件：</strong>16 張身份牌 + 各自圓形標記</p>
+        </section>
+
+        <section class="section role-list">
+            <h2>二、身份牌清單（16 張）</h2>
+            <ul>
+                <li>3 村民</li>
+                <li>2 狼人</li>
+                <li>1 預言家</li>
+                <li>1 強盜</li>
+                <li>1 搗蛋鬼</li>
+                <li>1 皮匠</li>
+                <li>1 酒鬼</li>
+                <li>1 獵人</li>
+                <li>2 守夜人</li>
+                <li>1 失眠者</li>
+                <li>1 爪牙</li>
+                <li>1 化身幽靈</li>
+            </ul>
+        </section>
+
+        <section class="section game-flow">
+            <h2>三、遊戲流程</h2>
+            <h3>步驟 1：遊戲準備</h3>
+            <p>1. 從 16 張身份牌中抽 N+3 張（N=玩家人數），其餘放回盒子。</p>
+            <p>2. 所有人看清這 N+3 張身份牌是什麼。</p>
+            <p>3. 洗混這 N+3 張牌，面朝下每人發 1 張，剩餘 3 張放桌中央。</p>
+            <p>4. 每人看自己身份牌（除強盜外，其他有技能角色必須執行技能）。</p>
+
+            <h3>步驟 2：夜晚階段（主持人叫醒順序）</h3>
+            <p>化身幽靈 → 狼人 → 爪牙 → 守夜人×2 → 預言家 → 強盜 → 搗蛋鬼 → 酒鬼 → 失眠者</p>
+
+            <h3>步驟 3：白天階段</h3>
+            <p>激情討論 → 同時投票，手指向票出對象</p>
+            <p>票數最多者出局，亮身份牌</p>
+            <p>全平票則無人出局</p>
+
+            <h3>步驟 4：勝利判定</h3>
+            <p>亮所有身份牌，按最終身份判斷勝利：</p>
+            <ul>
+                <li>有狼人：無狼人死亡 → 狼人勝；至少一狼死亡 → 好人勝</li>
+                <li>無狼人但有爪牙：爪牙外其他任一死亡 → 爪牙勝；爪牙死亡 → 好人勝</li>
+                <li>有皮匠：皮匠死且無狼人死 → 皮匠獨勝；皮匠死＋狼人死 → 好人勝</li>
+            </ul>
+        </section>
+
+        <section class="section recommend-config">
+            <h2>四、推薦配置（按人數）</h2>
+            <ul id="recommended-configs">
+                <li><strong>4人：</strong> 狼人×2, 預言家, 怪盜, 搗蛋鬼, 酒鬼, 村民</li>
+                <li><strong>5人：</strong> 狼人×2, 預言家, 怪盜, 搗蛋鬼, 酒鬼, 失眠者, 村民</li>
+                <li><strong>6人：</strong> 化身幽靈, 狼人×2, 預言家, 怪盜, 搗蛋鬼, 酒鬼, 失眠者, 村民</li>
+                <li><strong>7人：</strong> 化身幽靈, 狼人×2, 預言家, 怪盜, 搗蛋鬼, 酒鬼, 失眠者, 村民, 皮匠</li>
+                <li><strong>8人：</strong> 化身幽靈, 狼人×2, 爪牙, 預言家, 怪盜, 搗蛋鬼, 酒鬼, 失眠者, 村民, 獵人</li>
+                <li><strong>9人：</strong> 化身幽靈, 狼人×2, 爪牙, 預言家, 怪盜, 搗蛋鬼, 酒鬼, 失眠者, 村民, 獵人, 皮匠</li>
+            </ul>
+        </section>
+
+        <section class="section game-controls">
+            <h2>五、頁面功能需求</h2>
+            <div>
+                <label for="player-count">玩家人數 (3-10):</label>
+                <input type="number" id="player-count" min="3" max="10" value="4">
+                <button id="use-recommended-config">使用推薦配置</button>
+                <button id="toggle-custom-config">自訂配置</button>
+                <button id="deal-cards">發牌</button>
+            </div>
+
+            <div id="custom-config-area" class="custom-config-area hidden">
+                <h3>自訂身份牌數量</h3>
+                <div id="role-quantity-inputs">
+                    <!-- Role inputs will be dynamically generated here -->
+                </div>
+                <p>總牌數應為：<span id="total-cards-needed"></span></p>
+                <p>當前選定牌數：<span id="current-selected-cards">0</span></p>
+            </div>
+
+            <!-- 2. 輪流睇身份 -->
+            <div id="game-results" class="game-results hidden">
+                <div id="initial-deal-message" class="host-view">
+                    <h3>身份分配完成！</h3>
+                    <p class="description">請玩家按座位順序輪流查看身份：</p>
+                    <button id="start-player-view-btn">開始讓玩家輪流看身份</button>
+                </div>
+                
+                <div id="player-flow" class="player-view hidden">
+                    <div class="player-turn">
+                        <h3>輪到邊個睇身份？</h3>
+                        <p>玩家 <span id="current-player">1</span></p>
+                        <input type="text" id="player-name-input" placeholder="輸入呢個玩家名">
+                        <button id="show-player-role-btn">畀佢睇身份</button>
+                        <div id="player-role-display-area" class="player-role-display-area hidden"></div>
+                        <button id="next-player-btn" class="hidden">睇完畀下一個</button>
+                    </div>
+                </div>
+
+                <!-- 3. 夜晚開始 -->
+                <div id="night-start-container" class="night-start hidden">
+                    <h2>✅ 齊人都睇晒身份啦！</h2>
+                    <p>依家開始夜晚階段，按呢個次序叫醒：</p>
+                    <ol>
+                        <li>化身幽靈</li>
+                        <li>狼人</li>
+                        <li>爪牙</li>
+                        <li>守夜人</li>
+                        <li>預言家</li>
+                        <li>強盜</li>
+                        <li>搗蛋鬼</li>
+                        <li>酒鬼</li>
+                        <li>失眠者</li>
+                    </ol>
+                    <button id="start-night-button" class="dpd-game-button">開始夜晚</button>
+                </div>
+                
+                <div id="wake-up-order-container" class="hidden">
+                    <button id="show-next-wake-up-role">叫醒下一個角色</button>
+                    <p class="wake-up-order-display">當前叫醒角色: <span id="current-wake-up-role"></span></p>
+                </div>
+            </div>
+
+            <div id="daytime-voting-area" class="voting-area hidden">
+                <h3>白天投票</h3>
+                <p>請投票給欲票出的玩家：</p>
+                <div id="vote-buttons">
+                    <!-- Player buttons for voting will be here -->
+                </div>
+                <button id="submit-vote">結束投票並顯示結果</button>
+                <div id="vote-results" class="hidden">
+                    <h4>投票結果:</h4>
+                    <ul id="final-votes"></ul>
+                    <p>出局玩家: <span id="eliminated-player"></span></p>
+                    <h4>最終勝利條件判定:</h4>
+                    <p id="final-victory-condition"></p>
+                </div>
+            </div>
+        </section>
+
+        <button id="restart-game-btn" class="dpd-game-button" style="margin-top: 20px;">再嚟一局</button>
+
+        <section class="section role-skills">
+            <h2>角色技能簡介</h2>
+            <dl>
+                <dt>化身幽靈</dt>
+                <dd>查看一人身份，複製該身份技能和勝利條件</dd>
+                <dt>狼人</dt>
+                <dd>夜晚知同伴，獨狼可查看桌中 1 張牌</dd>
+                <dt>爪牙</dt>
+                <dd>夜晚知狼人身份，無狼人時其他任一死亡即勝</dd>
+                <dt>守夜人</dt>
+                <dd>夜晚知另一守夜人是誰（總是同時出現）</dd>
+                <dt>預言家</dt>
+                <dd>夜晚查看一人身份或桌中 2 張牌</dd>
+                <dt>強盜</dt>
+                <dd>夜晚可與一人交換身份牌</dd>
+                <dt>搗蛋鬼</dt>
+                <dd>夜晚交換兩人身份牌</dd>
+                <dt>酒鬼</dt>
+                <dd>夜晚與桌中 1 張牌交換，不可查看新身份</dd>
+                <dt>失眠者</dt>
+                <dd>夜晚可重看自己身份牌</dd>
+                <dt>皮匠</dt>
+                <dd>夜晚不叫醒，死後若無狼人死則獨勝</dd>
+                <dt>獵人</dt>
+                <dd>白天被票出時，所有投他的人也死</dd>
+                <dt>村民</dt>
+                <dd>無技能</dd>
+            </dl>
+        </section>
+    </div>
+
+    <script src="onenight-werewolf.js"></script>
+</body>
+</html>

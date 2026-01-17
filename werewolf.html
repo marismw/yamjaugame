@@ -38,20 +38,20 @@
 
     /* General styles for sections to mimic game cards */
     .game-section-card {
-        background: linear-gradient(145deg, var(--dpd-card-bg-darker), var(--dpd-bg-dark)); /* Use existing variables */
+        background: linear-gradient(145deg, var(--dpd-card-bg-darker), var(--dpd-bg-dark));
         border-radius: 20px;
         box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
         padding: 30px;
         color: var(--dpd-text-light);
-        position: relative; /* For absolute positioning of back button */
+        position: relative;
     }
 
     .game-section-card h2 {
-        color: var(--accent-warm-yellow); /* Use existing variables */
+        color: var(--accent-warm-yellow);
         font-size: 1.8em;
         margin-top: 0;
         margin-bottom: 20px;
-        border-bottom: 2px solid var(--accent-dark-green); /* Use existing variables */
+        border-bottom: 2px solid var(--accent-dark-green);
         padding-bottom: 10px;
         text-align: center;
     }
@@ -66,7 +66,7 @@
 
     .game-section-card input[type="number"],
     .game-section-card input[type="text"] {
-        width: calc(100% - 20px); /* Adjust for padding */
+        width: calc(100% - 20px);
         padding: 10px;
         border-radius: 8px;
         border: 1px solid var(--dpd-border-gray);
@@ -75,10 +75,15 @@
         font-size: 1em;
     }
 
+    .role-help {
+        font-size: 0.9em;
+        color: var(--dpd-text-muted);
+        margin-top: 20px;
+    }
+
     /* Button styles reusing existing classes */
     .dpd-game-button {
         margin-top: 20px;
-        /* width: auto; */ /* Override 100% width if set elsewhere for game-button */
     }
     .dpd-game-button.secondary {
         margin-left: 10px;
@@ -90,20 +95,20 @@
         justify-content: space-between;
         align-items: center;
         padding: 8px 0;
-        border-bottom: 1px solid var(--dpd-border-gray); /* Consistent separator */
+        border-bottom: 1px solid var(--dpd-border-gray);
         font-size: 1em;
-        color: var(--dpd-text-light); /* Default text color */
+        color: var(--dpd-text-light);
     }
     .player-list-item:last-child {
         border-bottom: none;
     }
     .player-list-item.dead .player-name,
     .player-list-item.dead .player-status {
-        color: var(--dpd-border-gray); /* Grayer when dead */
+        color: var(--dpd-border-gray);
         text-decoration: line-through;
     }
     .player-list-item .toggle-status-btn {
-        background-color: var(--accent-warm-yellow); /* Yellow for toggle */
+        background-color: var(--accent-warm-yellow);
         color: #1a1a1a;
         font-size: 0.8em;
         padding: 5px 10px;
@@ -111,7 +116,7 @@
         margin-top: 0;
     }
     .player-list-item.dead .toggle-status-btn {
-        background-color: var(--warm-orange); /* Orange when dead */
+        background-color: var(--warm-orange);
     }
 
     /* Section Specific Collapsed/Expanded Styles */
@@ -207,6 +212,65 @@
     }
 
   </style>
+  <script>
+    const roleDescriptions = {
+      "狼人": "每晚可選擇一位玩家殺害。",
+      "雪狼": "狼隊友全部死亡後，雪狼的攻擊附帶冰凍效果，被冰凍的玩家無法使用當晚的特殊能力。",
+      "隱狼": "不會被預言家查驗出狼人身份，但技能只在夜晚發動。",
+      "狼王": "每天晚上除了可以參與殺害，若狼王被公投出局或被刀出局，則臨死前可以選擇一位玩家槍斃（不能自選）。",
+      "狼美人": "狼美人每晚與狼人一起行動，每天晚上選一位玩家魅惑，該玩家在白天不能使用技能。如果狼美人死亡，他魅惑的玩家也會跟著死亡。",
+      "白狼王": "白狼王出局時可以發動技能「自爆」，選擇一名玩家帶走，但本回合不能再投票發言。",
+      "石像鬼": "石像鬼是狼人陣營的一員。每晚他的殺戮行動都在狼人之前。當晚被石像鬼擊殺的玩家，不會出局，而是被石像鬼的暗影之力吞噬，導致能力失效。",
+      "血月使徒": "血月使徒在夜晚行動的過程中，與狼人團隊一起決定是否轉換一名人類玩家為狼人，並剝奪該玩家的原有身份牌。被轉化為狼人的玩家，會繼續保留自己的技能，但目標變為幫助狼人取得勝利。",
+      "惡靈騎士": "惡靈騎士不會受到任何傷害，但只要惡靈騎士被檢驗或攻擊，則他會立刻變身，將所有人類玩家的身份牌全部變成狼人，達成狼人勝利。",
+      "預言家": "每晚可查驗一位玩家的身份，知曉其是好人或狼人。",
+      "女巫": "擁有一瓶解藥和一瓶毒藥，解藥可以救活一人，毒藥可以毒殺一人，解藥和毒藥各限用一次，不可同時使用。",
+      "獵人": "被狼人殺害或被投票出局時，可以選擇槍斃場上任意一位玩家（不能自選）。",
+      "守衛": "每晚可守護一名玩家，使其免受狼人的傷害，不能連續兩晚守護同一位玩家。",
+      "平民": "沒有任何特殊能力，通過思考和發言協助神職找出狼人。",
+      "白癡": "被投票出局時可翻開身份牌，宣告自己是白癡，免死一次，之後不能再被投票出局且不能使用技能。",
+      "禁言長老": "每晚可選擇一位玩家禁言，使其在白天不能發言和投票。",
+      "騎士": "白天可以選擇一位玩家決鬥，若對方是狼人則立即出局，若對方是好人則騎士出局。",
+      "烏鴉": "烏鴉每晚選擇一名玩家施予詛咒。受到詛咒的玩家，在次日的放逐投票環節，會額外多一張廢票，讓他的票形不佳，更容易被公投出局。",
+      "獵魔人": "在夜晚行動，可以選擇一位玩家進行攻擊，若目標是狼人則立即出局，若不是則獵魔人出局。",
+      "守墓人": "守墓人每晚可以查看一名當晚死亡角色的身份信息，從而獲取信息在白天指引好人陣營。",
+      "訓熊師": "每晚可以選擇一名玩家，若該玩家是狼人陣營，則訓熊師會感知到；若該玩家不是狼人，則訓熊師感知不到任何信息。",
+      "魔術師": "魔術師每晚可以交換兩名玩家的號碼牌，被交換號碼牌的玩家，在當日的死亡信息通報，及放逐投票環節中，會沿用被交換的號碼牌。",
+      "攝夢人": "攝夢人每晚可以指定一名玩家成為他的夢中情人，夢中情人不會死於狼人殺。如果攝夢人死亡，他的夢中情人會跟著他一起殉情。",
+      "老流氓": "每晚可以選擇偷取一名玩家的身份牌查看，並在白天可以使用被偷取的身份牌的技能，每晚只能偷取一次。",
+      "炸彈人": "若炸彈人死亡，他可以在靈魂狀態下引爆炸彈，炸死一名玩家，然後炸彈人才能徹底死亡。",
+      "邱比特": "選擇兩名玩家成為情侶，情侶同生共死。邱比特可以將自己和任意一名玩家相連成為情侶。",
+      "盜賊": "開局時可以選擇偷看場上的一張牌，並將其替換為自己的身份牌，被替換出的身份牌則成為新的身份牌。",
+      "野孩子": "選擇一位玩家作為榜樣，榜樣存活時，野孩子是平民。榜樣死亡時，野孩子變成狼人。",
+    };
+
+    const allRolesDescriptionListElem = document.getElementById("all-roles-description-list");
+    const usedRolesHelpElem = document.getElementById("used-roles-help");
+
+    function renderAllRolesHelp() {
+      allRolesDescriptionListElem.innerHTML = ""; // Clear existing content
+      for (const [role, description] of Object.entries(roleDescriptions)) {
+        const li = document.createElement("li");
+        li.innerHTML = `<strong>${role}：</strong> ${description}`;
+        allRolesDescriptionListElem.appendChild(li);
+      }
+    }
+
+    function renderUsedRolesHelp() {
+      if (!players || players.length === 0) return;
+      const usedRoles = Array.from(new Set(players.map(p => p.role)));
+      usedRolesHelpElem.innerHTML = '<details><summary>本局使用角色簡單說明</summary><ul>';
+      usedRoles.forEach(role => {
+        const description = roleDescriptions[role] || "無描述";
+        usedRolesHelpElem.innerHTML += `<li><strong>${role}：</strong> ${description}</li>`;
+      });
+      usedRolesHelpElem.innerHTML += '</ul></details>';
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      renderAllRolesHelp();
+    });
+  </script>
 </head>
 <body>
   <a href="index.html" class="back-button back-to-home-btn-fixed">← 返回主頁</a>
@@ -235,7 +299,7 @@
       <input type="number" id="num-witch" min="0" value="1" />
       <label for="num-hunter">獵人</label>
       <input type="number" id="num-hunter" min="0" value="1" />
-      <label for="num-guard">守衛</label>
+      <label for="num-guard">守衛</label> 
       <input type="number" id="num-guard" min="0" value="1" />
       <label for="num-villager">平民</label>
       <input type="number" id="num-villager" min="0" value="3" />
@@ -295,9 +359,17 @@
       <p class="info">
         提示：發卡後才設定玩家名字。夜晚流程由你口頭主持。
       </p>
-       <button class="dpd-game-button secondary" id="back-to-player-count-btn">
+      <button class="dpd-game-button secondary" id="back-to-player-count-btn">
         返回選擇人數
       </button>
+      <div class="role-help">
+        <details>
+          <summary>查看所有角色簡單說明</summary>
+          <ul id="all-roles-description-list">
+            <!-- Role descriptions will be populated here by JavaScript -->
+          </ul>
+        </details>
+      </div>
     </section>
 
     <div class="right-panel">
@@ -322,6 +394,7 @@
             </button>
           </div>
           <div class="info" id="player-end-text"></div>
+          <div id="used-roles-help" class="role-help"></div>
           <button class="dpd-game-button secondary" id="back-to-role-setup-btn" style="margin-top:0.6rem;">
             返回角色設定
           </button>
@@ -393,7 +466,6 @@
     const roleSetupError = document.getElementById("role-setup-error");
     const backToPlayerCountBtn = document.getElementById("back-to-player-count-btn");
 
-
     // 元素 - Player Section (Phase 3+)
     const currentPlayerLabel = document.getElementById("current-player-label");
     const currentPlayerNameInput = document.getElementById("current-player-name-input");
@@ -409,8 +481,10 @@
     // 元素 - Reset Section
     const resetGameBtn = document.getElementById("reset-game-btn");
 
+    // 即時渲染角色說明
+    const allRolesDescriptionList = document.getElementById("all-roles-description-list");
+    const usedRolesHelp = document.getElementById("used-roles-help");
 
-    // Helper Functions
     function getNumberValue(element) {
       return parseInt(element.value || "0", 10);
     }
@@ -436,12 +510,9 @@
       if (count === 9) {
         return { wolf: 3, seer: 1, witch: 1, hunter: 1, guard: 1, villager: 3, idiot: 0, elder: 0, knight: 0, crow: 0, demonhunter: 0, gravekeeper: 0, tamer: 0, magician: 0, dreamweaver: 0, hooligan: 0, bomber: 0, snowwolf: 0, hiddenwolf: 0, wolfking: 0, wolfbeauty: 0, whitewolfking: 0, gargoyle: 0, bloodmoonapostle: 0, evilknight: 0, cupid: 0, thief: 0, wildchild: 0 };
       }
-      if (count === 10) {
-        return { wolf: 3, seer: 1, witch: 1, hunter: 1, guard: 1, villager: 4, idiot: 0, elder: 0, knight: 0, crow: 0, demonhunter: 0, gravekeeper: 0, tamer: 0, magician: 0, dreamweaver: 0, hooligan: 0, bomber: 0, snowwolf: 0, hiddenwolf: 0, wolfking: 0, wolfbeauty: 0, whitewolfking: 0, gargoyle: 0, bloodmoonapostle: 0, evilknight: 0, cupid: 0, thief: 0, wildchild: 0 };
-      }
       // 10 人以上可以用簡單規則：狼 ≈ 1/3，其餘神職 3–4 張，剩下平民
       const wolves = Math.round(count / 3);
-      const gods = 3; // 先預設 3 神：預言家、女巫、獵人
+      const gods = 3;   // 先預設 3 神：預言家、女巫、獵人
       const villagers = count - wolves - gods;
       return { wolf: wolves, seer: 1, witch: 1, hunter: 1, villager: villagers, guard:0, idiot: 0, elder: 0, knight: 0, crow: 0, demonhunter: 0, gravekeeper: 0, tamer: 0, magician: 0, dreamweaver: 0, hooligan: 0, bomber: 0, snowwolf: 0, hiddenwolf: 0, wolfking: 0, wolfbeauty: 0, whitewolfking: 0, gargoyle: 0, bloodmoonapostle: 0, evilknight: 0, cupid: 0, thief: 0, wildchild: 0 };
     }
@@ -468,7 +539,7 @@
             case "禁言長老": return { team: "good", type: "神" };
             case "騎士": return { team: "good", type: "神" };
             case "烏鴉": return { team: "good", type: "神" };
-            case "獵魔人": return { team: "good", type: "神" };
+            case "獵魔人": return {team: "good", type: "神" };
             case "守墓人": return { team: "good", type: "神" };
             case "訓熊師": return { team: "good", type: "神" };
             case "魔術師": return { team: "good", type: "神" };
@@ -536,8 +607,7 @@
         const alive = currentPlayers.filter(p => p.alive);
 
         const aliveWolves = alive.filter(p => getRoleTeamAndType(p.role).team === "wolf");
-        const aliveGods = alive.filter(p => getRoleTeamAndType(p.role).type === "神");
-        const aliveVillagers = alive.filter(p => getRoleTeamAndType(p.role).type === "民");
+        const aliveGoodPeople = alive.filter(p => getRoleTeamAndType(p.role).team === "good");
 
         // 好人獲勝條件：所有狼人出局
         if (aliveWolves.length === 0) {
@@ -546,15 +616,9 @@
 
         // 狼人獲勝條件：好人被屠神或屠民(只剩下等量的狼人, 或比狼人少)
         // Simplified aggressive win for wolves: if alive wolves count >= alive good people count
-        const aliveGoodPeople = alive.filter(p => getRoleTeamAndType(p.role).team === "good");
         if (aliveWolves.length >= aliveGoodPeople.length) {
              return { winner: "wolf", reason: "狼人數量已足以屠殺所有好人，狼人陣營獲勝！" };
         }
-
-        // 檢查屠神或屠民 (原始用戶需求)
-        // if (aliveGods.length === 0 || aliveVillagers.length === 0) {
-        //     return { winner: "wolf", reason: "好人已被屠神或屠民，狼人陣營獲勝。" };
-        // }
 
         return null; // No winner yet
     }
@@ -587,49 +651,54 @@
 
     // Event Listeners
     startSetupBtn.addEventListener("click", () => {
-        const count = getNumberValue(playerCountInput);
-        if (count < 6 || count > 18) {
-            initialSetupError.textContent = '玩家人數必須介乎 6–18。 ';
-            return;
-        }
-        initialSetupError.textContent = '';
-        currentSelectedPlayerCount = count;
+      console.log("startSetupBtn 綁定成功:", startSetupBtn); // Debugging line
+      console.log("開始設定被點擊了！"); // Debugging line
+      const playerCount = parseInt(playerCountInput.value) || 0;
+      console.log("玩家人數:", playerCount); // Debugging line
+      if (playerCount < 6 || playerCount > 18) {
+        initialSetupError.textContent = '玩家人數必須介乎 6–18。';
+        console.log("驗證失敗：玩家人數不在範圍內"); // Debugging line
+        return;
+      }
+      initialSetupError.textContent = '';
+      currentSelectedPlayerCount = playerCount;
 
-        const defaultRoles = getDefaultRoles(count);
-        numWolfInput.value = defaultRoles.wolf;
-        numSeerInput.value = defaultRoles.seer;
-        numWitchInput.value = defaultRoles.witch;
-        numHunterInput.value = defaultRoles.hunter || 0; // Use 0 if undefined
-        numGuardInput.value = defaultRoles.guard || 0; // Use 0 if undefined
-        numVillagerInput.value = defaultRoles.villager || 0; // Use 0 if undefined
+      const defaultRoles = getDefaultRoles(playerCount);
+      numWolfInput.value = defaultRoles.wolf;
+      numSeerInput.value = defaultRoles.seer;
+      numWitchInput.value = defaultRoles.witch;
+      numHunterInput.value = defaultRoles.hunter || 0;
+      numGuardInput.value = defaultRoles.guard || 0;
+      numVillagerInput.value = defaultRoles.villager || 0;
+      numIdiotInput.value = defaultRoles.idiot || 0;
+      numElderInput.value = defaultRoles.elder || 0;
+      numKnightInput.value = defaultRoles.knight || 0;
+      numCrowInput.value = defaultRoles.crow || 0;
+      numDemonhunterInput.value = defaultRoles.demonhunter || 0;
+      numGravekeeperInput.value = defaultRoles.gravekeeper || 0;
+      numTamerInput.value = defaultRoles.tamer || 0;
+      numMagicianInput.value = defaultRoles.magician || 0;
+      numDreamweaverInput.value = defaultRoles.dreamweaver || 0;
+      numHooliganInput.value = defaultRoles.hooligan || 0;
+      numBomberInput.value = defaultRoles.bomber || 0;
+      numSnowwolfInput.value = defaultRoles.snowwolf || 0;
+      numHiddenwolfInput.value = defaultRoles.hiddenwolf || 0;
+      numWolfkingInput.value = defaultRoles.wolfking || 0;
+      numWolfbeautyInput.value = defaultRoles.wolfbeauty || 0;
+      numWhitewolfkingInput.value = defaultRoles.whitewolfking || 0;
+      numGargoyleInput.value = defaultRoles.gargoyle || 0;
+      numBloodmoonapostleInput.value = defaultRoles.bloodmoonapostle || 0;
+      numEvilknightInput.value = defaultRoles.evilknight || 0;
+      numCupidInput.value = defaultRoles.cupid || 0;
+      numThiefInput.value = defaultRoles.thief || 0;
+      numWildchildInput.value = defaultRoles.wildchild || 0;
 
-        // Set values for newly added roles, defaulting to 0
-        numIdiotInput.value = defaultRoles.idiot || 0;
-        numElderInput.value = defaultRoles.elder || 0;
-        numKnightInput.value = defaultRoles.knight || 0;
-        numCrowInput.value = defaultRoles.crow || 0;
-        numDemonhunterInput.value = defaultRoles.demonhunter || 0;
-        numGravekeeperInput.value = defaultRoles.gravekeeper || 0;
-        numTamerInput.value = defaultRoles.tamer || 0;
-        numMagicianInput.value = defaultRoles.magician || 0;
-        numDreamweaverInput.value = defaultRoles.dreamweaver || 0;
-        numHooliganInput.value = defaultRoles.hooligan || 0;
-        numBomberInput.value = defaultRoles.bomber || 0;
-        numSnowwolfInput.value = defaultRoles.snowwolf || 0;
-        numHiddenwolfInput.value = defaultRoles.hiddenwolf || 0;
-        numWolfkingInput.value = defaultRoles.wolfking || 0;
-        numWolfbeautyInput.value = defaultRoles.wolfbeauty || 0;
-        numWhitewolfkingInput.value = defaultRoles.whitewolfking || 0;
-        numGargoyleInput.value = defaultRoles.gargoyle || 0;
-        numBloodmoonapostleInput.value = defaultRoles.bloodmoonapostle || 0;
-        numEvilknightInput.value = defaultRoles.evilknight || 0;
-        numCupidInput.value = defaultRoles.cupid || 0;
-        numThiefInput.value = defaultRoles.thief || 0;
-        numWildchildInput.value = defaultRoles.wildchild || 0;
+      console.log("設定角色數量：", defaultRoles); // Debugging line
 
-        initialSetupSection.classList.add("hidden");
-        roleSetupSection.classList.remove("hidden");
-        resetSection.classList.add("hidden"); // Hide global reset button in initial setup
+      initialSetupSection.classList.add("hidden");
+      roleSetupSection.classList.remove("hidden");
+      resetSection.classList.add("hidden");
+      console.log("切換到角色設定畫面"); // Debugging line
     });
 
     backToPlayerCountBtn.addEventListener("click", () => {
@@ -637,6 +706,7 @@
         roleSetupSection.classList.add("hidden");
         roleSetupError.textContent = ''; // Clear previous state if any
         resetSection.classList.add("hidden"); // Hide global reset button
+        console.log("返回玩家人數選擇畫面"); // Debugging line
     });
 
     dealBtn.addEventListener("click", () => {
@@ -709,6 +779,7 @@
           ") 必須等於玩家人數 (" +
           playerCount +
           ")。只有在您手動修改角色數量後才會檢查此項。 ";
+        console.log("驗證失敗：角色總數不符"); // Debugging line
         return;
       }
 
@@ -755,9 +826,10 @@
       addRoles("盜賊", numThief, "third", "第三方");
       addRoles("野孩子", numWildchild, "third", "第三方");
 
-      fisherYatesShuffle(rolesPool);
+      const shuffledRoles = [...rolesPool]; // Create a copy for shuffling
+      fisherYatesShuffle(shuffledRoles);
 
-      players = rolesPool.map((roleObj, index) => ({
+      players = shuffledRoles.map((roleObj, index) => ({
         id: index + 1,
         name: `玩家${index + 1}`,
         role: roleObj.role,
@@ -766,36 +838,51 @@
         alive: true,
       }));
 
+      console.log("發牌結果:", players); // Debugging line
+
       roleSetupSection.classList.add("hidden");
       initialSetupSection.classList.add("hidden");
       playerSection.classList.remove("hidden");
       resetSection.classList.remove("hidden"); // Show reset button once game starts
 
-      startPlayerFlow();
+      startPlayerFlow(); // This function needs to be defined or replaced.
+      console.log("切換到玩家看牌畫面"); // Debugging line
     });
 
     showRoleBtn.addEventListener("click", () => {
-        console.log("show role clicked"); 
-      if (currentPlayerIndex >= players.length) return;
+      console.log("showRoleBtn 綁定成功:", showRoleBtn); // Debugging line
+      console.log("顯示角色被點擊了！"); // Debugging line
+      console.log("=== DEBUG ===");
+      console.log("players:", players);
+      console.log("players.length:", players.length);
+      console.log("currentPlayerIndex:", currentPlayerIndex);
+      console.log("roleText:", roleText);
+      if (currentPlayerIndex >= players.length) {
+        console.log(" currentPlayerIndex 已經超出 players.length, 不再顯示角色"); // Debugging line
+        return;
+      }
       const p = players[currentPlayerIndex];
       p.name = currentPlayerNameInput.value.trim() || (`玩家${p.id}`); 
       roleText.textContent = `你的角色是：「${p.role}」`;
       roleText.classList.remove("hidden");
       showRoleBtn.classList.add("hidden");
       nextPlayerBtn.classList.remove("hidden");
+      console.log(`顯示玩家 ${p.id} (名稱: ${p.name}) 的角色: ${p.role}`); // Debugging line
     });
 
     nextPlayerBtn.addEventListener("click", () => {
-      console.log("隱藏角色，切去下一位");
+      console.log("隱藏角色，切去下一位"); // Debugging line
       roleText.classList.add("hidden");
       roleText.textContent = ""; // Clear previous role text content
       nextPlayerBtn.classList.add("hidden");
       showRoleBtn.classList.remove("hidden");
       currentPlayerIndex++;
       updatePlayerView(); 
+      renderUsedRolesHelp(); // Re-render used roles in case player name was updated
     });
 
     backToRoleSetupBtn.addEventListener("click", () => {
+        console.log("返回角色設定畫面 (從玩家看牌)"); // Debugging line
         playerSection.classList.add("hidden");
         playerStatusSection.classList.add("hidden");
         roleSetupSection.classList.remove("hidden"); 
@@ -809,12 +896,12 @@
         currentPlayerIndex = 0;
     });
 
-
     resetGameBtn.addEventListener('click', () => {
+        console.log("重新設定遊戲按鈕被點擊"); // Debugging line
         if (!confirm("確定要重新設定遊戲嗎？所有進度將會遺失。")) {
             return;
         }
-        // Simulate a full reset to initial setup
+        // Simulate a full reset to specific initial setup
         players = [];
         currentPlayerIndex = 0;
         currentSelectedPlayerCount = 9; // Reset to default
@@ -843,10 +930,14 @@
         nextPlayerBtn.classList.add("hidden");
         playerEndText.textContent = "";
         playerStatusListDiv.innerHTML = '';
+
+        renderAllRolesHelp(); // Re-render role descriptions if needed
+        console.log("遊戲已重置到初始設定"); // Debugging line
     });
 
     // Initial state setup on page load
     document.addEventListener('DOMContentLoaded', () => {
+        console.log("DOMContentLoaded 觸發，初始化設定"); // Debugging line
         // Ensure only initial setup is visible at load
         initialSetupSection.classList.remove("hidden");
         roleSetupSection.classList.add("hidden");
@@ -854,7 +945,13 @@
         playerStatusSection.classList.add("hidden");
         playerCountInput.value = 9; // Set default player count
         resetSection.classList.add("hidden"); // Hide reset button initially
+        renderAllRolesHelp();
     });
+
+    function startPlayerFlow() {
+        currentPlayerIndex = 0; // Reset index for new game
+        updatePlayerView();
+    }
   </script>
 </body>
 </html>

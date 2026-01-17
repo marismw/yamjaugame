@@ -16,7 +16,8 @@
 /* 泛用基礎樣式 - 應用於所有頁面（最小限度） */
 /* ======================================================= */
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif, 'Microsoft JhengHei', 'PingFang TC', sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui,
+                 sans-serif, 'Microsoft JhengHei', 'PingFang TC'; /* Updated font family */
     line-height: 1.6;
     margin: 0;
     padding: 0;

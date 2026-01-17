@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+  <meta charset="UTF-8" />
+  <title>啤牌酒Game – 狼人殺（主持輔助版）</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* Additional responsive styles for Werewolf page layout */
+    .main-wrapper {
+        display: flex;
+        flex-direction: column; /* Stack on mobile */
+        max-width: 960px; /* Max width for desktop */
+        margin: 20px auto; /* Centering and top/bottom margin */
+        gap: 20px; /* Gap between sections */
+        padding: 0 20px;
+    }
+    @media (min-width: 768px) {
+        .main-wrapper {
+            flex-direction: row; /* A left, B+C right on desktop */
+            align-items: flex-start; /* Align items to the top */
+        }
+        .left-panel {
+            flex: 1; /* Takes 1 part of space */
+            min-width: 300px; /* Ensure it doesn't get too small */
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .right-panel {
+            flex: 2; /* Takes 2 parts of space */
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            min-width: 400px; /* Ensure it doesn't get too small */
+        }
+    }
+
+    /* General styles for sections to mimic game cards */
+    .game-section-card {
+        background: linear-gradient(145deg, var(--dpd-card-bg-darker), var(--dpd-bg-dark)); /* Use existing variables */
+        border-radius: 20px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
+        padding: 30px;
+        color: var(--dpd-text-light);
+        position: relative; /* For absolute positioning of back button */
+    }
+
+    .game-section-card h2 {
+        color: var(--accent-warm-yellow); /* Use existing variables */
+        font-size: 1.8em;
+        margin-top: 0;
+        margin-bottom: 20px;
+        border-bottom: 2px solid var(--accent-dark-green); /* Use existing variables */
+        padding-bottom: 10px;
+        text-align: center;
+    }
+
+    .game-section-card label {
+        color: var(--dpd-text-light);
+        font-size: 1.1em;
+        margin-top: 10px;
+        margin-bottom: 5px;
+        display: block;
+    }
+
+    .game-section-card input[type="number"],
+    .game-section-card input[type="text"] {
+        width: calc(100% - 20px); /* Adjust for padding */
+        padding: 10px;
+        border-radius: 8px;
+        border: 1px solid var(--dpd-border-gray);
+        background-color: #333;
+        color: var(--dpd-text-light);
+        font-size: 1em;
+    }
+
+    /* Button styles reusing existing classes */
+    .dpd-game-button {
+        margin-top: 20px;
+        /* width: auto; */ /* Override 100% width if set elsewhere for game-button */
+    }
+    .dpd-game-button.secondary {
+        margin-left: 10px;
+    }
+
+    /* Specific styles for player status list */
+    .player-list-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 8px 0;
+        border-bottom: 1px solid var(--dpd-border-gray); /* Consistent separator */
+        font-size: 1em;
+        color: var(--dpd-text-light); /* Default text color */
+    }
+    .player-list-item:last-child {
+        border-bottom: none;
+    }
+    .player-list-item.dead .player-name,
+    .player-list-item.dead .player-status {
+        color: var(--dpd-border-gray); /* Grayer when dead */
+        text-decoration: line-through;
+    }
+    .player-list-item .toggle-status-btn {
+        background-color: var(--accent-warm-yellow); /* Yellow for toggle */
+        color: #1a1a1a;
+        font-size: 0.8em;
+        padding: 5px 10px;
+        border-radius: 50px;
+        margin-top: 0;
+    }
+    .player-list-item.dead .toggle-status-btn {
+        background-color: var(--warm-orange); /* Orange when dead */
+    }
+
+    /* Section Specific Collapsed/Expanded Styles */
+    #initial-setup-section.hidden,
+    #role-setup-section.hidden,
+    #player-section.hidden,
+    #player-status-section.hidden,
+    #reset-section.hidden {
+        display: none !important;
+    }
+
+    /* Host Done is now just part of initial setup */
+    #host-done-section {
+        display: none !important; /* Always hidden, logic absorbed */
+    }
+
+    #initial-setup-section {
+        width: 100%;
+    }
+    #role-setup-section {
+        width: 100%;
+    }
+
+    /* Player view styling */
+    #player-section {
+        flex-grow: 1; /* Takes available space in right panel */
+    }
+
+    #player-section .big-number {
+        font-size: 2em;
+        margin-bottom: 15px;
+        color: var(--accent-warm-yellow);
+    }
+
+    #player-section .role-display {
+        font-size: 2.5em;
+        padding: 20px;
+        margin-top: 20px;
+        background-color: var(--dpd-bg-dark);
+        border: 2px solid var(--accent-dark-green);
+        border-radius: 10px;
+    }
+
+    #player-section input[type="text"] {
+        margin-bottom: 20px;
+    }
+
+    /* Player status styling */
+    #player-status-section h2 {
+        border-bottom: none;
+        padding-bottom: 0;
+        margin-bottom: 10px;
+        color: var(--dpd-text-light);
+        font-size: 1.5em;
+    }
+
+    .player-status-list {
+        font-size: 0.9em;
+        list-style: none;
+        padding: 0;
+    }
+
+    .player-status-list li {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 5px 0;
+        border-bottom: 1px solid rgba(255,255,255,0.1); /* Lighter separator */
+    }
+
+    .player-status-list li:last-child {
+        border-bottom: none;
+    }
+
+    .player-status-list .alive-name {
+        color: var(--dpd-text-light);
+        font-weight: bold;
+    }
+
+    .player-status-list .dead-name {
+        color: var(--dpd-border-gray);
+        text-decoration: line-through;
+    }
+    .back-to-home-btn-fixed {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        z-index: 1000;
+    }
+    /* Hide the global reset button when initial setup is not visible */
+    body:not(.initial-setup-active) #global-reset-btn {
+        display: none;
+    }
+
+  </style>
+</head>
+<body>
+  <a href="index.html" class="back-button back-to-home-btn-fixed">← 返回主頁</a>
+
+  <div class="main-wrapper">
+    <!-- 區塊 A：初始設定 - 只選擇人數 -->
+    <section id="initial-setup-section" class="game-section-card">
+      <h2>步驟 1：選擇玩家人數</h2>
+      <label for="player-count">玩家人數（6–18）</label>
+      <input type="number" id="player-count" min="6" max="18" value="9" />
+      <button class="dpd-game-button" id="start-setup-btn">開始設定</button>
+      <div class="error" id="initial-setup-error"></div>
+    </section>
+
+    <!-- 區塊 A 的延伸：角色數量設定 -->
+    <section id="role-setup-section" class="game-section-card hidden">
+      <h2>步驟 2：設定角色數量</h2>
+      <div class="info" style="margin-top:0.8rem; font-size: 1em; color: var(--dpd-text-light);">
+        請調整各角色數量，總數需與玩家人數一致：
+      </div>
+      <label for="num-wolf">狼人</label>
+      <input type="number" id="num-wolf" min="0" value="3" />
+      <label for="num-seer">預言家</label>
+      <input type="number" id="num-seer" min="0" value="1" />
+      <label for="num-witch">女巫</label>
+      <input type="number" id="num-witch" min="0" value="1" />
+      <label for="num-hunter">獵人</label>
+      <input type="number" id="num-hunter" min="0" value="1" />
+      <label for="num-guard">守衛</label>
+      <input type="number" id="num-guard" min="0" value="1" />
+      <label for="num-villager">平民</label>
+      <input type="number" id="num-villager" min="0" value="3" />
+
+      <!-- 好人陣營（神職＋平民） -->
+      <label for="num-idiot">白癡</label>
+      <input type="number" id="num-idiot" min="0" value="0" />
+      <label for="num-elder">禁言長老</label>
+      <input type="number" id="num-elder" min="0" value="0" />
+      <label for="num-knight">騎士</label>
+      <input type="number" id="num-knight" min="0" value="0" />
+      <label for="num-crow">烏鴉</label>
+      <input type="number" id="num-crow" min="0" value="0" />
+      <label for="num-demonhunter">獵魔人</label>
+      <input type="number" id="num-demonhunter" min="0" value="0" />
+      <label for="num-gravekeeper">守墓人</label>
+      <input type="number" id="num-gravekeeper" min="0" value="0" />
+      <label for="num-tamer">訓熊師</label>
+      <input type="number" id="num-tamer" min="0" value="0" />
+      <label for="num-magician">魔術師</label>
+      <input type="number" id="num-magician" min="0" value="0" />
+      <label for="num-dreamweaver">攝夢人</label>
+      <input type="number" id="num-dreamweaver" min="0" value="0" />
+      <label for="num-hooligan">老流氓</label>
+      <input type="number" id="num-hooligan" min="0" value="0" />
+      <label for="num-bomber">炸彈人</label>
+      <input type="number" id="num-bomber" min="0" value="0" />
+
+      <!-- 狼人陣營 -->
+      <label for="num-snowwolf">雪狼</label>
+      <input type="number" id="num-snowwolf" min="0" value="0" />
+      <label for="num-hiddenwolf">隱狼</label>
+      <input type="number" id="num-hiddenwolf" min="0" value="0" />
+      <label for="num-wolfking">狼王</label>
+      <input type="number" id="num-wolfking" min="0" value="0" />
+      <label for="num-wolfbeauty">狼美人</label>
+      <input type="number" id="num-wolfbeauty" min="0" value="0" />
+      <label for="num-whitewolfking">白狼王</label>
+      <input type="number" id="num-whitewolfking" min="0" value="0" />
+      <label for="num-gargoyle">石像鬼</label>
+      <input type="number" id="num-gargoyle" min="0" value="0" />
+      <label for="num-bloodmoonapostle">血月使徒</label>
+      <input type="number" id="num-bloodmoonapostle" min="0" value="0" />
+      <label for="num-evilknight">惡靈騎士</label>
+      <input type="number" id="num-evilknight" min="0" value="0" />
+
+      <!-- 第三方陣營 -->
+      <label for="num-cupid">邱比特</label>
+      <input type="number" id="num-cupid" min="0" value="0" />
+      <label for="num-thief">盜賊</label>
+      <input type="number" id="num-thief" min="0" value="0" />
+      <label for="num-wildchild">野孩子</label>
+      <input type="number" id="num-wildchild" min="0" value="0" />
+
+      <button class="dpd-game-button" id="deal-btn">發卡</button>
+      <div class="error" id="role-setup-error"></div>
+      <p class="info">
+        提示：發卡後才設定玩家名字。夜晚流程由你口頭主持。
+      </p>
+       <button class="dpd-game-button secondary" id="back-to-player-count-btn">
+        返回選擇人數
+      </button>
+    </section>
+
+    <div class="right-panel">
+        <!-- 玩家輪流看牌 -->
+        <section id="player-section" class="game-section-card hidden">
+          <h2>步驟 3：玩家輪流看牌</h2>
+          <p class="info">
+            請除了「輪到的玩家」以外，其他人先避開螢幕。由主持人操作按鈕。
+          </p>
+          <div id="player-flow">
+            <div id="player-info" style="text-align: center;">
+                <div class="big-number" id="current-player-label"></div>
+                <label for="current-player-name-input">玩家名稱</label>
+                <input type="text" id="current-player-name-input" class="player-name-input-flow"/>
+            </div>
+            <div id="role-box" style="text-align: center;">
+              <div class="role-display hidden" id="role-text"></div>
+            </div>
+            <button class="dpd-game-button" id="show-role-btn">顯示角色</button>
+            <button class="dpd-game-button secondary hidden" id="next-player-btn">
+              隱藏並交給下一位
+            </button>
+          </div>
+          <div class="info" id="player-end-text"></div>
+          <button class="dpd-game-button secondary" id="back-to-role-setup-btn" style="margin-top:0.6rem;">
+            返回角色設定
+          </button>
+        </section>
+
+        <!-- 玩家狀態區塊 -->
+        <section id="player-status-section" class="game-section-card hidden">
+            <h2>步驟 4：玩家狀態</h2>
+            <div id="player-status-list"></div>
+        </section>
+    </div>
+  </div>
+
+  <!-- 遊戲重置區塊 -->
+  <section id="reset-section" class="game-section-card hidden">
+      <button class="dpd-game-button secondary" id="reset-game-btn">重新設定遊戲</button>
+  </section>
+
+  <script>
+    // 狀態
+    let players = []; // {id, name, role, team, type, alive}
+    let currentPlayerIndex = 0;
+    let currentSelectedPlayerCount = 9; // Default or last chosen player count
+
+    // 元素 - Sections
+    const initialSetupSection = document.getElementById("initial-setup-section");
+    const roleSetupSection = document.getElementById("role-setup-section");
+    const playerSection = document.getElementById("player-section");
+    const playerStatusSection = document.getElementById("player-status-section");
+    const resetSection = document.getElementById("reset-section");
+
+    // 元素 - Initial Setup (Phase 1)
+    const playerCountInput = document.getElementById("player-count");
+    const startSetupBtn = document.getElementById("start-setup-btn");
+    const initialSetupError = document.getElementById("initial-setup-error");
+
+    // 元素 - Role Setup (Phase 2)
+    const numWolfInput = document.getElementById("num-wolf");
+    const numSeerInput = document.getElementById("num-seer");
+    const numWitchInput = document.getElementById("num-witch");
+    const numHunterInput = document.getElementById("num-hunter");
+    const numGuardInput = document.getElementById("num-guard");
+    const numVillagerInput = document.getElementById("num-villager");
+
+    const numIdiotInput = document.getElementById("num-idiot");
+    const numElderInput = document.getElementById("num-elder");
+    const numKnightInput = document.getElementById("num-knight");
+    const numCrowInput = document.getElementById("num-crow");
+    const numDemonhunterInput = document.getElementById("num-demonhunter");
+    const numGravekeeperInput = document.getElementById("num-gravekeeper");
+    const numTamerInput = document.getElementById("num-tamer");
+    const numMagicianInput = document.getElementById("num-magician");
+    const numDreamweaverInput = document.getElementById("num-dreamweaver");
+    const numHooliganInput = document.getElementById("num-hooligan");
+    const numBomberInput = document.getElementById("num-bomber");
+    const numSnowwolfInput = document.getElementById("num-snowwolf");
+    const numHiddenwolfInput = document.getElementById("num-hiddenwolf");
+    const numWolfkingInput = document.getElementById("num-wolfking");
+    const numWolfbeautyInput = document.getElementById("num-wolfbeauty");
+    const numWhitewolfkingInput = document.getElementById("num-whitewolfking");
+    const numGargoyleInput = document.getElementById("num-gargoyle");
+    const numBloodmoonapostleInput = document.getElementById("num-bloodmoonapostle");
+    const numEvilknightInput = document.getElementById("num-evilknight");
+    const numCupidInput = document.getElementById("num-cupid");
+    const numThiefInput = document.getElementById("num-thief");
+    const numWildchildInput = document.getElementById("num-wildchild");
+
+    const dealBtn = document.getElementById("deal-btn");
+    const roleSetupError = document.getElementById("role-setup-error");
+    const backToPlayerCountBtn = document.getElementById("back-to-player-count-btn");
+
+
+    // 元素 - Player Section (Phase 3+)
+    const currentPlayerLabel = document.getElementById("current-player-label");
+    const currentPlayerNameInput = document.getElementById("current-player-name-input");
+    const roleText = document.getElementById("role-text");
+    const showRoleBtn = document.getElementById("show-role-btn");
+    const nextPlayerBtn = document.getElementById("next-player-btn");
+    const playerEndText = document.getElementById("player-end-text");
+    const backToRoleSetupBtn = document.getElementById("back-to-role-setup-btn");
+
+    // 元素 - Player Status Section
+    const playerStatusListDiv = document.getElementById("player-status-list");
+
+    // 元素 - Reset Section
+    const resetGameBtn = document.getElementById("reset-game-btn");
+
+
+    // Helper Functions
+    function getNumberValue(element) {
+      return parseInt(element.value || "0", 10);
+    }
+
+    function fisherYatesShuffle(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+    }
+
+    function getDefaultRoles(count) {
+      // 先寫死幾個常用人數
+      if (count === 6) {
+        return { wolf: 2, seer: 1, witch: 1, guard: 1, villager: 1, hunter: 0, idiot: 0, elder: 0, knight: 0, crow: 0, demonhunter: 0, gravekeeper: 0, tamer: 0, magician: 0, dreamweaver: 0, hooligan: 0, bomber: 0, snowwolf: 0, hiddenwolf: 0, wolfking: 0, wolfbeauty: 0, whitewolfking: 0, gargoyle: 0, bloodmoonapostle: 0, evilknight: 0, cupid: 0, thief: 0, wildchild: 0 };
+      }
+      if (count === 7) {
+        return { wolf: 2, seer: 1, witch: 1, hunter: 1, guard: 1, villager: 1, idiot: 0, elder: 0, knight: 0, crow: 0, demonhunter: 0, gravekeeper: 0, tamer: 0, magician: 0, dreamweaver: 0, hooligan: 0, bomber: 0, snowwolf: 0, hiddenwolf: 0, wolfking: 0, wolfbeauty: 0, whitewolfking: 0, gargoyle: 0, bloodmoonapostle: 0, evilknight: 0, cupid: 0, thief: 0, wildchild: 0 };
+      }
+      if (count === 8) {
+        return { wolf: 3, seer: 1, witch: 1, hunter: 1, guard: 1, villager: 2, idiot: 0, elder: 0, knight: 0, crow: 0, demonhunter: 0, gravekeeper: 0, tamer: 0, magician: 0, dreamweaver: 0, hooligan: 0, bomber: 0, snowwolf: 0, hiddenwolf: 0, wolfking: 0, wolfbeauty: 0, whitewolfking: 0, gargoyle: 0, bloodmoonapostle: 0, evilknight: 0, cupid: 0, thief: 0, wildchild: 0 };
+      }
+      if (count === 9) {
+        return { wolf: 3, seer: 1, witch: 1, hunter: 1, guard: 1, villager: 3, idiot: 0, elder: 0, knight: 0, crow: 0, demonhunter: 0, gravekeeper: 0, tamer: 0, magician: 0, dreamweaver: 0, hooligan: 0, bomber: 0, snowwolf: 0, hiddenwolf: 0, wolfking: 0, wolfbeauty: 0, whitewolfking: 0, gargoyle: 0, bloodmoonapostle: 0, evilknight: 0, cupid: 0, thief: 0, wildchild: 0 };
+      }
+      if (count === 10) {
+        return { wolf: 3, seer: 1, witch: 1, hunter: 1, guard: 1, villager: 4, idiot: 0, elder: 0, knight: 0, crow: 0, demonhunter: 0, gravekeeper: 0, tamer: 0, magician: 0, dreamweaver: 0, hooligan: 0, bomber: 0, snowwolf: 0, hiddenwolf: 0, wolfking: 0, wolfbeauty: 0, whitewolfking: 0, gargoyle: 0, bloodmoonapostle: 0, evilknight: 0, cupid: 0, thief: 0, wildchild: 0 };
+      }
+      // 10 人以上可以用簡單規則：狼 ≈ 1/3，其餘神職 3–4 張，剩下平民
+      const wolves = Math.round(count / 3);
+      const gods = 3; // 先預設 3 神：預言家、女巫、獵人
+      const villagers = count - wolves - gods;
+      return { wolf: wolves, seer: 1, witch: 1, hunter: 1, villager: villagers, guard:0, idiot: 0, elder: 0, knight: 0, crow: 0, demonhunter: 0, gravekeeper: 0, tamer: 0, magician: 0, dreamweaver: 0, hooligan: 0, bomber: 0, snowwolf: 0, hiddenwolf: 0, wolfking: 0, wolfbeauty: 0, whitewolfking: 0, gargoyle: 0, bloodmoonapostle: 0, evilknight: 0, cupid: 0, thief: 0, wildchild: 0 };
+    }
+
+    function getRoleTeamAndType(roleName) {
+        switch (roleName) {
+            // 狼人陣營
+            case "狼人": return { team: "wolf", type: "狼" };
+            case "雪狼": return { team: "wolf", type: "狼" };
+            case "隱狼": return { team: "wolf", type: "狼" };
+            case "狼王": return { team: "wolf", type: "狼" };
+            case "狼美人": return { team: "wolf", type: "狼" };
+            case "白狼王": return { team: "wolf", type: "狼" };
+            case "石像鬼": return { team: "wolf", type: "狼" };
+            case "血月使徒": return { team: "wolf", type: "狼" };
+            case "惡靈騎士": return { team: "wolf", type: "狼" };
+
+            // 好人神職
+            case "預言家": return { team: "good", type: "神" };
+            case "女巫": return { team: "good", type: "神" };
+            case "獵人": return { team: "good", type: "神" };
+            case "守衛": return { team: "good", type: "神" };
+            case "白癡": return { team: "good", type: "神" };
+            case "禁言長老": return { team: "good", type: "神" };
+            case "騎士": return { team: "good", type: "神" };
+            case "烏鴉": return { team: "good", type: "神" };
+            case "獵魔人": return { team: "good", type: "神" };
+            case "守墓人": return { team: "good", type: "神" };
+            case "訓熊師": return { team: "good", type: "神" };
+            case "魔術師": return { team: "good", type: "神" };
+            case "攝夢人": return { team: "good", type: "神" };
+            case "炸彈人": return { team: "good", type: "神" };
+
+            // 平民
+            case "平民": return { team: "good", type: "民" };
+            case "老流氓": return { team: "good", type: "民" };
+
+            // 第三方陣營
+            case "邱比特": return { team: "third", type: "第三方" };
+            case "盜賊": return { team: "third", type: "第三方" };
+            case "野孩子": return { team: "third", type: "第三方" };
+
+            default: return { team: "unknown", type: "unknown" };
+        }
+    }
+
+    function renderPlayerStatus() {
+        playerStatusListDiv.innerHTML = '<h2>玩家目前狀況</h2>'; // Add a title
+        players.forEach(player => {
+            const div = document.createElement('div');
+            div.classList.add('player-list-item');
+            if (!player.alive) {
+                div.classList.add('dead');
+            }
+            const buttonText = player.alive ? "標記為死亡" : "撤回死亡標記";
+            div.innerHTML = `
+                <span class="player-name">${player.name} (玩家${player.id})</span>
+                <span class="player-status">狀態：${player.alive ? '存活' : '已死亡'}</span>
+                <button class="dpd-game-button secondary toggle-status-btn" onclick="toggleAlive(${player.id})">
+                    ${buttonText}
+                </button>
+            `;
+            playerStatusListDiv.appendChild(div);
+        });
+        
+        const winResult = checkWin(players);
+        if (winResult) {
+            const resultDiv = document.createElement('div');
+            resultDiv.className = 'info'
+            resultDiv.style.fontWeight = 'bold';
+            resultDiv.style.color = winResult.winner === 'wolf' ? '#f97373' : '#4CAF50';
+            resultDiv.textContent = winResult.reason;
+            playerStatusListDiv.appendChild(resultDiv);
+            alert(winResult.reason); // Pop up alert for victory
+        }
+    }
+
+    window.toggleAlive = function(id) {
+        const player = players.find(p => p.id === id);
+        if (player) {
+            if (!player.alive) { // If currently dead, confirm before reviving
+                if (!confirm(`確定要把 ${player.name} 標記為存活嗎？`)) {
+                    return; // User cancelled
+                }
+            }
+            player.alive = !player.alive;
+            renderPlayerStatus();
+        }
+    };
+
+    function checkWin(currentPlayers) {
+        const alive = currentPlayers.filter(p => p.alive);
+
+        const aliveWolves = alive.filter(p => getRoleTeamAndType(p.role).team === "wolf");
+        const aliveGods = alive.filter(p => getRoleTeamAndType(p.role).type === "神");
+        const aliveVillagers = alive.filter(p => getRoleTeamAndType(p.role).type === "民");
+
+        // 好人獲勝條件：所有狼人出局
+        if (aliveWolves.length === 0) {
+            return { winner: "good", reason: "所有狼人已出局，好人陣營獲勝！" };
+        }
+
+        // 狼人獲勝條件：好人被屠神或屠民(只剩下等量的狼人, 或比狼人少)
+        // Simplified aggressive win for wolves: if alive wolves count >= alive good people count
+        const aliveGoodPeople = alive.filter(p => getRoleTeamAndType(p.role).team === "good");
+        if (aliveWolves.length >= aliveGoodPeople.length) {
+             return { winner: "wolf", reason: "狼人數量已足以屠殺所有好人，狼人陣營獲勝！" };
+        }
+
+        // 檢查屠神或屠民 (原始用戶需求)
+        // if (aliveGods.length === 0 || aliveVillagers.length === 0) {
+        //     return { winner: "wolf", reason: "好人已被屠神或屠民，狼人陣營獲勝。" };
+        // }
+
+        return null; // No winner yet
+    }
+
+
+    function updatePlayerView() {
+      if (currentPlayerIndex >= players.length) {
+        // All players have viewed their roles
+        currentPlayerLabel.textContent = "所有玩家已看完身份";
+        currentPlayerNameInput.classList.add("hidden"); // Hide name input when done
+        playerEndText.textContent = "可以開始遊戲囉！";
+        showRoleBtn.classList.add("hidden");
+        nextPlayerBtn.classList.add("hidden");
+        roleText.classList.add("hidden"); // Ensure role text is hidden
+        playerStatusSection.classList.remove("hidden"); // Show player status section after all viewed
+        renderPlayerStatus(); // Final render to ensure all name updates are reflected
+        return;
+      }
+      const p = players[currentPlayerIndex];
+      currentPlayerLabel.textContent = "輪到：" + (p.name || (`玩家${p.id}`));
+      currentPlayerNameInput.value = p.name || (`玩家${p.id}`);
+      currentPlayerNameInput.classList.remove("hidden"); 
+
+      // Ensure role text and next button are hidden for the new player's turn
+      roleText.classList.add("hidden");
+      roleText.textContent = ""; // Clear previous role text
+      nextPlayerBtn.classList.add("hidden");
+      showRoleBtn.classList.remove("hidden"); // Show '顯示角色' button
+    }
+
+    // Event Listeners
+    startSetupBtn.addEventListener("click", () => {
+        const count = getNumberValue(playerCountInput);
+        if (count < 6 || count > 18) {
+            initialSetupError.textContent = '玩家人數必須介乎 6–18。 ';
+            return;
+        }
+        initialSetupError.textContent = '';
+        currentSelectedPlayerCount = count;
+
+        const defaultRoles = getDefaultRoles(count);
+        numWolfInput.value = defaultRoles.wolf;
+        numSeerInput.value = defaultRoles.seer;
+        numWitchInput.value = defaultRoles.witch;
+        numHunterInput.value = defaultRoles.hunter || 0; // Use 0 if undefined
+        numGuardInput.value = defaultRoles.guard || 0; // Use 0 if undefined
+        numVillagerInput.value = defaultRoles.villager || 0; // Use 0 if undefined
+
+        // Set values for newly added roles, defaulting to 0
+        numIdiotInput.value = defaultRoles.idiot || 0;
+        numElderInput.value = defaultRoles.elder || 0;
+        numKnightInput.value = defaultRoles.knight || 0;
+        numCrowInput.value = defaultRoles.crow || 0;
+        numDemonhunterInput.value = defaultRoles.demonhunter || 0;
+        numGravekeeperInput.value = defaultRoles.gravekeeper || 0;
+        numTamerInput.value = defaultRoles.tamer || 0;
+        numMagicianInput.value = defaultRoles.magician || 0;
+        numDreamweaverInput.value = defaultRoles.dreamweaver || 0;
+        numHooliganInput.value = defaultRoles.hooligan || 0;
+        numBomberInput.value = defaultRoles.bomber || 0;
+        numSnowwolfInput.value = defaultRoles.snowwolf || 0;
+        numHiddenwolfInput.value = defaultRoles.hiddenwolf || 0;
+        numWolfkingInput.value = defaultRoles.wolfking || 0;
+        numWolfbeautyInput.value = defaultRoles.wolfbeauty || 0;
+        numWhitewolfkingInput.value = defaultRoles.whitewolfking || 0;
+        numGargoyleInput.value = defaultRoles.gargoyle || 0;
+        numBloodmoonapostleInput.value = defaultRoles.bloodmoonapostle || 0;
+        numEvilknightInput.value = defaultRoles.evilknight || 0;
+        numCupidInput.value = defaultRoles.cupid || 0;
+        numThiefInput.value = defaultRoles.thief || 0;
+        numWildchildInput.value = defaultRoles.wildchild || 0;
+
+        initialSetupSection.classList.add("hidden");
+        roleSetupSection.classList.remove("hidden");
+        resetSection.classList.add("hidden"); // Hide global reset button in initial setup
+    });
+
+    backToPlayerCountBtn.addEventListener("click", () => {
+        initialSetupSection.classList.remove("hidden");
+        roleSetupSection.classList.add("hidden");
+        roleSetupError.textContent = ''; // Clear previous state if any
+        resetSection.classList.add("hidden"); // Hide global reset button
+    });
+
+    dealBtn.addEventListener("click", () => {
+      const playerCount = currentSelectedPlayerCount;
+      
+      const numWolf = getNumberValue(numWolfInput);
+      const numSeer = getNumberValue(numSeerInput);
+      const numWitch = getNumberValue(numWitchInput);
+      const numHunter = getNumberValue(numHunterInput);
+      const numGuard = getNumberValue(numGuardInput);
+      const numVillager = getNumberValue(numVillagerInput);
+
+      const numIdiot = getNumberValue(numIdiotInput);
+      const numElder = getNumberValue(numElderInput);
+      const numKnight = getNumberValue(numKnightInput);
+      const numCrow = getNumberValue(numCrowInput);
+      const numDemonhunter = getNumberValue(numDemonhunterInput);
+      const numGravekeeper = getNumberValue(numGravekeeperInput);
+      const numTamer = getNumberValue(numTamerInput);
+      const numMagician = getNumberValue(numMagicianInput);
+      const numDreamweaver = getNumberValue(numDreamweaverInput);
+      const numHooligan = getNumberValue(numHooliganInput);
+      const numBomber = getNumberValue(numBomberInput);
+      const numSnowwolf = getNumberValue(numSnowwolfInput);
+      const numHiddenwolf = getNumberValue(numHiddenwolfInput);
+      const numWolfking = getNumberValue(numWolfkingInput);
+      const numWolfbeauty = getNumberValue(numWolfbeautyInput);
+      const numWhitewolfking = getNumberValue(numWhitewolfkingInput);
+      const numGargoyle = getNumberValue(numGargoyleInput);
+      const numBloodmoonapostle = getNumberValue(numBloodmoonapostleInput);
+      const numEvilknight = getNumberValue(numEvilknightInput);
+      const numCupid = getNumberValue(numCupidInput);
+      const numThief = getNumberValue(numThiefInput);
+      const numWildchild = getNumberValue(numWildchildInput);
+
+      const totalRoles =
+        numWolf +
+        numSeer +
+        numWitch +
+        numHunter +
+        numGuard +
+        numVillager +
+        numIdiot +
+        numElder +
+        numKnight +
+        numCrow +
+        numDemonhunter +
+        numGravekeeper +
+        numTamer +
+        numMagician +
+        numDreamweaver +
+        numHooligan +
+        numBomber +
+        numSnowwolf +
+        numHiddenwolf +
+        numWolfking +
+        numWolfbeauty +
+        numWhitewolfking +
+        numGargoyle +
+        numBloodmoonapostle +
+        numEvilknight +
+        numCupid +
+        numThief +
+        numWildchild;
+
+      if (totalRoles !== playerCount) {
+        roleSetupError.textContent =
+          "角色總數 (" +
+          totalRoles +
+          ") 必須等於玩家人數 (" +
+          playerCount +
+          ")。只有在您手動修改角色數量後才會檢查此項。 ";
+        return;
+      }
+
+      roleSetupError.textContent = "";
+
+      const rolesPool = [];
+      function addRoles(roleName, count, team, type) {
+          for (let i = 0; i < count; i++) {
+              rolesPool.push({ role: roleName, team: team, type: type });
+          }
+      }
+      addRoles("狼人", numWolf, "wolf", "狼");
+      addRoles("預言家", numSeer, "good", "神");
+      addRoles("女巫", numWitch, "good", "神");
+      addRoles("獵人", numHunter, "good", "神");
+      addRoles("守衛", numGuard, "good", "神");
+      addRoles("平民", numVillager, "good", "民");
+
+      // Additional Good Roles
+      addRoles("白癡", numIdiot, "good", "神");
+      addRoles("禁言長老", numElder, "good", "神");
+      addRoles("騎士", numKnight, "good", "神");
+      addRoles("烏鴉", numCrow, "good", "神");
+      addRoles("獵魔人", numDemonhunter, "good", "神");
+      addRoles("守墓人", numGravekeeper, "good", "神");
+      addRoles("訓熊師", numTamer, "good", "神");
+      addRoles("魔術師", numMagician, "good", "神");
+      addRoles("攝夢人", numDreamweaver, "good", "神");
+      addRoles("老流氓", numHooligan, "good", "民");
+      addRoles("炸彈人", numBomber, "good", "神");
+
+      // Wolf Roles
+      addRoles("雪狼", numSnowwolf, "wolf", "狼");
+      addRoles("隱狼", numHiddenwolf, "wolf", "狼");
+      addRoles("狼王", numWolfking, "wolf", "狼");
+      addRoles("狼美人", numWolfbeauty, "wolf", "狼");
+      addRoles("白狼王", numWhitewolfking, "wolf", "狼");
+      addRoles("石像鬼", numGargoyle, "wolf", "狼");
+      addRoles("血月使徒", numBloodmoonapostle, "wolf", "狼");
+      addRoles("惡靈騎士", numEvilknight, "wolf", "狼");
+
+      // Third Party Roles
+      addRoles("邱比特", numCupid, "third", "第三方");
+      addRoles("盜賊", numThief, "third", "第三方");
+      addRoles("野孩子", numWildchild, "third", "第三方");
+
+      fisherYatesShuffle(rolesPool);
+
+      players = rolesPool.map((roleObj, index) => ({
+        id: index + 1,
+        name: `玩家${index + 1}`,
+        role: roleObj.role,
+        team: roleObj.team,
+        type: roleObj.type,
+        alive: true,
+      }));
+
+      roleSetupSection.classList.add("hidden");
+      initialSetupSection.classList.add("hidden");
+      playerSection.classList.remove("hidden");
+      resetSection.classList.remove("hidden"); // Show reset button once game starts
+
+      startPlayerFlow();
+    });
+
+    showRoleBtn.addEventListener("click", () => {
+        console.log("show role clicked"); 
+      if (currentPlayerIndex >= players.length) return;
+      const p = players[currentPlayerIndex];
+      p.name = currentPlayerNameInput.value.trim() || (`玩家${p.id}`); 
+      roleText.textContent = `你的角色是：「${p.role}」`;
+      roleText.classList.remove("hidden");
+      showRoleBtn.classList.add("hidden");
+      nextPlayerBtn.classList.remove("hidden");
+    });
+
+    nextPlayerBtn.addEventListener("click", () => {
+      console.log("隱藏角色，切去下一位");
+      roleText.classList.add("hidden");
+      roleText.textContent = ""; // Clear previous role text content
+      nextPlayerBtn.classList.add("hidden");
+      showRoleBtn.classList.remove("hidden");
+      currentPlayerIndex++;
+      updatePlayerView(); 
+    });
+
+    backToRoleSetupBtn.addEventListener("click", () => {
+        playerSection.classList.add("hidden");
+        playerStatusSection.classList.add("hidden");
+        roleSetupSection.classList.remove("hidden"); 
+        resetSection.classList.add("hidden");
+        // Clear current player view state
+        currentPlayerLabel.textContent = "";
+        currentPlayerNameInput.value = "";
+        currentPlayerNameInput.classList.add("hidden");
+        playerEndText.textContent = "";
+        players = []; 
+        currentPlayerIndex = 0;
+    });
+
+
+    resetGameBtn.addEventListener('click', () => {
+        if (!confirm("確定要重新設定遊戲嗎？所有進度將會遺失。")) {
+            return;
+        }
+        // Simulate a full reset to initial setup
+        players = [];
+        currentPlayerIndex = 0;
+        currentSelectedPlayerCount = 9; // Reset to default
+
+        initialSetupSection.classList.remove("hidden");
+        roleSetupSection.classList.add("hidden");
+        playerSection.classList.add("hidden");
+        playerStatusSection.classList.add("hidden");
+        resetSection.classList.add("hidden");
+
+        // Reset input fields
+        playerCountInput.value = 9;
+        numWolfInput.value = 3; numSeerInput.value = 1; numWitchInput.value = 1;
+        numHunterInput.value = 1; numGuardInput.value = 1; numVillagerInput.value = 3;
+
+        initialSetupError.textContent = '';
+        roleSetupError.textContent = '';
+
+        // Reset player view elements
+        currentPlayerLabel.textContent = "";
+        currentPlayerNameInput.value = "";
+        currentPlayerNameInput.classList.add("hidden");
+        roleText.textContent = "";
+        roleText.classList.add("hidden");
+        showRoleBtn.classList.remove("hidden");
+        nextPlayerBtn.classList.add("hidden");
+        playerEndText.textContent = "";
+        playerStatusListDiv.innerHTML = '';
+    });
+
+    // Initial state setup on page load
+    document.addEventListener('DOMContentLoaded', () => {
+        // Ensure only initial setup is visible at load
+        initialSetupSection.classList.remove("hidden");
+        roleSetupSection.classList.add("hidden");
+        playerSection.classList.add("hidden");
+        playerStatusSection.classList.add("hidden");
+        playerCountInput.value = 9; // Set default player count
+        resetSection.classList.add("hidden"); // Hide reset button initially
+    });
+  </script>
+</body>
+</html>

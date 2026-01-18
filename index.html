@@ -5,6 +5,69 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>啤牌酒 game🍻 </title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        /* Common styles for game cards in index.html */
+        .game-card h3, .game-card h2 {
+            font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: #facc15;      /* 金黃色 */
+            font-size: 1.5rem;   /* 大排檔同樣大小 */
+            font-weight: 800;
+            margin: 0 0 10px 0;
+            text-align: center;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+        }
+
+        .main-menu .game-card {
+            background: linear-gradient(145deg, #1f2937, #111827);
+            border: 3px solid #10b981;
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            transition: transform 0.2s;
+            width: 300px; /* Keep width consistent */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .main-menu .game-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(16,185,129,0.6); /* Use the same as play-btn hover for consistency */
+        }
+        
+        .main-menu .game-card p {
+             font-size: 1em; /* Adjusted for better spacing overall */
+             color: #bbb;
+             margin-bottom: 8px;
+        }
+        .main-menu .game-card .short-description {
+            font-size: 0.8em;
+            color: #888;
+            margin-bottom: 15px; /* Add some space before button */
+        }
+
+        .play-btn {
+            display: inline-block;
+            background: linear-gradient(45deg, #10b981, #059669);
+            color: white !important;
+            padding: 15px 30px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            text-decoration: none;
+            border-radius: 25px;
+            border: 3px solid #047857;
+            box-shadow: 0 6px 20px rgba(16,185,129,0.4);
+            transition: all 0.3s;
+            margin-top: auto; /* Push button to bottom */
+        }
+        .play-btn:hover {
+            background: linear-gradient(45deg, #059669, #047857);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(16,185,129,0.6);
+        }
+
+    </style>
 </head>
 <body>
     <div class="main-menu">
@@ -15,31 +78,31 @@
             <!-- 大排檔遊戲卡片 -->
             <a href="dai_pai_dong.html" class="game-card">
                 <h2>大排檔</h2>
-                <p>🃏 劈酒經典，飲到你懷疑人生嘅牌局！</p>
-                <p class="short-description">每張牌都有獨特玩法，考驗你嘅酒量同反應。</p>
+                <p>🃏 劈酒經典</p>
+                <a href="dai_pai_dong.html" class="play-btn">開始大排檔</a>
             </a>
 
             <!-- 真心話大冒險遊戲卡片 -->
             <a href="truth_or_dare.html" class="game-card">
                 <h2>真心話大冒險</h2>
-                <p>🃏 刺激真心話，爆笑大冒險，酒逢知己千杯少！</p>
-                <p class="short-description">想知道朋友嘅小秘密？定係想睇佢做啲意想不到嘅事？真心話大冒險等你嚟挑戰！</p>
+                <p>🃏 刺激真心話，爆笑大冒險</p>
+                <a href="truth_or_dare.html" class="play-btn">開始真心話冒險</a>
             </a>
 
             <!-- 狼人殺遊戲卡片 -->
             <a href="werewolf.html" class="game-card">
                 <h2>狼人殺（極簡版）</h2>
-                <p>🐺 快速分配身份，輕鬆開局</p>
+                <p>🐺 快速分配身份</p>
+                <a href="werewolf.html" class="play-btn">開始狼人殺</a>
             </a>
 
             <!-- 一夜狼人殺遊戲卡片 -->
             <a href="onenight-werewolf.html" class="game-card">
-                <h2>一夜狼人殺 (One Night)</h2>
-                <p>🌕 快速推理，一夜定勝負！</p>
-                <p class="short-description">獨特技能，瞬息萬變，挑戰你嘅邏輯同謊言！</p>
+                <h2>一夜狼人殺</h2>
+                <p>🐺 3-10人速玩閉眼換牌</p>
+                <a href="onenight-werewolf.html" class="play-btn">開始一夜狼人</a>
             </a>
 
         </div>
     </div>
 </body>
-</html>

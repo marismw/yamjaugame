@@ -360,7 +360,7 @@
         <option value="8">8人</option>
       </select>
 
-      <div class="name-inputs" style="display:flex; flex-wrap:wrap; justify-content:center; gap: 10px; margin: 10px 0;">
+      <div class="name-inputs" style="display:none;">
         <h4>輸入玩家名字（可選）：</h4>
         <input id="name1" placeholder="玩家1">
         <input id="name2" placeholder="玩家2">
@@ -606,26 +606,41 @@
 
             let resultMessage = '';
 
+            // User defined skills handling for private view
+            prophetResultDiv.innerHTML = resultMessage; // Display default message
+
             switch (role) {
                 case '預言家':
-                    resultMessage = `預言家: ${ROLES['預言家'].skill}`;
-                     showProphetCheck();
+                    showProphetCheck();
                     break;
                 case '狼人':
-                    const werewolves = state.players.filter(p => state.startgame.find(pl => pl.id === p.id).initialRole === '狼人'); // Original role
-                    if (werewolves.length === 1 && playerWhoUsedSkill.initialRole === '狼人') { // Only one wolf
-                        prompt("你係獨狼！輸入1, 2 或 3 (桌牌編號) 查看一張桌牌：");
-                         // Actual implementation would need to show the role based on input
-                        resultMessage = "獨狼查看了桌面牌。";
+                    // Simplified for now, just displays info
+                    const werewolves = state.players.filter(p => p.initialRole === '狼人');
+
+                    if (werewolves.length === 1 && playerWhoUsedSkill.initialRole === '狼人') {
+                        let choice = prompt("你係獨狼！輸入1, 2 或 3 (桌牌編號) 查看一張桌牌：");
+                        let targetCardIndex = parseInt(choice) - 1; // Adjust for 0-indexed array
+                        if (targetCardIndex >= 0 && targetCardIndex < state.centerCards.length) {
+                            resultMessage = `獨狼查看了桌面牌 ${targetCardIndex + 1}: ${state.centerCards[targetCardIndex].role} (${getRoleCamp(state.centerCards[targetCardIndex].role)}陣營)。`;
+                        } else {
+                            resultMessage = "無效選擇。";
+                        }
                     } else if (werewolves.length > 1) {
-                         resultMessage = `你哋係狼人隊友: ${werewolves.map(w => w.name).join(', ')}。`;
+                        resultMessage = `你哋係狼人隊友: ${werewolves.map(w => w.name).join(', ')}。`;
+                    } else {
+                        resultMessage = '冇狼人啦！';
                     }
                     prophetResultDiv.innerHTML = resultMessage;
-                     break;
-                // Add cases for other roles as needed
+                    break;
+                case '酒鬼':
+                    resultMessage = "已盲換桌牌。";
+                    prophetResultDiv.innerHTML = resultMessage;
+                    prompt("請再輸入你想交換桌牌的位置(1-3)"); 
+                    break;
+                // For other roles, a simple message might suffice or they might have no active skill.
                 default:
                     resultMessage = `${role}: 無特殊夜間行動。`;
-                     prophetResultDiv.innerHTML = resultMessage;
+                    prophetResultDiv.innerHTML = resultMessage;
                     break;
             }
         }

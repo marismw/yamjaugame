@@ -33,10 +33,8 @@
             box-shadow: 0 8px 25px rgba(16,185,129,0.3);
         }
 
-        /* Original h1 style, now part of the more general rule above. */
-        /* The game-section styles need to be adjusted to green theme */
         /* New .setup-section styles */
-        .setup-section {
+        .setup {
             background: linear-gradient(135deg, #0f766e, #115e59);
             padding: 25px;
             border-radius: 20px;
@@ -46,6 +44,13 @@
             width: 90%; /* Maintain width from game-section base */
             max-width: 700px;
             box-sizing: border-box;
+             display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .setup select, .setup button {
+            margin: 10px;
         }
 
         /* .game-section (general card style) to be applied to other sections */
@@ -60,15 +65,11 @@
             box-sizing: border-box;
         }
 
-
-        /* Adjusting existing h1 related styles: */
-        /* The original h1 specific color/font-size will be overridden by the new general rule. */
-        /* Other elements need to align with the new color scheme. */
         h1 {
             font-size: 2.5em; /* Keep size consistent with previous h1 */
             margin-bottom: 20px;
         }
-        .game-section h2 {
+        h2 {
             color: #10b981; /* Use the new main green color */
             font-size: 1.8em;
             margin-top: 0;
@@ -78,66 +79,10 @@
             display: inline-block;
         }
 
-        /* Re-align other color usages to the new theme */
-
-        /* was --accent-warm-yellow*/
         .player-card h3, .center-card h3, .role-card h3 {
             color: #fbc02d; /* Retain a warm yellow if it's used for contrast, or change to green variant */
         }
 
-        /* was --dpd-border-gray*/
-        .game-button:disabled {
-            background-color: #065f46; /* Use a green variant */
-        }
-
-        /* was --accent-warm-yellow*/
-        .player-count-selector button.active, .config-button.active {
-            background-color: #fbc02d; /* Retain warm yellow for active button for contrast */
-            color: var(--dpd-bg-dark);
-        }
-
-        /* was --accent-warm-yellow*/
-        #results-banner {
-            color: #fbc02d;
-            background-color: #047857; /* Use green from game-card background for banner */
-        }
-
-
-
-        .game-section h2 {
-            color: var(--accent-dark-green); /* Green accent for section titles */
-            font-size: 1.8em;
-            margin-top: 0;
-            margin-bottom: 20px;
-            border-bottom: 2px solid var(--accent-dark-green);
-            padding-bottom: 10px;
-            display: inline-block;
-        }
-
-        /* Base button style (now specific config buttons will inherit/override) */
-        .btn {
-            display: inline-block;
-            border: none;
-            border-radius: 12px;
-            font-weight: 600;
-            font-size: 18px;
-            transition: all 0.3s;
-            cursor: pointer;
-            text-decoration: none; /* Ensure it works for <a> as well */
-            margin: 5px; /* Default margin */
-        }
-
-        .btn:hover {
-            transform: translateY(-2px);
-        }
-        .btn:disabled {
-            background: #6c757d;
-            box-shadow: none;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        /* Specific config button styling */
         .config-btn {
             padding: 12px 25px;
             margin: 0 10px;
@@ -147,68 +92,6 @@
             font-size: 16px;
             transition: all 0.3s;
             box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-        }
-
-        .night-phase {
-            background: linear-gradient(135deg, #1e3a8a, #1e40af);
-            padding: 30px;
-            border-radius: 25px;
-            margin: 20px 0;
-            border: 4px solid #3b82f6;
-            width: 90%; /* Match game-section container width */
-            max-width: 700px;
-            box-sizing: border-box;
-        }
-
-        .night-phase .night-buttons {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 10px; /* Space between night action buttons */
-            margin-top: 20px;
-        }
-
-        .night-phase .night-btn {
-            flex: 1;
-            padding: 18px;
-            margin: 8px;
-            background: rgba(255,255,255,0.1);
-            color: white;
-            border: 2px solid rgba(255,255,255,0.3);
-            border-radius: 15px;
-            font-size: 16px;
-            font-weight: 600;
-            backdrop-filter: blur(10px); /* For a glassy effect if possible */
-            transition: all 0.3s;
-            cursor: pointer;
-            min-width: 100px; /* Ensure buttons are not too small */
-        }
-
-        .night-phase .night-btn:hover {
-            background: rgba(255,255,255,0.2); 
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.4);            
-        }
-
-        .night-phase .night-btn:disabled {
-            background: #6c757d;
-            color: #ccc;
-            cursor: not-allowed;
-            box-shadow: none;
-            transform: none;
-        }
-
-        .night-phase .night-btn.executed-skill {
-            opacity: 0.7; /* Dim out executed skills */
-            background: linear-gradient(45deg, #495057, #6c757d); /* Gray out executed buttons */
-            cursor: default;
-        }
-
-        .night-phase .night-btn.skipped-skill {
-            opacity: 0.5;
-            background: linear-gradient(45deg, #adb5bd, #ced4da); /* Lighter gray for skipped */
-            color: #343a40;
-            cursor: default;
         }
 
         .config-btn.green {
@@ -272,7 +155,7 @@
         }
 
         .night-phase .night-btn:hover {
-            background: rgba(255,255,255,0.2); 
+            background: rgba(255,255,255,0.2);
             transform: translateY(-3px);
             box-shadow: 0 8px 20px rgba(0,0,0,0.4);            
         }
@@ -298,70 +181,7 @@
             cursor: default;
         }
 
-        .night-phase {
-            background: linear-gradient(135deg, #1e3a8a, #1e40af);
-            padding: 30px;
-            border-radius: 25px;
-            margin: 20px 0;
-            border: 4px solid #3b82f6;
-            width: 90%; /* Match game-section container width */
-            max-width: 700px;
-            box-sizing: border-box;
-        }
-
-        .night-phase .night-buttons {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 10px; /* Space between night action buttons */
-            margin-top: 20px;
-        }
-
-        .night-phase .night-btn {
-            flex: 1;
-            padding: 18px;
-            margin: 8px;
-            background: rgba(255,255,255,0.1);
-            color: white;
-            border: 2px solid rgba(255,255,255,0.3);
-            border-radius: 15px;
-            font-size: 16px;
-            font-weight: 600;
-            backdrop-filter: blur(10px); /* For a glassy effect if possible */
-            transition: all 0.3s;
-            cursor: pointer;
-        }
-
-        .night-phase .night-btn:hover {
-            background: rgba(255,255,255,0.2); 
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.4);            
-        }
-
-
-        /* For player count and config buttons, use btn-small */
-        /* Specific styles for player view cards (button inside it) */
-        .player-card .view-card-btn {
-            background: linear-gradient(45deg, #10b981, #059669); /* Green from play-btn */
-            color: #fff;
-            border: none;
-            padding: 8px 15px;
-            font-size: 0.9em;
-            font-weight: bold;
-            border-radius: 20px;
-            cursor: pointer;
-            transition: background-color 0.3s ease, transform 0.2s ease;
-            margin-top: 10px; /* Keep margin */
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-        }
-        .player-card .view-card-btn:hover {
-            filter: brightness(1.1); /* Match config-btn hover */
-            transform: translateY(-2px);
-        }
-
-
-
-        #player-list, #center-cards, #night-actions, #voting-area, #results {
+        #player-list, #center-cards, #night-actions, #voting-area {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
@@ -404,61 +224,6 @@
             color: #ccc;
         }
 
-        /* Night actions buttons */
-
-        .night-phase .night-buttons {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 10px; /* Space between night action buttons */
-            margin-top: 20px;
-        }
-
-        .night-phase .night-btn {
-            padding: 12px 20px; /* Slightly larger for better tap target */
-            font-size: 1em; /* Adjusted font size */
-            font-weight: 600;
-            border-radius: 25px; /* More rounded */
-            background: linear-gradient(45deg, #10b981, #059669);
-            color: white;
-            border: none;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-            transition: all 0.2s;
-            cursor: pointer;
-        }
-
-        .night-phase .night-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 15px rgba(0,0,0,0.3);
-        }
-
-        .night-phase .night-btn:disabled {
-            background: #6c757d;
-            cursor: not-allowed;
-            box-shadow: none;
-            transform: none;
-        }
-
-        /* Night actions buttons (active/executed state) */
-        .night-phase .night-btn.executed-skill {
-            opacity: 0.7; /* Dim out executed skills */
-            background: linear-gradient(45deg, #495057, #6c757d); /* Gray out executed buttons */
-            cursor: default;
-        }
-
-        .night-phase .night-btn.skipped-skill {
-            opacity: 0.5;
-            background: linear-gradient(45deg, #adb5bd, #ced4da); /* Lighter gray for skipped */
-            color: #343a40;
-            cursor: default;
-        }
-
-        /* .game-button will be replaced with .btn or .config-btn */
-        #night-actions .game-button { /* Keep this for now to match old style if used elsewhere */ 
-            min-width: 100px;
-            margin: 5px;
-        }
-        
         #discussion-area textarea {
             width: 100%;
             height: 100px;
@@ -530,6 +295,22 @@
             font-size: 0.9em;
         }
 
+        #skill-result {
+            display: none; 
+            background: #1f2937; 
+            padding: 20px; 
+            border-radius: 15px; 
+            margin: 20px 0; 
+            border: 3px solid #10b981;
+            animation: pulse 0.5s;
+            background: linear-gradient(135deg, #1e40af, #1d4ed8);
+            border-color: #60a5fa;
+        }
+        @keyframes pulse {
+            0% { transform: scale(0.95); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
         /* Responsive adjustments */
         @media (max-width: 768px) {
             h1 {
@@ -541,11 +322,11 @@
             .game-section h2 {
                 font-size: 1.5em;
             }
-            .game-button, .player-card, .role-display {
+            .player-card, .role-display {
                 padding: 10px 20px;
                 font-size: 1em;
             }
-            .player-count-selector button, .config-button {
+            .player-count-selector button, .config-btn {
                 padding: 8px 12px;
                 font-size: 0.9em;
             }
@@ -571,150 +352,50 @@
     <a href="index.html" class="back-button">返主頁</a>
     <h1>一夜狼人殺 (6人)</h1>
 
+    <!-- 準備區 (超簡) -->
+    <div class="setup">
+      <select id="playerCount" onchange="updatePlayerCount(this.value)">
+        <option value="6" selected>6人</option>
+        <option value="7">7人</option>
+        <option value="8">8人</option>
+      </select>
 
-    <!-- 階段1：準備區美化 -->
-    <div class="setup-section">
-      <h2>準備</h2>
-
-      <div class="player-config">
-        <label for="playerCount">玩家人數</label>
-        <select id="playerCount">
-          <option value="3">3</option>
-          <option value="4">4</option>
-          <option value="5">5</option>
-          <option value="6" selected>6</option>
-          <option value="7">7</option>
-          <option value="8">8</option>
-          <option value="9">9</option>
-          <option value="10">10</option>
-        </select>
+      <div class="name-inputs" style="display:flex; flex-wrap:wrap; justify-content:center; gap: 10px; margin: 10px 0;">
+        <h4>輸入玩家名字（可選）：</h4>
+        <input id="name1" placeholder="玩家1">
+        <input id="name2" placeholder="玩家2">
+        <input id="name3" placeholder="玩家3">
+        <input id="name4" placeholder="玩家4">
+        <input id="name5" placeholder="玩家5">
+        <input id="name6" placeholder="玩家6">
+        <input id="name7" placeholder="玩家7">
+        <input id="name8" placeholder="玩家8">
+        <input id="name9" placeholder="玩家9">
+        <input id="name10" placeholder="玩家10">
       </div>
 
-      <div class="player-names">
-        <input type="text" placeholder="玩家1" id="p1name">
-        <input type="text" placeholder="玩家2" id="p2name">
-        <input type="text" placeholder="玩家3" id="p3name">
-        <input type="text" placeholder="玩家4" id="p4name">
-        <input type="text" placeholder="玩家5" id="p5name">
-        <input type="text" placeholder="玩家6" id="p6name">
-        <input type="text" placeholder="玩家7" id="p7name">
-        <input type="text" placeholder="玩家8" id="p8name">
-        <input type="text" placeholder="玩家9" id="p9name">
-        <input type="text" placeholder="玩家10" id="p10name">
-      </div>
-
-
-      <div class="player-names">
-        <input type="text" placeholder="玩家1" id="p1name">
-        <input type="text" placeholder="玩家2" id="p2name">
-        <input type="text" placeholder="玩家3" id="p3name">
-        <input type="text" placeholder="玩家4" id="p4name">
-        <input type="text" placeholder="玩家5" id="p5name">
-        <input type="text" placeholder="玩家6" id="p6name">
-        <input type="text" placeholder="玩家7" id="p7name">
-        <input type="text" placeholder="玩家8" id="p8name">
-        <input type="text" placeholder="玩家9" id="p9name">
-        <input type="text" placeholder="玩家10" id="p10name">
-      </div>
-
-      <div class="player-names">
-        <input type="text" placeholder="玩家1" id="p1name">
-        <input type="text" placeholder="玩家2" id="p2name">
-        <input type="text" placeholder="玩家3" id="p3name">
-        <input type="text" placeholder="玩家4" id="p4name">
-        <input type="text" placeholder="玩家5" id="p5name">
-        <input type="text" placeholder="玩家6" id="p6name">
-        <input type="text" placeholder="玩家7" id="p7name">
-        <input type="text" placeholder="玩家8" id="p8name">
-        <input type="text" placeholder="玩家9" id="p9name">
-        <input type="text" placeholder="玩家10" id="p10name">
-      </div>
-      
-      <div class="config-buttons">
-        <button class="config-btn green" id="recommended-config-button">推薦配置</button>
-        <button class="config-btn blue" id="custom-config-button">自訂配置</button>
-        <button class="config-btn gold" id="deal-cards-button">✨發牌✨</button>
-      </div>
-      <div class="game-buttons" style="margin-top:20px;">
-        <button id="shuffle-distribute-button" class="config-btn blue" disabled>洗牌分配</button>
-        <button id="reveal-all-button" class="config-btn green" disabled>亮所有牌</button>
-      </div>
+      <button onclick="loadRecommended()" class="config-btn green">推薦配置</button>
+      <button onclick="dealCards()" class="config-btn gold">發牌</button>
     </div>
 
-    <!-- 原有的牌堆和分配部分調整為新的結構 -->
-    <div id="card-pile-section" class="game-section">
-        <h2>牌堆 (9張)</h2>
-        <div id="牌堆" style="display:flex; flex-wrap:wrap; justify-content:center; min-height: 100px;">
-            <!-- 抽到的9張牌會顯示喺度 -->
-        </div>
+    <!-- 結果 (單一區塊) -->
+    <div id="result-section" class="game-section" style="display:none;">
+      <h3>牌局分配</h3>
+      <div id="players-display"></div>
+      <div id="center-display">桌中央: ???</div>
     </div>
 
-     <div id="distribution-section" class="game-section" style="display:none;">
-        <h2>分配</h2>
-        <div id="分配" style="display:flex; flex-wrap:wrap; justify-content:center; min-height: 250px;">
-            <!-- 玩家同桌面牌會顯示喺度 -->
-        </div>
-        <p id="result-message" style="margin-top:20px; font-size:1.5em; color: var(--accent-warm-yellow);"></p>
+    <div id="private-view" style="display:none;" class="game-section">
+      <h3>👀 私下查看身份</h3>
+      <div id="private-names"></div>
     </div>
 
-    <!-- 階段2：私看身份 -->
-    <div id="private-view-section" class="game-section" style="display:none;">
-        <h2>私看身份</h2>
-        <div id="player-view-cards" style="display:flex; flex-wrap:wrap; justify-content:center;">
-            <!-- Player cards for private viewing -->
-        </div>
-        <button id="night-phase-button" class="config-btn blue" style="margin-top:20px;">進入夜晚</button>
+    <!-- 技能結果顯示區 -->
+    <div id="skill-result" style="display:none;">
+      <h4>🔮 預言家查驗結果</h4>
+      <div id="prophet-result"></div>
     </div>
 
-    <!-- 階段3：夜晚行動 -->
-    <div id="night-phase-section" class="night-phase" style="display:none;">
-        <h2>夜晚行動</h2>
-        <div class="night-buttons" id="night-actions">
-            <!-- Night action buttons will be populated here -->
-        </div>
-        <div id="skill-action-area" class="night-skill-options" style="display:none;">
-            <p id="skill-description"></p>
-            <div id="skill-targets">
-                <!-- Skill specific targeting options (players, center cards) -->
-            </div>
-            <button id="confirm-skill-button" class="config-btn green">確認行動</button>
-            <button id="skip-skill-button" class="config-btn blue">跳過</button>
-        </div>
-        <button id="day-phase-button" class="config-btn gold" style="display:none; margin-top:20px;">進入白天</button>
-    </div>
-
-    <!-- 階段4：白天討論與投票 -->
-    <div id="day-phase-section" class="game-section" style="display:none;">
-        <h2>白天討論與投票</h2>
-        <div id="discussion-area">
-            <textarea placeholder="大家討論下啦..."></textarea>
-        </div>
-        <div id="voting-area" style="margin-top:20px;">
-            <h3>投票環節</h3>
-            <div id="voting-selection">
-                <label for="vote-target">投邊個: </label>
-                <select id="vote-target">
-                    <!-- Player options will be populated here -->
-                </select>
-                <button id="cast-vote-button" class="config-btn green">投票 (玩家1)</button>
-            </div>
-            <div id="final-votes" style="margin-top:20px; display:none;">
-                <p>投票結果:</p>
-                <ul id="vote-counts" style="list-style-type: none; padding:0;"></ul>
-                <button id="show-results-button" class="config-btn gold">顯示結果</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- 階段5：結果顯示 -->
-    <div id="results-section" class="game-section" style="display:none;">
-        <h2>遊戲結果</h2>
-        <div id="final-roles" style="display:flex; flex-wrap:wrap; justify-content:center;">
-            <!-- Final roles and center cards will be displayed here -->
-        </div>
-        <p id="results-banner" style="margin-top:20px; font-size:1.8em; font-weight:bold;"></p>
-        <button id="restart-game-button" class="config-btn blue" style="margin-top:20px;">重新開始</button>
-    </div>
 
     <details style="margin-top: 30px; width: 90%; max-width: 700px;" class="game-section">
         <summary style="font-size: 1.2em; font-weight: bold; color: var(--accent-warm-yellow); cursor: pointer; padding: 10px 0;">角色速查</summary>
@@ -729,36 +410,38 @@
 
     <script>
         const ROLES_ARRAY = ['村民','村民','村民','狼人','狼人','預言家','強盜','搗蛋鬼','皮匠','酒鬼','獵人','守夜人','守夜人','失眠者','爪牙','化身幽靈'];
-        const SKILLS = {
-            '化身幽靈':'選1玩家複製身份+勝條件',
-            '狼人':'互認隊友(獨狼看桌1張)',
-            '爪牙':'知狼位置(無狼時任一死=勝)',
-            '守夜人':'知另一守夜人',
-            '預言家':'查1玩家或桌2張',
-            '強盜':'可換1玩家身份+查看',
-            '搗蛋鬼':'換2玩家身份',
-            '酒鬼':'盲換桌1張',
-            '失眠者':'重看自己',
-            '皮匠':'死無狼死=獨勝',
-            '獵人':'死帶最多投者',
-            '村民':'無'
+        const ROLES = { // Added camps for win condition logic
+            '村民': { camp: '好人', skill: '無' },
+            '狼人': { camp: '狼人', skill: '互認隊友(獨狼看桌1張)' },
+            '預言家': { camp: '好人', skill: '查1玩家或桌2張' },
+            '強盜': { camp: '好人', skill: '可換1玩家身份+查看' },
+            '搗蛋鬼': { camp: '好人', skill: '換2玩家身份' },
+            '皮匠': { camp: '獨狼', skill: '死無狼死=獨勝' },
+            '酒鬼': { camp: '好人', skill: '盲換桌1張' },
+            '獵人': { camp: '好人', skill: '死帶最多投者' },
+            '守夜人': { camp: '好人', skill: '知另一守夜人' },
+            '失眠者': { camp: '好人', skill: '重看自己' },
+            '爪牙': { camp: '狼人', skill: '知狼位置(無狼時任一死=勝)' },
+            '化身幽靈': { camp: '變身', skill: '選1玩家複製身份+勝條件' }
         };
 
         const RECOMMENDED_CONFIGS = {
-            4: ['狼人', '狼人', '預言家', '強盜', '搗蛋鬼', '酒鬼', '村民'],
-            5: ['狼人', '狼人', '預言家', '強盜', '搗蛋鬼', '酒鬼', '失眠者', '村民'],
-            6: ['化身幽靈', '狼人', '狼人', '預言家', '強盜', '搗蛋鬼', '酒鬼', '失眠者', '村民'],
-            7: ['化身幽靈', '狼人', '狼人', '預言家', '強盜', '搗蛋鬼', '酒鬼', '失眠者', '村民', '皮匠'],
-            8: ['化身幽靈', '狼人', '狼人', '預言家', '強盜', '搗蛋鬼', '酒鬼', '失眠者', '村民', '皮匠', '爪牙', '獵人'],
-            9: ['化身幽靈', '狼人', '狼人', '預言家', '強盜', '搗蛋鬼', '酒鬼', '失眠者', '村民', '皮匠', '爪牙', '獵人', '守夜人']
+            3: ['狼人','狼人','預言家','強盜','搗蛋鬼','酒鬼'],
+            4: ['狼人','狼人','預言家','強盜','搗蛋鬼','酒鬼','村民'],
+            5: ['狼人','狼人','預言家','強盜','搗蛋鬼','酒鬼','失眠者','村民'],
+            6: ['化身幽靈','狼人','狼人','預言家','強盜','搗蛋鬼','酒鬼','失眠者','村民'],
+            7: ['化身幽靈','狼人','狼人','預言家','強盜','搗蛋鬼','酒鬼','失眠者','村民','皮匠'],
+            8: ['化身幽靈','狼人','狼人','爪牙','預言家','強盜','搗蛋鬼','酒鬼','失眠者','村民','獵人'],
+            9: ['化身幽靈','狼人','狼人','爪牙','預言家','強盜','搗蛋鬼','酒鬼','失眠者','村民','獵人','皮匠'],
+            10:['化身幽靈','狼人','狼人','爪牙','預言家','強盜','搗蛋鬼','酒鬼','失眠者','村民','獵人','皮匠','村民']
         };
 
         let state = {
-            players: [], // [{ id: 'p1', name: '玩家1', initialRole: '', currentRole: '', hasViewed: false, voteFor: null }]
+            players: [], // [{ id: 'p1', name: '', initialRole: '', currentRole: '', hasViewed: false, voteFor: null }]
             centerCards: [], // [{ id: 'c1', role: '' }]
             rolesInPlay: [], // All N+3 roles for the current game
             nightOrder: ['化身幽靈', '狼人', '爪牙', '守夜人', '預言家', '強盜', '搗蛋鬼', '酒鬼', '失眠者'],
-            currentPhase: 'setup', // 'setup', 'privateView', 'night', 'day', 'results'
+            currentPhase: 'setup', // 'setup', 'night', 'day', 'results'
             activePlayerIndex: 0,
             activeNightSkillIndex: 0,
             votes: {}, // { 'player_id': count }
@@ -778,907 +461,228 @@
         }
 
         function getRoleDisplayName(role) {
-            return role === '村民' ? '村民' : role; // Simplify for some roles if needed
+            return role;
+        }
+        
+        function getRoleCamp(role) {
+            return ROLES[role] ? ROLES[role].camp : '未知';
+        }
+
+        function getPlayerNames() {
+            let names = [];
+            const numPlayers = parseInt(document.getElementById('playerCount').value);
+            for(let i=1; i<=numPlayers; i++) { // Loop through visible name inputs
+                const nameInput = document.getElementById(`name${i}`);
+                if (nameInput) {
+                    names.push(nameInput.value || `玩家${i}`);
+                }
+            }
+            return names;
         }
 
         // UI Update Functions
         function renderRoleSkills() {
             const skillListDiv = document.getElementById('skill-list');
             skillListDiv.innerHTML = '';
-            for (const role in SKILLS) {
+            for (const role in ROLES) {
                 const p = document.createElement('p');
-                p.innerHTML = `<strong style="color: var(--accent-warm-yellow);">${role}:</strong> ${SKILLS[role]}`;
+                p.innerHTML = `<strong style="color: var(--accent-warm-yellow);">${role}:</strong> ${ROLES[role].skill || '無'} (${ROLES[role].camp}陣營)`;
                 skillListDiv.appendChild(p);
             }
         }
 
         function updatePlayerCount(count) {
-            playerCount = count;
-            // Update the display for player count in setup section
-            document.getElementById('playerCount').value = count; // This targets the select element directly
-
-            // Hide/show player name input fields based on count
-            for (let i = 1; i <= 10; i++) {
-                const input = document.getElementById(`p${i}name`);
-                if (input) {
-                    input.style.display = i <= count ? 'block' : 'none';
+            playerCount = parseInt(count);
+            // Show/hide name input fields based on player count
+            for(let i=1; i<=10; i++) {
+                const nameInput = document.getElementById(`name${i}`);
+                if (nameInput) {
+                    nameInput.style.display = i <= playerCount ? 'inline-block' : 'none';
                 }
             }
-
-            // Highlight recommended config button if applicable
-            document.querySelectorAll('.config-btn').forEach(btn => btn.classList.remove('active'));
-            const recommendedBtn = document.querySelector(`#recommended-config-button[data-player-count="${count}"]`);
-            if (recommendedBtn) {
-                recommendedBtn.classList.add('active');
-                loadRecommendedConfig(count);
-            } else {
-                document.getElementById('牌堆').innerHTML = ''; // Clear if custom config needed
-            }
-             updateGameButtons();
         }
 
-        function updateGameButtons() {
-            const dealCardsButton = document.getElementById('deal-cards-button');
-            const shuffleDistributeButton = document.getElementById('shuffle-distribute-button');
-            const revealAllButton = document.getElementById('reveal-all-button');
+        function loadRecommended() {
+            const numPlayers = parseInt(document.getElementById('playerCount').value);
+            const configRoles = RECOMMENDED_CONFIGS[numPlayers];
+            if (configRoles) {
+                state.rolesInPlay = [...configRoles];
+                document.getElementById('players-display').innerHTML = ``;
+                document.getElementById('center-display').textContent = `桌中央: ???`;
+                document.getElementById('result-section').style.display = 'none';
 
-            dealCardsButton.disabled = playerCount < 3 || state.rolesInPlay.length === 0;
-            shuffleDistributeButton.disabled = state.players.length === 0 || state.currentPhase === 'playing'; // After cards are dealt
-            revealAllButton.disabled = state.players.length === 0;
+                // Provide a visual cue of selected roles
+                let rolesHtml = `<p>已選定 ${numPlayers} 人局推薦配置:</p><div style="display:flex; flex-wrap:wrap; justify-content:center;">`;
+                state.rolesInPlay.forEach(role => {
+                    rolesHtml += `<span class="role-card" style="padding: 5px 10px; margin: 5px; background: #065f46;">${role}</span>`;
+                });
+                rolesHtml += `</div>`;
+                document.getElementById('players-display').innerHTML = rolesHtml;
+                document.getElementById('result-section').style.display = 'block';
+            } else {
+                alert('這個人數沒有推薦配置，請選擇其他人數。');
+            }
         }
 
         function dealCards() {
-            // Logic to draw N+3 cards and display them in the '牌堆' section
-            const drawnRoles = RECOMMENDED_CONFIGS[playerCount] || []; // Use recommended or a default
-            state.rolesInPlay = [...drawnRoles]; // Copy roles for this game session
-
-            const cardPileDiv = document.getElementById('牌堆');
-            cardPileDiv.innerHTML = ''; // Clear previous cards
-            state.rolesInPlay.forEach(role => {
-                const cardDiv = document.createElement('div');
-                cardDiv.classList.add('role-card');
-                cardDiv.innerHTML = `<h3>${getRoleDisplayName(role)}</h3>`;
-                cardPileDiv.appendChild(cardDiv);
-            });
-            document.getElementById('deal-cards-button').disabled = true; // Disable after dealing
-            document.getElementById('shuffle-distribute-button').disabled = false; // Enable shuffle/distribute
-        }
-
-
-        function displayDrawnCards() {
-            const drawnCardsDiv = document.getElementById('牌堆'); // Use '牌堆' for drawn cards
-            drawnCardsDiv.innerHTML = '';
-            state.rolesInPlay.forEach(role => {
-                const cardDiv = document.createElement('div');
-                cardDiv.classList.add('role-card');
-                cardDiv.innerHTML = `<h3>${getRoleDisplayName(role)}</h3>`;
-                drawnCardsDiv.appendChild(cardDiv);
-            });
-        }
-
-        function displayPlayerViewCards() {
-            const playerViewDiv = document.getElementById('player-view-cards');
-            playerViewDiv.innerHTML = '';
-            state.players.forEach(player => {
-                const cardDiv = document.createElement('div');
-                cardDiv.classList.add('player-card');
-                cardDiv.dataset.playerId = player.id;
-                cardDiv.innerHTML = `<h3>${player.name}</h3><p>身份: ???</p><button class="view-card-btn" data-player-id="${player.id}">睇牌</button>`;
-                playerViewDiv.appendChild(cardDiv);
-            });
-        }
-
-        function setupNightActions() {
-            const nightActionsDiv = document.getElementById('night-actions');
-            nightActionsDiv.innerHTML = '';
-            state.nightOrder.forEach(role => {
-                const button = document.createElement('button');
-                button.classList.add('night-btn'); // Changed from game-button to night-btn
-                button.textContent = role;
-                button.dataset.role = role;
-                button.addEventListener('click', () => activateNightSkill(role));
-                nightActionsDiv.appendChild(button);
-            });
-             // day-phase-button is now part of the night-phase-section HTML
-        }
-
-        function setupVotingOptions() {
-            const voteTargetSelect = document.getElementById('vote-target');
-            voteTargetSelect.innerHTML = '';
-            state.players.forEach(player => {
-                const option = document.createElement('option');
-                option.value = player.id;
-                option.textContent = player.name;
-                voteTargetSelect.appendChild(option);
-            });
-        }
-
-        function revealAllRoles() {
-            // Reveal all player roles and center cards
-            const finalRolesDiv = document.getElementById('final-roles');
-            finalRolesDiv.innerHTML = '';
-            state.players.forEach(player => {
-                const cardDiv = document.createElement('div');
-                cardDiv.classList.add('player-card');
-                cardDiv.innerHTML = `<h3>${player.name}</h3><p>真身: ${getRoleDisplayName(player.initialRole)}</p><p>現身: ${getRoleDisplayName(player.currentRole)}</p>`;
-                finalRolesDiv.appendChild(cardDiv);
-            });
-            state.centerCards.forEach(card => {
-                const cardDiv = document.createElement('div');
-                cardDiv.classList.add('center-card');
-                cardDiv.innerHTML = `<h3>檯面牌 ${card.id.replace('c','')}</h3><p>${getRoleDisplayName(card.role)}</p>`;
-                finalRolesDiv.appendChild(cardDiv);
-            });
-             showSection('results-section'); // Directly show results when all roles are revealed
-        }
-
-        function showSection(sectionId) {
-            document.querySelectorAll('.game-section, .night-phase').forEach(section => {
-                section.style.display = 'none';
-            });
-            document.getElementById(sectionId).style.display = 'block';
-            state.currentPhase = sectionId.replace('-section', '').replace('-phase', ''); // Update current phase
-        }
-
-        // Game Logic Functions
-
-        function loadRecommendedConfig(count) {
-            const configRoles = RECOMMENDED_CONFIGS[count];
-            if (configRoles) {
-                state.rolesInPlay = [...configRoles]; // Deep copy
-            } else {
-                // If no recommended config, use default set of ROLES_ARRAY and trim/add
-                let allPossibleRoles = [...ROLES_ARRAY];
-                while (allPossibleRoles.length < count + 3) {
-                    allPossibleRoles.push('村民'); // Add generic村民 if not enough roles
-                }
-                state.rolesInPlay = allPossibleRoles.slice(0, count + 3);
-            }
-            displayDrawnCards();
-        }
-
-        function startGame() {
+            // Re-initialize state for a new game
             state.players = [];
-            for (let i = 0; i < playerCount; i++) {
-                const playerNameInput = document.getElementById(`p${i + 1}name`);
-                const playerName = playerNameInput && playerNameInput.value ? playerNameInput.value : `玩家${i + 1}`;
+            state.centerCards = [];
+            state.votes = {};
+            state.dead = [];
+            state.messages = [];
+            state.activePlayerIndex = 0;
+            state.activeNightSkillIndex = 0;
+            state.currentPhase = 'playing'; // Change phase after dealing
+
+            const numPlayers = parseInt(document.getElementById('playerCount').value);
+            if (!RECOMMENDED_CONFIGS[numPlayers]) {
+                alert('請先選擇推薦配置人數！');
+                return;
+            }
+
+            const availableRoles = [...RECOMMENDED_CONFIGS[numPlayers]];
+            const shuffledRoles = shuffleArray(availableRoles);
+
+            const playerNames = getPlayerNames();
+
+            // Distribute player roles
+            for (let i = 0; i < numPlayers; i++) {
                 state.players.push({
                     id: `p${i + 1}`,
-                    name: playerName,
-                    initialRole: '',
-                    currentRole: '',
+                    name: playerNames[i], 
+                    initialRole: shuffledRoles.shift(),
+                    currentRole: '', 
                     hasViewed: false,
                     voteFor: null
                 });
-            }
-
-            // Ensure rolesInPlay has N+3 cards
-            if (state.rolesInPlay.length !== playerCount + 3) {
-                 const currentRoles = [...document.querySelectorAll('#drawn-cards .role-card h3')].map(h3 => h3.textContent);
-                 if (currentRoles.length === playerCount + 3) {
-                     state.rolesInPlay = currentRoles; // Use manually picked roles if config not loaded
-                 } else { // Fallback, use the default ROLES_ARRAY if not explicitly chosen
-                    let tempRoles = [...ROLES_ARRAY];
-                    while (tempRoles.length < playerCount + 3) {
-                        tempRoles.push('村民');
-                    }
-                    state.rolesInPlay = tempRoles.slice(0, playerCount + 3);
-                }
-            }
-
-
-            const shuffledRoles = shuffleArray([...state.rolesInPlay]);
-            state.centerCards = [];
-
-            // Distribute player roles
-            for (let i = 0; i < playerCount; i++) {
-                state.players[i].initialRole = shuffledRoles.shift();
-                state.players[i].currentRole = state.players[i].initialRole;
             }
 
             // Distribute center cards
             for (let i = 0; i < 3; i++) {
                 state.centerCards.push({ id: `c${i + 1}`, role: shuffledRoles.shift() });
             }
-             console.log("Game started! Players:", state.players, "Center cards:", state.centerCards);
-            showSection('private-view-section');
-            displayPlayerViewCards();
+
+            document.getElementById('result-section').style.display = 'block'; // Show the result area
+
+            // Initial display (all hidden)
+            let playersHtml = '<h4>玩家身份</h4>';
+            state.players.forEach(player => {
+                playersHtml += `<div class="player-card"><h3>${player.name}</h3><p>身份: ???</p></div>`;
+            });
+            document.getElementById('players-display').innerHTML = playersHtml;
+            document.getElementById('center-display').textContent = `桌中央: ???`;
+
+            console.log("Game dealt. Players:", state.players, "Center cards:", state.centerCards);
+
+            showPrivateView(); // Call showPrivateView after dealing cards
         }
 
-        function viewPlayerCard(playerId) {
-            const player = state.players.find(p => p.id === playerId);
-            if (!player) return;
-
-            const cardElement = document.querySelector(`.player-card[data-player-id="${playerId}"]`);
-            if (player.hasViewed) {
-                cardElement.querySelector('p').textContent = `身份: ???`;
-                cardElement.querySelector('.view-card-btn').textContent = '睇牌';
-                player.hasViewed = false;
-            } else {
-                cardElement.querySelector('p').textContent = `身份: ${getRoleDisplayName(player.currentRole)}`;
-                cardElement.querySelector('.view-card-btn').textContent = '收埋';
-                player.hasViewed = true;
-                setTimeout(() => {
-                    if (player.hasViewed) { // Check if it's still viewed after timeout
-                        cardElement.querySelector('p').textContent = `身份: ???`;
-                        cardElement.querySelector('.view-card-btn').textContent = '睇牌';
-                        player.hasViewed = false;
-                    }
-                }, 5000); // Hide after 5 seconds
-            }
-        }
-        
-        // Night Phase Logic
-        let activeSkillRole = null;
-        let skillTargetingData = {}; // To store temporary choices for a skill
-
-        function activateNightSkill(role) {
-            activeSkillRole = role;
-            skillTargetingData = {}; // Reset targeting data
-
-            document.querySelectorAll('#night-actions .game-button').forEach(btn => btn.disabled = true);
-            document.getElementById('skill-action-area').style.display = 'block';
-            document.getElementById('skill-description').textContent = `${role}: ${SKILLS[role]}`;
-            const skillTargetsDiv = document.getElementById('skill-targets');
-            skillTargetsDiv.innerHTML = '';
+        function showPrivateView() {
+            const privateViewDiv = document.getElementById('private-view');
+            const privateNamesDiv = document.getElementById('private-names');
+            privateNamesDiv.innerHTML = '';
             
-            // Skill specific UI population
+            const playerNames = getPlayerNames();
+            const numPlayers = parseInt(document.getElementById('playerCount').value);
+            for(let i=0; i<numPlayers; i++) {
+                privateNamesDiv.innerHTML += `<button onclick="showIdentity(${i})">${playerNames[i] || '玩家'+(i+1)}查看</button>`;
+            }
+            privateViewDiv.style.display = 'block';
+        }
+
+        function showIdentity(playerIndex) {
+            alert(`你 (${state.players[playerIndex].name}) 是：${state.players[playerIndex].initialRole} (${getRoleCamp(state.players[playerIndex].initialRole)})`);
+        }
+
+
+        let currentSkillPromises = []; // To handle async prompts for skills
+
+        function activateNightSkill(role, playerWhoUsedSkill) {
+            const skillResultDiv = document.getElementById('skill-result');
+            const prophetResultDiv = document.getElementById('prophet-result');
+            prophetResultDiv.innerHTML = ''; // Clear previous results
+            skillResultDiv.style.display = 'block';
+
+            let resultMessage = '';
+
             switch (role) {
-                case '狼人':
-                    handleWerewolfSkill(skillTargetsDiv);
-                    break;
                 case '預言家':
-                    handleSeerSkill(skillTargetsDiv);
-                    break;
-                case '強盜':
-                    handleRobberSkill(skillTargetsDiv);
-                    break;
-                case '搗蛋鬼':
-                    handleTroublemakerSkill(skillTargetsDiv);
-                    break;
-                case '酒鬼':
-                    handleDrunkSkill(skillTargetsDiv);
-                    break;
-                case '失眠者':
-                    handleInsomniacSkill(skillTargetsDiv);
-                    break;
-                case '化身幽靈':
-                     handleDoppelgangerSkill(skillTargetsDiv);
-                     break;
-                case '爪牙':
-                     handleMinionSkill(skillTargetsDiv);
-                     break;
-                case '守夜人':
-                     handleMasonSkill(skillTargetsDiv);
-                     break;
-                default:
-                    // For roles with no active night skill, just confirm/skip
-                    document.getElementById('confirm-skill-button').style.display = 'block';
-                    document.getElementById('skip-skill-button').style.display = 'block';
-                    skillTargetsDiv.innerHTML = `<p>呢個角色冇指定行動，可以跳過。</p>`;
-                    break;
-            }
-        }
-
-        function handleDoppelgangerSkill(skillTargetsDiv) {
-            const selectTarget = createPlayerSelect('doppelganger-target', '複製邊個身份:');
-            skillTargetsDiv.appendChild(selectTarget);
-            document.getElementById('confirm-skill-button').style.display = 'block';
-            document.getElementById('skip-skill-button').style.display = 'block';
-        }
-
-        function handleWerewolfSkill(skillTargetsDiv) {
-            const werewolves = state.players.filter(p => p.currentRole === '狼人');
-            const centerCardsDisplay = document.createElement('div');
-            centerCardsDisplay.innerHTML = `<p style="font-weight:bold; margin-top:10px;">桌面牌:</p>`;
-            state.centerCards.forEach(card => {
-                const cardDiv = document.createElement('span');
-                cardDiv.classList.add('center-card');
-                cardDiv.style.cursor = 'pointer';
-                cardDiv.textContent = `檯面牌 ${card.id.replace('c','')}`;
-                cardDiv.dataset.cardId = card.id;
-                cardDiv.addEventListener('click', () => {
-                    skillTargetingData.centerCard = card.id;
-                    cardDiv.style.backgroundColor = 'var(--accent-dark-green)';
-                    document.querySelectorAll('.center-card').forEach(c => {
-                        if (c.dataset.cardId !== card.id) c.style.backgroundColor = '';
-                    });
-                });
-                centerCardsDisplay.appendChild(cardDiv);
-            });
-            skillTargetsDiv.appendChild(centerCardsDisplay);
-
-            if (werewolves.length === 1) { // Lone wolf
-                skillTargetsDiv.innerHTML = `<p>你係獨狼! 可以睇一張桌面牌。</p>`;
-                skillTargetsDiv.appendChild(centerCardsDisplay);
-                document.getElementById('confirm-skill-button').style.display = 'block';
-                document.getElementById('skip-skill-button').style.display = 'block';
-            } else if (werewolves.length > 1) { // Multiple werewolves
-                skillTargetsDiv.innerHTML = `<p>你哋係狼人隊友! ${werewolves.map(w => w.name).join(', ')}</p><p>唔使行動，跳過就得。</p>`;
-                document.getElementById('confirm-skill-button').style.display = 'none'; // No active choice needed
-                document.getElementById('skip-skill-button').style.display = 'block';
-            } else { // No werewolves (shouldn't happen with current config logic but for robustness)
-                skillTargetsDiv.innerHTML = `<p>遊戲冇狼人，唔使行動。</p>`;
-                document.getElementById('confirm-skill-button').style.display = 'none';
-                document.getElementById('skip-skill-button').style.display = 'block';
-            }
-        }
-
-        function handleMinionSkill(skillTargetsDiv) {
-            const werewolves = state.players.filter(p => p.currentRole === '狼人');
-            if (werewolves.length > 0) {
-                skillTargetsDiv.innerHTML = `<p>狼人位置: ${werewolves.map(w => w.name).join(', ')}</p><p>無需要行動，跳過就得。</p>`;
-                document.getElementById('confirm-skill-button').style.display = 'none';
-                document.getElementById('skip-skill-button').style.display = 'block';
-            } else {
-                skillTargetsDiv.innerHTML = `<p>冇狼人，如果人狼死就村民贏！</p><p>無需要行動，跳過就得。</p>`;
-                document.getElementById('confirm-skill-button').style.display = 'none';
-                document.getElementById('skip-skill-button').style.display = 'block';
-            }
-        }
-        
-        function handleMasonSkill(skillTargetsDiv) {
-            const masons = state.players.filter(p => p.currentRole === '守夜人');
-            if (masons.length > 1) {
-                skillTargetsDiv.innerHTML = `<p>你哋係守夜人隊友: ${masons.map(m => m.name).join(', ')}</p><p>無需要行動，跳過就得。</p>`;
-            } else {
-                skillTargetsDiv.innerHTML = `<p>你係孤獨嘅守夜人。</p><p>無需要行動，跳過就得。</p>`;
-            }
-            document.getElementById('confirm-skill-button').style.display = 'none';
-            document.getElementById('skip-skill-button').style.display = 'block';
-        }
-
-        function handleSeerSkill(skillTargetsDiv) {
-            const selectPlayer = createPlayerSelect('seer-player-target', '查一個玩家身份:');
-            const selectCenter1 = createCenterCardSelect('seer-center-target1', '睇一張桌面牌:');
-            const selectCenter2 = createCenterCardSelect('seer-center-target2');
-            
-            selectPlayer.style.display = 'inline-block';
-            selectCenter1.style.display = 'inline-block';
-            selectCenter2.style.display = 'inline-block';
-
-            skillTargetsDiv.appendChild(selectPlayer);
-            skillTargetsDiv.appendChild(selectCenter1);
-            skillTargetsDiv.appendChild(selectCenter2);
-
-            document.getElementById('confirm-skill-button').style.display = 'block';
-            document.getElementById('skip-skill-button').style.display = 'block';
-        }
-
-        function handleRobberSkill(skillTargetsDiv) {
-            const selectTarget = createPlayerSelect('robber-target', '換邊個身份:');
-            skillTargetsDiv.appendChild(selectTarget);
-            document.getElementById('confirm-skill-button').style.display = 'block';
-            document.getElementById('skip-skill-button').style.display = 'block';
-        }
-
-        function handleTroublemakerSkill(skillTargetsDiv) {
-            const selectTarget1 = createPlayerSelect('troublemaker-target1', '玩家1:');
-            const selectTarget2 = createPlayerSelect('troublemaker-target2', '玩家2:');
-            skillTargetsDiv.appendChild(selectTarget1);
-            skillTargetsDiv.appendChild(selectTarget2);
-            document.getElementById('confirm-skill-button').style.display = 'block';
-            document.getElementById('skip-skill-button').style.display = 'block';
-        }
-
-        function handleDrunkSkill(skillTargetsDiv) {
-            const selectTarget = createCenterCardSelect('drunk-target', '換邊張桌面牌:');
-            skillTargetsDiv.appendChild(selectTarget);
-            document.getElementById('confirm-skill-button').style.display = 'block';
-            document.getElementById('skip-skill-button').style.display = 'block';
-        }
-
-        function handleInsomniacSkill(skillTargetsDiv) {
-            // Insomniac essentially just views their own card at the end of the night
-            // No direct action/selection needed here beyond 'confirm' to acknowledge
-            skillTargetsDiv.innerHTML = `<p>醒咗嘅你，可以確認你嘅最終身份。</p>`;
-            document.getElementById('confirm-skill-button').style.display = 'block';
-            document.getElementById('skip-skill-button').style.display = 'block';
-        }
-
-        function createPlayerSelect(id, labelText) {
-            const div = document.createElement('div');
-            div.style.marginBottom = '10px';
-            const label = document.createElement('label');
-            label.setAttribute('for', id);
-            label.textContent = labelText;
-            const select = document.createElement('select');
-            select.id = id;
-            select.name = id;
-            state.players.forEach(player => {
-                const option = document.createElement('option');
-                option.value = player.id;
-                option.textContent = player.name;
-                select.appendChild(option);
-            });
-            div.appendChild(label);
-            div.appendChild(select);
-            return div;
-        }
-
-        function createCenterCardSelect(id, labelText = '選桌面牌:') {
-            const div = document.createElement('div');
-            div.style.marginBottom = '10px';
-            const label = document.createElement('label');
-            label.setAttribute('for', id);
-            label.textContent = labelText;
-            const select = document.createElement('select');
-            select.id = id;
-            select.name = id;
-            state.centerCards.forEach(card => {
-                const option = document.createElement('option');
-                option.value = card.id;
-                option.textContent = `桌面牌 ${card.id.replace('c','')}`;
-                select.appendChild(option);
-            });
-            div.appendChild(label);
-            div.appendChild(select);
-            return div;
-        }
-
-        function confirmNightSkill() {
-            const currentPlayer = state.players[state.activePlayerIndex]; // The player whose turn it actually is to resolve the skill
-
-            const skillActionArea = document.getElementById('skill-action-area');
-            const nightActionsButtons = document.querySelectorAll('#night-actions .game-button');
-            const currentSkillButton = document.querySelector(`#night-actions button[data-role="${activeSkillRole}"]`);
-
-            switch (activeSkillRole) {
-                case '化身幽靈':
-                    const doppelgangerTargetId = document.getElementById('doppelganger-target').value;
-                    const doppelgangerTargetPlayer = state.players.find(p => p.id === doppelgangerTargetId);
-                    if (doppelgangerTargetPlayer) {
-                        // The Doppelganger becomes the role they chose, and then performs *that* role's action
-                        // For simplicity in this initial version, we will just record the target.
-                        // The actual action resolution might be too complex for a one-shot simulation.
-                        // So, for now, doppelganger just chooses identity, not performs role.
-                        // The prompt says "複製身份+勝條件", so this change of role is important.
-                        const originalRole = currentPlayer.currentRole;
-                        currentPlayer.currentRole = doppelgangerTargetPlayer.currentRole;
-                        state.messages.push(`${currentPlayer.name} (化身幽靈) 變成咗 ${getRoleDisplayName(currentPlayer.currentRole)}。`);
-                        console.log(`${currentPlayer.name} (Doppelganger) became ${currentPlayer.currentRole}.`);
-                        // A prompt asks "模擬技能(選人/自動, 更新狀態)" - this means the state of roles must reflect this change.
-                        // However, the DOppelganger's new role's action happens 'now' as the doppelganger.
-                        // This implies I need to re-activate a *new* skill for the doppelganger based on the chosen role.
-                        // This makes the night phase order dynamic, which is more complex.
-                        // For a "smallest workable 6-player" version, I will only have the doppelganger record the target,
-                        // and their "final" role will be based on that at the reveal.
-                        // Re-reading prompt: "選1玩家複製身份+勝條件" - it means only copy role and win condition, not perform action.
-                        // So the change is internal state only.
-                    }
+                    resultMessage = `預言家: ${ROLES['預言家'].skill}`;
+                     showProphetCheck();
                     break;
                 case '狼人':
-                    if (skillTargetingData.centerCard) {
-                        const targetCard = state.centerCards.find(c => c.id === skillTargetingData.centerCard);
-                        if (targetCard) {
-                            state.messages.push(`${currentPlayer.name} (獨狼) 睇咗張桌面牌: ${getRoleDisplayName(targetCard.role)}。`);
-                            console.log(`Lone Wolf ${currentPlayer.name} viewed center card ${targetCard.id}: ${targetCard.role}`);
-                        }
+                    const werewolves = state.players.filter(p => state.startgame.find(pl => pl.id === p.id).initialRole === '狼人'); // Original role
+                    if (werewolves.length === 1 && playerWhoUsedSkill.initialRole === '狼人') { // Only one wolf
+                        prompt("你係獨狼！輸入1, 2 或 3 (桌牌編號) 查看一張桌牌：");
+                         // Actual implementation would need to show the role based on input
+                        resultMessage = "獨狼查看了桌面牌。";
+                    } else if (werewolves.length > 1) {
+                         resultMessage = `你哋係狼人隊友: ${werewolves.map(w => w.name).join(', ')}。`;
                     }
-                    break;
-
-                case '預言家':
-                    const seerPlayerTargetId = document.getElementById('seer-player-target').value;
-                    const seerCenterTarget1Id = document.getElementById('seer-center-target1').value;
-                    const seerCenterTarget2Id = document.getElementById('seer-center-target2').value;
-
-                    const seerTargetPlayer = state.players.find(p => p.id === seerPlayerTargetId);
-                    const seerTargetCenter1 = state.centerCards.find(c => c.id === seerCenterTarget1Id);
-                    const seerTargetCenter2 = state.centerCards.find(c => c.id === seerCenterTarget2Id);
-
-                    let message = `${currentPlayer.name} (預言家) 查`;
-                    if (seerTargetPlayer) {
-                        state.messages.push(`${message}咗 ${seerTargetPlayer.name} 嘅身份: ${getRoleDisplayName(seerTargetPlayer.currentRole)}。`);
-                        console.log(`Seer ${currentPlayer.name} viewed ${seerTargetPlayer.name}: ${seerTargetPlayer.currentRole}`);
-                    } else if (seerTargetCenter1 && seerTargetCenter2) {
-                        state.messages.push(`${message}咗兩張桌面牌: ${getRoleDisplayName(seerTargetCenter1.role)} 同 ${getRoleDisplayName(seerTargetCenter2.role)}。`);
-                        console.log(`Seer ${currentPlayer.name} viewed center cards ${seerTargetCenter1.id}: ${seerTargetCenter1.role} and ${seerTargetCenter2.id}: ${seerTargetCenter2.role}`);
-                    } else {
-                         state.messages.push(`${message}唔到嘢，可能係冇做選擇。`);
-                    }
-                    break;
-
-                case '強盜':
-                    const robberTargetId = document.getElementById('robber-target').value;
-                    const robberTargetPlayer = state.players.find(p => p.id === robberTargetId);
-                    if (robberTargetPlayer) {
-                        const robberOriginalRole = currentPlayer.currentRole;
-                        currentPlayer.currentRole = robberTargetPlayer.currentRole;
-                        robberTargetPlayer.currentRole = robberOriginalRole;
-                        state.messages.push(`${currentPlayer.name} (強盜) 同 ${robberTargetPlayer.name} 交換咗身份。而家 ${currentPlayer.name} 係 ${getRoleDisplayName(currentPlayer.currentRole)}，${robberTargetPlayer.name} 係 ${getRoleDisplayName(robberTargetPlayer.currentRole)}。`);
-                        console.log(`Robber ${currentPlayer.name} swapped roles with ${robberTargetPlayer.name}. ${currentPlayer.name} is now ${currentPlayer.currentRole}, ${robberTargetPlayer.name} is now ${robberTargetPlayer.currentRole}.`);
-                     }
-                    break;
-
-                case '搗蛋鬼':
-                    const troublemakerTarget1Id = document.getElementById('troublemaker-target1').value;
-                    const troublemakerTarget2Id = document.getElementById('troublemaker-target2').value;
-                    const troublemakerTargetPlayer1 = state.players.find(p => p.id === troublemakerTarget1Id);
-                    const troublemakerTargetPlayer2 = state.players.find(p => p.id === troublemakerTarget2Id);
-                    if (troublemakerTargetPlayer1 && troublemakerTargetPlayer2 && troublemakerTargetPlayer1.id !== troublemakerTargetPlayer2.id) {
-                        const role1 = troublemakerTargetPlayer1.currentRole;
-                        troublemakerTargetPlayer1.currentRole = troublemakerTargetPlayer2.currentRole;
-                        troublemakerTargetPlayer2.currentRole = role1;
-                        state.messages.push(`${currentPlayer.name} (搗蛋鬼) 將 ${troublemakerTargetPlayer1.name} 同 ${troublemakerTargetPlayer2.name} 嘅身份交換咗。`);
-                        console.log(`Troublemaker ${currentPlayer.name} swapped roles of ${troublemakerTargetPlayer1.name} and ${troublemakerTargetPlayer2.name}.`);
-                    } else {
-                        state.messages.push(`${currentPlayer.name} (搗蛋鬼) 冇換到身份 (可能冇選夠兩個唔同嘅玩家)。`);
-                        console.log(`Troublemaker target invalid or same player selected.`);
-                    }
-                    break;
-
-                case '酒鬼':
-                    const drunkTargetCardId = document.getElementById('drunk-target').value;
-                    const drunkTargetCard = state.centerCards.find(c => c.id === drunkTargetCardId);
-                    if (drunkTargetCard) {
-                        const playerOriginalRole = currentPlayer.currentRole;
-                        currentPlayer.currentRole = drunkTargetCard.role;
-                        drunkTargetCard.role = playerOriginalRole; // Player's original card goes to center
-                        state.messages.push(`${currentPlayer.name} (酒鬼) 盲抽咗張桌面牌 ${drunkTargetCard.id.replace('c','')} 交換咗身份。而家 ${currentPlayer.name} 係 ${getRoleDisplayName(currentPlayer.currentRole)}。`);
-                        console.log(`Drunk ${currentPlayer.name} blindly swapped with center card ${drunkTargetCard.id}. ${currentPlayer.name} is now ${currentPlayer.currentRole}.`);
-                    }
-                    break;
-
-                case '失眠者':
-                    // Insomniac just re-views their own card at the end of night actions
-                    state.messages.push(`${currentPlayer.name} (失眠者) 重睇咗自己嘅身份: ${getRoleDisplayName(currentPlayer.currentRole)}。`);
-                    console.log(`Insomniac ${currentPlayer.name} re-viewed their role: ${currentPlayer.currentRole}`);
-                    break;
-                case '爪牙': // Minion and Mason have no active choice for player to make
-                case '守夜人':
-                    state.messages.push(`${currentPlayer.name} (${activeSkillRole}) 冇指定行動。`);
-                     console.log(`${activeSkillRole} has no active skill action.`);
-                    break;
+                    prophetResultDiv.innerHTML = resultMessage;
+                     break;
+                // Add cases for other roles as needed
                 default:
-                    state.messages.push(`${currentPlayer.name} 冇執行任何行動。`);
-                    console.log(`No specific action for role ${activeSkillRole}.`);
+                    resultMessage = `${role}: 無特殊夜間行動。`;
+                     prophetResultDiv.innerHTML = resultMessage;
                     break;
             }
-
-            // After confirming skill, deactivate UI and prepare for next
-            skillActionArea.style.display = 'none';
-            nightActionsButtons.forEach(btn => btn.disabled = false);
-            if (currentSkillButton) {
-                currentSkillButton.disabled = true; // Disable the button for the just-completed role
-                currentSkillButton.classList.add('executed-skill'); // Optional: visual cue
-            }
-
-            // Check if all night actions are done
-            const allActionsCompleted = state.nightOrder.every(role => {
-                const button = document.querySelector(`#night-actions button[data-role="${role}"]`);
-                return !button || button.disabled; // If button exists, it must be disabled to be "completed"
-            });
-
-            if (allActionsCompleted) {
-                document.getElementById('day-phase-button').style.display = 'block';
-            }
         }
 
-        function skipNightSkill() {
-            const skillActionArea = document.getElementById('skill-action-area');
-            const nightActionsButtons = document.querySelectorAll('#night-actions .game-button');
-            const currentSkillButton = document.querySelector(`#night-actions button[data-role="${activeSkillRole}"]`);
 
-            // Log skipped action if needed
-            state.messages.push(`${state.players[state.activePlayerIndex].name} (${activeSkillRole}) 跳過咗今晚嘅行動。`);
-            console.log(`${activeSkillRole} skipped action.`);
-
-            skillActionArea.style.display = 'none';
-            nightActionsButtons.forEach(btn => btn.disabled = false);
-            if (currentSkillButton) {
-                currentSkillButton.disabled = true;
-                currentSkillButton.classList.add('skipped-skill');
-            }
-            const allActionsCompleted = state.nightOrder.every(role => {
-                const button = document.querySelector(`#night-actions button[data-role="${role}"]`);
-                return !button || button.disabled;
-            });
-
-            if (allActionsCompleted) {
-                document.getElementById('day-phase-button').style.display = 'block';
-            }
-        }
-
-        function castVote() {
-            const voteTargetSelect = document.getElementById('vote-target');
-            const playerVoting = state.players[state.activePlayerIndex]; // The player who is currently casting their vote
-            const targetId = voteTargetSelect.value;
-            playerVoting.voteFor = targetId;
-
-            state.messages.push(`${playerVoting.name} 投咗 ${state.players.find(p => p.id === targetId).name} 一票。`);
-            console.log(`${playerVoting.name} voted for ${state.players.find(p => p.id === targetId).name}.`);
-
-            state.activePlayerIndex++;
-            if (state.activePlayerIndex < state.players.length) {
-                document.getElementById('cast-vote-button').textContent = `投票 (${state.players[state.activePlayerIndex].name})`;
-                 voteTargetSelect.value = state.players[state.activePlayerIndex].id; // Pre-select current player to vote for themselves (default)
+        function showProphetCheck() {
+            const numPlayers = parseInt(document.getElementById('playerCount').value);
+            let choice = prompt(`輸入玩家編號 (1-${numPlayers}) 或 0 (桌牌):`);
+            let target = parseInt(choice);
+            
+            let result;
+            if (target === 0) {
+                const centerCardIndex = Math.floor(Math.random() * state.centerCards.length);
+                const card = state.centerCards[centerCardIndex];
+                result = `桌中央牌 ${centerCardIndex + 1}: ${card.role} (${getRoleCamp(card.role)}陣營)`;
+            } else if (target >= 1 && target <= numPlayers) {
+                const player = state.players[target - 1];
+                result = `${player.name}: ${player.initialRole} (${getRoleCamp(player.initialRole)}陣營)`;
             } else {
-                document.getElementById('cast-vote-button').disabled = true;
-                document.getElementById('show-results-button').style.display = 'block';
-                document.getElementById('final-votes').style.display = 'block';
-                calculateAndDisplayVotes();
-            }
-        }
-
-        function calculateAndDisplayVotes() {
-            const voteCounts = {}; // { playerId: count }
-            state.players.forEach(player => {
-                if (player.voteFor) {
-                    voteCounts[player.voteFor] = (voteCounts[player.voteFor] || 0) + 1;
-                }
-            });
-            state.votes = voteCounts; // Store for results calculation
-
-            const voteCountsUl = document.getElementById('vote-counts');
-            voteCountsUl.innerHTML = '';
-            for (const playerId in voteCounts) {
-                const li = document.createElement('li');
-                li.textContent = `${state.players.find(p => p.id === playerId).name}: ${voteCounts[playerId]} 票`;
-                voteCountsUl.appendChild(li);
-            }
-        }
-
-        function showResults() {
-            showSection('results-section');
-            let maxVotes = 0;
-            let playersWithMaxVotes = [];
-
-            for (const playerId in state.votes) {
-                if (state.votes[playerId] > maxVotes) {
-                    maxVotes = state.votes[playerId];
-                    playersWithMaxVotes = [playerId];
-                } else if (state.votes[playerId] === maxVotes) {
-                    playersWithMaxVotes.push(playerId);
-                }
-            }
-
-            // Determine who dies
-            if (playersWithMaxVotes.length === 0) {
-                 state.dead = []; // No votes, no one dies.
-            } else if (playersWithMaxVotes.length === 1) {
-                state.dead.push(state.players.find(p => p.id === playersWithMaxVotes[0]));
-            } else {
-                // Tie: no one dies if there's no clear majority, usually.
-                // One Night rules: If there's a tie for most votes, *everyone* who tied dies.
-                playersWithMaxVotes.forEach(playerId => {
-                    state.dead.push(state.players.find(p => p.id === playerId));
-                });
+                result = "無效選擇。";
             }
             
-            // Hunter Effect (if Hunter is among those who died and game has a hunter)
-            const hunterRole = state.players.find(p => p.initialRole === '獵人' || p.currentRole === '獵人'); // Hunter's final role or initial role can be hunter
-            let hunterTriggeredKill = false;
-            if (hunterRole && state.dead.some(d => d.id === hunterRole.id)) {
-                // Hunter dies, takes the player with most votes *from previous round of voting* (or if tied, no one)
-                // In One Night, if Hunter dies they shoot the player they voted for.
-                const hunterVotedForId = state.players.find(p => p.id === hunterRole.id)?.voteFor;
-                if (hunterVotedForId && !state.dead.some(d => d.id === hunterVotedForId)) { // If hunter voted for someone who isn't already dead
-                    const targetPlayer = state.players.find(p => p.id === hunterVotedForId);
-                    if (targetPlayer) {
-                        state.dead.push(targetPlayer);
-                        hunterTriggeredKill = true;
-                        state.messages.push(`${hunterRole.name} (獵人) 死咗，佢帶走咗佢投嘅 ${targetPlayer.name}！`);
-                        console.log(`Hunter ${hunterRole.name} died and took down ${targetPlayer.name}.`);
-                    }
-                }
-            }
+            document.getElementById('prophet-result').innerHTML = result;
+            document.getElementById('skill-result').style.display = 'block';
+        }
 
+        function getRecommended(count) {
+           return RECOMMENDED_CONFIGS[count] ? [...RECOMMENDED_CONFIGS[count]] : null;
+        }
 
-            const finalRolesDiv = document.getElementById('final-roles');
-            finalRolesDiv.innerHTML = '';
-            state.players.forEach(player => {
-                const isDead = state.dead.some(d => d.id === player.id);
-                const cardDiv = document.createElement('div');
-                cardDiv.classList.add('player-card');
-                if (isDead) {
-                    cardDiv.style.backgroundColor = 'darkred';
-                    cardDiv.style.color = 'white';
-                }
-                cardDiv.innerHTML = `<h3>${player.name}</h3><p>真身: ${getRoleDisplayName(player.initialRole)}</p><p>最終身份: ${getRoleDisplayName(player.currentRole)} ${isDead ? '(已死)' : ''}</p>`;
-                finalRolesDiv.appendChild(cardDiv);
+        function showPlayers(playerRoles) {
+            const playersDisplayDiv = document.getElementById('players-display');
+            playersDisplayDiv.innerHTML = '<h4>玩家身份</h4>';
+            playerRoles.forEach((role, index) => {
+                const playerDiv = document.createElement('div');
+                playerDiv.classList.add('player-card');
+                playerDiv.innerHTML = `<h3>玩家${index + 1}</h3><p>身份: ${role}</p>`;
+                playersDisplayDiv.appendChild(playerDiv);
             });
-            state.centerCards.forEach(card => {
+        }
+
+        function showCenter(centerRoles) {
+            const centerDisplayDiv = document.getElementById('center-display');
+            centerDisplayDiv.innerHTML = '<h4>桌中央牌</h4>';
+            centerRoles.forEach((role, index) => {
                 const cardDiv = document.createElement('div');
                 cardDiv.classList.add('center-card');
-                cardDiv.innerHTML = `<h3>檯面牌 ${card.id.replace('c','')}</h3><p>${getRoleDisplayName(card.role)}</p>`;
-                finalRolesDiv.appendChild(cardDiv);
+                cardDiv.innerHTML = `<h3>牌位${index + 1}</h3><p>身份: ${role}</p>`;
+                centerDisplayDiv.appendChild(cardDiv);
             });
-
-            // Determine Winner
-            let resultMessage = "冇贏家?";
-            let werewolvesAlive = state.players.filter(p => p.currentRole === '狼人' && !state.dead.some(d => d.id === p.id)).length > 0;
-            let villagersAlive = state.players.filter(p => !['狼人', '爪牙'].includes(p.currentRole) && !state.dead.some(d => d.id === p.id)).length > 0;
-            let minionAlive = state.players.some(p => p.currentRole === '爪牙' && !state.dead.some(d => d.id === p.id));
-            let tannerAlive = state.players.some(p => p.currentRole === '皮匠' && !state.dead.some(d => d.id === p.id));
-
-            // Win condition for Tanner: If Tanner is the *only* one who dies
-            let tannerWins = false;
-            let deadTanners = state.dead.filter(p => p.currentRole === '皮匠');
-            if (deadTanners.length > 0 && state.dead.length === deadTanners.length) {
-                resultMessage = "皮匠贏晒! 佢係唯一一個死嘅人!";
-                tannerWins = true;
-            }
-
-            if (!tannerWins) {
-                if (!werewolvesAlive) { // No werewolves left alive
-                    // Check if there were any werewolves OR minions in play to begin with
-                    const initialWerewolvesInPlay = state.rolesInPlay.filter(r => r === '狼人').length > 0;
-                    const initialMinionsInPlay = state.rolesInPlay.filter(r => r === '爪牙').length > 0;
-
-                    if (!initialWerewolvesInPlay && !initialMinionsInPlay) {
-                        // No werewolves or minions in play, so villagers always win by default if no one dies
-                        resultMessage = "遊戲冇狼人，村民們贏咗!";
-                    } else if (!state.dead.length) {
-                        // Werewolves and/or minions were in play, but no one died. Villagers lose unless no wolves were in play.
-                         resultMessage = "冇人死，狼人贏晒!"; // If no one dies, wolves win generally
-                    } else if (!initialWerewolvesInPlay && state.dead.length > 0) {
-                         // No werewolves in play, someone died, villagers still win
-                         resultMessage = "冇狼人，村民們贏咗!";
-                    } else { // Werewolves were in play and all died
-                        resultMessage = "所有狼人都死晒，村民們贏咗!";
-                    }
-                } else { // Werewolves are still alive
-                    // If a Minion is alive and a werewolf is alive, and no one died, werewolves/minions win because no one died.
-                    const anyWolfOrMinionDied = state.dead.some(p => ['狼人', '爪牙'].includes(p.currentRole));
-                    
-                    if (state.dead.length === 0) { // No one died, and wolves are alive
-                        resultMessage = "冇人死，狼人贏晒!";
-                    } else if (anyWolfOrMinionDied && !werewolvesAlive) { // A wolf died, and now no wolves are alive (handled above)
-                         resultMessage = "所有狼人都死晒，村民們贏咗!";
-                    } else if (!anyWolfOrMinionDied && werewolvesAlive) { // Only villagers or tanners died, wolves still alive
-                        resultMessage = "狼人仍然健在，狼人贏晒!";
-                    } else { // Some other complex scenario
-                         resultMessage = "遊戲結果不明。";
-                    }
-                }
-
-                // Minion specific win condition: If Minion is alive and all Werewolves died, Minion wins with Villagers.
-                // This rule is tricky. "無狼時任一死=勝" from prompt seems to imply standalone win if no wolves at all.
-                // If there are no actual Werewolves in the game (either through initial roles or swaps), AND if *anyone* dies, then the Minion wins.
-                // If there are actual Werewolves and they all die, Minion wins with Villagers.
-                const wasMinionInPlay = state.rolesInPlay.includes('爪牙');
-                if (wasMinionInPlay && minionAlive) {
-                    const actualWerewolvesInGame = state.players.filter(p => p.currentRole === '狼人').length > 0 || state.centerCards.filter(c => c.role === '狼人').length > 0;
-                    if (!werewolvesAlive) { // All werewolves died
-                         resultMessage = "所有狼人都死晒，爪牙同村民贏咗!";
-                    } else if (!actualWerewolvesInGame && state.dead.length > 0) { // No actual wolves in game AND someone died
-                        resultMessage = "遊戲冇狼人，有人死，爪牙獨贏!";
-                    }
-                }
-            }
-
-
-            document.getElementById('results-banner').textContent = resultMessage;
         }
 
-        function restartGame() {
-            // Reset state
-            state = {
-                players: [],
-                centerCards: [],
-                rolesInPlay: [],
-                nightOrder: ['化身幽靈', '狼人', '爪牙', '守夜人', '預言家', '強盜', '搗蛋鬼', '酒鬼', '失眠者'],
-                currentPhase: 'setup',
-                activePlayerIndex: 0,
-                activeNightSkillIndex: 0,
-                votes: {},
-                dead: [],
-                messages: []
-            };
-            playerCount = 6; // Reset to default
-
-            // Reset UI
-            document.getElementById('player-count').textContent = playerCount;
-            document.querySelectorAll('.player-count-selector button').forEach(btn => btn.classList.remove('active'));
-            document.querySelector(`.player-count-selector button[data-count="6"]`).classList.add('active');
-            document.querySelectorAll('.config-button').forEach(btn => btn.classList.remove('active'));
-            document.querySelector(`.config-button[data-config="6"]`).classList.add('active');
-
-
-            document.getElementById('drawn-cards').innerHTML = '';
-            document.getElementById('player-view-cards').innerHTML = '';
-            document.getElementById('night-actions').innerHTML = '';
-            document.getElementById('skill-action-area').style.display = 'none';
-            document.getElementById('day-phase-button').style.display = 'none';
-            document.getElementById('discussion-area').querySelector('textarea').value = '';
-            document.getElementById('vote-target').innerHTML = '';
-            document.getElementById('cast-vote-button').textContent = `投票 (玩家1)`;
-            document.getElementById('cast-vote-button').disabled = false;
-            document.getElementById('show-results-button').style.display = 'none';
-            document.getElementById('final-votes').style.display = 'none';
-            document.getElementById('vote-counts').innerHTML = '';
-            document.getElementById('final-roles').innerHTML = '';
-            document.getElementById('results-banner').textContent = '勝負判斷結果';
-
-            loadRecommendedConfig(playerCount); // Load default 6-player config initially
-
-            showSection('setup-section');
-        }
-
-        // Event Listeners
         document.addEventListener('DOMContentLoaded', () => {
-            renderRoleSkills(); // Populate role summary
-            updatePlayerCount(playerCount); // Initialize player count and recommended config
-            loadRecommendedConfig(playerCount); // Manually load for default 6 players too.
+            renderRoleSkills();
+            updatePlayerCount(document.getElementById('playerCount').value);
 
-            // Event listener for player count select box
-            document.getElementById('playerCount').addEventListener('change', (event) => {
-                updatePlayerCount(parseInt(event.target.value));
-            });
-
-            // Event listener for recommended config button
-            document.getElementById('recommended-config-button').addEventListener('click', () => {
-                const count = parseInt(document.getElementById('playerCount').value);
-                loadRecommendedConfig(count);
-                 updateGameButtons();
-            });
-
-            // Event listener for dealing cards
-            document.getElementById('deal-cards-button').addEventListener('click', () => {
-                dealCards();
-                document.getElementById('shuffle-distribute-button').disabled = false;
-            });
-
-            // Event listener for shuffling and distributing cards
-            document.getElementById('shuffle-distribute-button').addEventListener('click', () => {
-                startGame(); // Distributes to players and center
-                showSection('private-view-section');
-                updateGameButtons();
-
-            });
-
-            // Event listener for revealing all cards (debug/end game)
-            document.getElementById('reveal-all-button').addEventListener('click', () => {
-                revealAllRoles();
-                // You might want to automatically show results section after revealing all
-                showResults();
-            });
-
-            // Event listener for specific 'view card' buttons when clicked per player in private view
-            document.getElementById('player-view-cards').addEventListener('click', (event) => {
-                if (event.target.classList.contains('view-card-btn')) {
-                    viewPlayerCard(event.target.dataset.playerId);
-                }
-            });
-
-            // Event listener to move from private view to night phase
-            document.getElementById('night-phase-button').addEventListener('click', () => {
-                showSection('night-phase-section');
-                setupNightActions();
-                document.querySelectorAll('.night-btn').forEach(btn => btn.disabled = false); // Ensure night action buttons are enabled to start
-                document.querySelectorAll('.night-btn').forEach(btn => btn.classList.remove('executed-skill', 'skipped-skill'));
-            });
-
-            // Event listeners for night skill actions
-            document.getElementById('confirm-skill-button').addEventListener('click', confirmNightSkill);
-            document.getElementById('skip-skill-button').addEventListener('click', skipNightSkill);
-
-            // Event listener to move from night phase to day phase
-            document.getElementById('day-phase-button').addEventListener('click', () => {
-                showSection('day-phase-section');
-                setupVotingOptions();
-                state.activePlayerIndex = 0; // Reset for voting
-                document.getElementById('cast-vote-button').textContent = `投票 (${state.players[state.activePlayerIndex].name})`;
-                document.getElementById('cast-vote-button').disabled = false;
-                document.getElementById('show-results-button').style.display = 'none';
-                document.getElementById('final-votes').style.display = 'none';
-            });
-
-            // Event listener for casting a vote
-            document.getElementById('cast-vote-button').addEventListener('click', castVote);
-            // Event listener for showing results after voting
-            document.getElementById('show-results-button').addEventListener('click', showResults);
-
-            // Event listener for restarting the game
-            document.getElementById('restart-game-button').addEventListener('click', restartGame);
-
-
-            // Initial setup on page load
-            renderRoleSkills(); // Populate role summary table
-            updatePlayerCount(playerCount); // Initialize player count and recommended config
-            loadRecommendedConfig(playerCount); // Loads roles for default player count
-            updateGameButtons(); // Initial state of game control buttons
-
+            // Removed other old event listeners for buttons that are merged or removed.
         });
     </script>
 </body>

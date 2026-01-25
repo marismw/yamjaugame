@@ -615,7 +615,18 @@
         }
 
         function getRoleCamp(role) {
-            return ROLES[role] ? ROLES[role].camp : '未知';
+            const camp = ROLES[role] ? ROLES[role].camp : null;
+            if (camp) {
+                return camp;
+            }
+            // Fallback: try to determine camp based on role name patterns
+            if (role === '狼人' || role === '爪牙') {
+                return '狼人';
+            }
+            if (role === '化身幽靈' || role === '守夜人' || role === '先知' || role === '強盜' || role === '搗蛋鬼' || role === '酒鬼' || role === '失眠者') {
+                return '好人';
+            }
+            return '未知';
         }
 
         function getRoleNightOrder(role) {

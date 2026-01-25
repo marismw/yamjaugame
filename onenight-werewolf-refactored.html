@@ -449,6 +449,16 @@
             </div>
             <p id="private-role-camp" style="font-size: 1.2em; color: #fbc02d;"></p>
             <p id="private-role-skill" style="font-size: 1em; color: #ccc; margin-top: 10px;"></p>
+            
+            <!-- 新增：修改名字功能 -->
+            <div style="margin-top: 15px; padding-top: 15px; border-top: 1px dashed rgba(255,255,255,0.3);">
+              <p style="font-size: 0.9em; color: #ccc; margin-bottom: 8px;">修改名字（可選）：</p>
+              <input id="change-name-input" type="text" placeholder="輸入新名字" style="padding: 8px; border-radius: 8px; border: 2px solid #10b981; background: #065f46; color: white; font-size: 14px; width: 200px;">
+              <button onclick="changePlayerName()" class="config-btn green" style="margin-left: 10px; padding: 8px 15px; font-size: 14px;">保存</button>
+            </div>
+            
+            <!-- 新增：關閉按鈕 -->
+            <button onclick="hidePrivateRoleDisplay()" class="config-btn red" style="margin-top: 15px;">關閉</button>
           </div>
         </div>
 
@@ -460,8 +470,6 @@
       <!-- 夜間行動區 -->
       <div id="night-phase" class="night-phase" style="display:none;">
         <h2>🌙 夜間行動</h2>
-        
-        <!-- Night order display removed -->
         
         <div id="current-night-player" class="current-night-player">
           <h3>目前行動：<span id="night-player-name"></span></h3>
@@ -545,13 +553,15 @@
 
     <script>
         const ROLES = {
+            '化身幽靈': { camp: '好人', skill: '化身為另一名玩家的身份，並執行該身份的技能（可選擇是否執行）。', nightOrder: 1 },
             '狼人': { camp: '狼人', skill: '睜眼互相確認。若只有一隻狼，可查看桌面上三張牌中的一張。', nightOrder: 2 },
-            '爪牙': { camp: '狼人', skill: '睜眼確認狼人（狼人豎起大拇指）。', nightOrder: 1 },
-            '失眠者': { camp: '好人', skill: '最後醒來查看自己的牌（若被強盜或搗蛋鬼換過，會發現）。', nightOrder: 3 },
-            '先知': { camp: '好人', skill: '查看一名玩家的牌，或中央兩張牌。', nightOrder: 4 },
-            '強盜': { camp: '好人', skill: '與一名玩家交換身分，並查看交換後的新牌。', nightOrder: 5 },
-            '搗蛋鬼': { camp: '好人', skill: '交換兩名玩家的牌，但不查看。', nightOrder: 6 },
-            '酒鬼': { camp: '好人', skill: '與中央牌交換，不能看自己拿到的牌。', nightOrder: 7 }
+            '爪牙': { camp: '狼人', skill: '睜眼確認狼人（狼人豎起大拇指）。', nightOrder: 3 },
+            '守夜人': { camp: '好人', skill: '查看一名玩家是否為守夜人，若不是則查看其身份。', nightOrder: 4 },
+            '先知': { camp: '好人', skill: '查看一名玩家的牌，或中央兩張牌。', nightOrder: 5 },
+            '強盜': { camp: '好人', skill: '與一名玩家交換身分，並查看交換後的新牌。', nightOrder: 6 },
+            '搗蛋鬼': { camp: '好人', skill: '交換兩名玩家的牌，但不查看。', nightOrder: 7 },
+            '酒鬼': { camp: '好人', skill: '與中央牌交換，不能看自己拿到的牌。', nightOrder: 8 },
+            '失眠者': { camp: '好人', skill: '最後醒來查看自己的牌（若被強盜或搗蛋鬼換過，會發現）。', nightOrder: 9 }
         };
 
         const RECOMMENDED_CONFIGS = {
@@ -565,13 +575,15 @@
             10:['狼人','狼人','先知','強盜','搗蛋鬼','酒鬼','失眠者','爪牙']
         };
 
+        // 新增：角色夜間行動順序（關鍵變數）
+        const ROLE_NIGHT_ORDER = ['化身幽靈', '狼人', '爪牙', '守夜人', '先知', '強盜', '搗蛋鬼', '酒鬼', '失眠者'];
+
         let state = {
             players: [], // [{ id, name, initialRole, currentRole, hasNightAction, skillUsed }]
             centerCards: [], // [{ id, role }]
             rolesInPlay: [],
             currentPhase: 'setup', // setup, roleview, night, day, results
-            currentNightPlayerIndex: 0,
-            nightOrder: ['爪牙', '狼人', '失眼者', '先知', '強盜', '搗蛋鬼', '酒鬼'],
+            currentRoleIndex: 0, // 改為角色索引，不再是玩家索引
             selectedTargets: [],
             nightResults: {}, // { playerId: result }
             votes: {}, // { playerId: count }
@@ -661,7 +673,7 @@
             state.votes = {};
             state.nightResults = {};
             state.selectedTargets = [];
-            state.currentNightPlayerIndex = 0;
+            state.currentRoleIndex = 0;
             state.currentPhase = 'roleview';
             state.actionContext = null;
 
@@ -725,17 +737,6 @@
         function viewPlayerRole(playerIndex) {
             const player = state.players[playerIndex];
             
-            // Show private role display
-            document.getElementById('private-role-display').style.display = 'block';
-            
-            // Update the display
-            document.getElementById('private-role-name').textContent = player.currentRole;
-            document.getElementById('private-role-camp').textContent = `陣營: ${getRoleCamp(player.currentRole)}`;
-            document.getElementById('private-role-skill').textContent = `技能: ${ROLES[player.currentRole].skill}`;
-            
-            // Mark player as viewed
-            viewedPlayers.add(playerIndex);
-            
             // Update button appearance to show viewed status
             const btn = document.getElementById(`player-btn-${playerIndex}`);
             if (btn) {
@@ -743,10 +744,61 @@
                 btn.textContent = `${player.name} ✓`;
             }
             
+            // Mark player as viewed
+            viewedPlayers.add(playerIndex);
+            
+            // Show private role display (only to the current player)
+            const privateRoleDisplay = document.getElementById('private-role-display');
+            privateRoleDisplay.style.display = 'block';
+            
+            // Update the display
+            document.getElementById('private-role-name').textContent = player.currentRole;
+            document.getElementById('private-role-camp').textContent = `陣營: ${getRoleCamp(player.currentRole)}`;
+            document.getElementById('private-role-skill').textContent = `技能: ${ROLES[player.currentRole].skill}`;
+            
             // Check if all players have viewed
             if (viewedPlayers.size === state.players.length) {
                 document.getElementById('finish-view-btn').style.display = 'inline-block';
             }
+        }
+
+        // 新增：手動隱藏角色顯示
+        function hidePrivateRoleDisplay() {
+            document.getElementById('private-role-display').style.display = 'none';
+        }
+
+        // 新增：修改玩家名字
+        function changePlayerName() {
+            const input = document.getElementById('change-name-input');
+            const newName = input.value.trim();
+            
+            if (!newName) {
+                alert('請輸入名字！');
+                return;
+            }
+            
+            // 找出當前查看的玩家
+            const viewedPlayerIndex = Array.from(viewedPlayers).pop();
+            if (viewedPlayerIndex === undefined) {
+                alert('請先查看角色！');
+                return;
+            }
+            
+            const player = state.players[viewedPlayerIndex];
+            
+            // 更新玩家名字
+            player.name = newName;
+            
+            // 更新按鈕文字
+            const btn = document.getElementById(`player-btn-${viewedPlayerIndex}`);
+            if (btn) {
+                btn.textContent = newName;
+            }
+            
+            // 清空輸入框
+            input.value = '';
+            
+            alert('名字已更新！');
         }
 
         function finishRoleView() {
@@ -754,89 +806,82 @@
             startNightPhase();
         }
 
+        // ==================== 新增：角色順序夜間行動系統 ====================
+        
         function startNightPhase() {
             document.getElementById('night-phase').style.display = 'block';
             document.getElementById('day-phase').style.display = 'none';
             document.getElementById('results-section').style.display = 'none';
             
-            state.currentNightPlayerIndex = 0;
-            processNextNightPlayer();
+            state.currentRoleIndex = 0;  // 從第一個角色開始
+            processNextNightAction();
         }
 
-        function processNextNightPlayer() {
-            // Find next player with night action
-            let found = false;
-            while (state.currentNightPlayerIndex < state.players.length && !found) {
-                const player = state.players[state.currentNightPlayerIndex];
-                if (player.hasNightAction && !player.skillUsed) {
-                    found = true;
-                } else {
-                    state.currentNightPlayerIndex++;
-                }
-            }
-
-            if (!found) {
-                // All night actions complete
+        // 新增：處理下一個角色的行動
+        function processNextNightAction() {
+            // 取得當前要執行的角色
+            const currentRole = ROLE_NIGHT_ORDER[state.currentRoleIndex];
+            
+            // 如果沒有更多角色，結束夜間
+            if (!currentRole) {
                 endNightPhase();
                 return;
             }
-
-            const currentPlayer = state.players[state.currentNightPlayerIndex];
-            displayNightPlayer(currentPlayer);
+            
+            // 找出擁有該角色的所有玩家
+            const playersWithRole = state.players.filter(p => p.currentRole === currentRole);
+            
+            // 如果有玩家擁有此角色，執行行動
+            if (playersWithRole.length > 0) {
+                performRoleAction(currentRole, playersWithRole);
+            } else {
+                // 沒有玩家有此角色，跳過並處理下一個
+                state.currentRoleIndex++;
+                processNextNightAction();
+            }
         }
 
-        function displayNightPlayer(player) {
-            const nameDiv = document.getElementById('night-player-name');
-            const descDiv = document.getElementById('night-role-description');
-            const actionsDiv = document.getElementById('night-actions-container');
+        // 新增：執行特定角色的行動
+        function performRoleAction(role, playersWithRole) {
+            // 更新 UI 顯示（只顯示角色名稱，不顯示玩家姓名）
+            document.getElementById('night-player-name').textContent = role;
+            document.getElementById('night-role-description').textContent = `技能: ${ROLES[role].skill}`;
             
-            nameDiv.textContent = player.currentRole;
-            descDiv.textContent = `技能: ${ROLES[player.currentRole].skill}`;
-            
-            // Create action buttons
-            actionsDiv.innerHTML = '';
-            
-            // Add skill activation button
-            const skillBtn = document.createElement('button');
-            skillBtn.className = 'night-btn';
-            skillBtn.textContent = `使用 ${player.currentRole} 技能`;
-            skillBtn.onclick = () => activateSkill(player);
-            actionsDiv.appendChild(skillBtn);
-
-            // Reset action panel
+            // 重置行動面板
+            document.getElementById('night-actions-container').style.display = 'flex';
             document.getElementById('action-panel').style.display = 'none';
             document.getElementById('action-result').style.display = 'none';
             state.selectedTargets = [];
             state.actionContext = null;
-        }
-
-        function activateSkill(player) {
-            const role = player.currentRole;
             
-            // Hide action buttons, show selection panel
-            document.getElementById('night-actions-container').style.display = 'none';
-            
+            // 根據角色類型觸發對應行動
             switch (role) {
+                case '化身幽靈':
+                    handleDoppelgangerAction(playersWithRole[0]); // 只有一位化身幽靈
+                    break;
                 case '狼人':
-                    showWerewolfSelection();
+                    handleWerewolfAction(playersWithRole);
                     break;
                 case '爪牙':
-                    showMinionSelection();
+                    handleMinionAction(playersWithRole);
+                    break;
+                case '守夜人':
+                    handleWatchmanAction(playersWithRole[0]); // 只有一位守夜人
                     break;
                 case '失眠者':
-                    showInsomniacResult(player);
+                    handleInsomniacAction(playersWithRole);
                     break;
                 case '先知':
-                    showProphetSelection();
+                    handleProphetAction(playersWithRole[0]); // 只有一位先知
                     break;
                 case '強盜':
-                    showRobberSelection();
+                    handleRobberAction(playersWithRole[0]); // 只有一位強盜
                     break;
                 case '搗蛋鬼':
-                    showTroublemakerSelection();
+                    handleTroublemakerAction(playersWithRole[0]); // 只有一位搗蛋鬼
                     break;
                 case '酒鬼':
-                    showDrunkSelection();
+                    handleDrunkAction(playersWithRole[0]); // 只有一位酒鬼
                     break;
                 default:
                     showDefaultAction();
@@ -844,39 +889,22 @@
             }
         }
 
-        function showDoppelgangerSelection() {
-            const panel = document.getElementById('action-panel');
-            const title = document.getElementById('action-title');
-            const area = document.getElementById('selection-area');
-            
-            panel.style.display = 'block';
-            title.textContent = '化身幽靈：選擇要複製身份的玩家';
-            
-            area.innerHTML = '<div class="select-grid" id="player-selection"></div>';
-            const grid = document.getElementById('player-selection');
-            
-            getOtherPlayers(state.players[state.currentNightPlayerIndex].id).forEach(player => {
-                const btn = document.createElement('button');
-                btn.className = 'select-btn';
-                btn.textContent = player.name;
-                btn.onclick = () => selectTarget(player, btn);
-                grid.appendChild(btn);
-            });
-        }
+        // ==================== 各角色行動處理函式 ====================
 
-        function showWerewolfSelection() {
-            const currentPlayer = state.players[state.currentNightPlayerIndex];
+        // 處理狼人行動
+        function handleWerewolfAction(players) {
             const panel = document.getElementById('action-panel');
             const title = document.getElementById('action-title');
             const area = document.getElementById('selection-area');
+            const actionsDiv = document.getElementById('night-actions-container');
             
             panel.style.display = 'block';
+            actionsDiv.style.display = 'none';
             
-            const werewolves = state.players.filter(p => p.currentRole === '狼人');
-            
-            if (werewolves.length === 1) {
-                // Solo werewolf - check center cards
-                title.textContent = '獨狼：選擇一張中心牌查看';
+            if (players.length === 1) {
+                // 獨狼：查看中心牌
+                title.textContent = '狼人：獨狼查看中心牌';
+                
                 area.innerHTML = '<div class="select-grid" id="center-selection"></div>';
                 const grid = document.getElementById('center-selection');
                 
@@ -884,23 +912,31 @@
                     const btn = document.createElement('button');
                     btn.className = 'select-btn';
                     btn.textContent = `中心牌 ${index + 1}`;
-                    btn.onclick = () => selectTarget(card, btn);
+                    btn.onclick = () => selectTargetForRole(card, btn, '狼人');
                     grid.appendChild(btn);
                 });
             } else {
-                // Multiple werewolves - show teammates
-                title.textContent = '狼人隊友';
-                const teammates = werewolves.map(w => w.name).join(', ');
-                area.innerHTML = `<p style="font-size: 1.2em; color: #fbc02d;">你的隊友是: ${teammates}</p>`;
+                // 多狼人：顯示隊友名單
+                title.textContent = '狼人：隊友互認';
+                
+                const teammateNames = players.map(p => p.name).join(', ');
+                area.innerHTML = `<p style="font-size: 1.2em; color: #fbc02d;">你的隊友是: ${teammateNames}</p>`;
+                
+                // 自動記錄行動結果
+                recordRoleAction('狼人', `狼人隊友互認: ${teammateNames}`, players);
             }
         }
 
-        function showMinionSelection() {
+        // 處理爪牙行動
+        function handleMinionAction(players) {
             const panel = document.getElementById('action-panel');
             const title = document.getElementById('action-title');
             const area = document.getElementById('selection-area');
+            const actionsDiv = document.getElementById('night-actions-container');
             
             panel.style.display = 'block';
+            actionsDiv.style.display = 'none';
+            
             title.textContent = '爪牙：查看狼人位置';
             
             const werewolves = state.players.filter(p => p.currentRole === '狼人');
@@ -908,39 +944,78 @@
             if (werewolves.length > 0) {
                 const wolfNames = werewolves.map(w => w.name).join(', ');
                 area.innerHTML = `<p style="font-size: 1.2em; color: #fbc02d;">狼人在: ${wolfNames}</p>`;
+                
+                // 自動記錄行動結果
+                recordRoleAction('爪牙', `爪牙知道狼人位置: ${wolfNames}`, players);
             } else {
                 area.innerHTML = `<p style="font-size: 1.2em; color: #ef4444;">場上沒有狼人！</p>`;
+                
+                // 自動記錄行動結果
+                recordRoleAction('爪牙', '場上沒有狼人', players);
             }
         }
 
-        function showWatchmanSelection() {
-            const currentPlayer = state.players[state.currentNightPlayerIndex];
+        // 處理失眠者行動
+        function handleInsomniacAction(players) {
             const panel = document.getElementById('action-panel');
             const title = document.getElementById('action-title');
             const area = document.getElementById('selection-area');
+            const actionsDiv = document.getElementById('night-actions-container');
             
             panel.style.display = 'block';
-            title.textContent = '守夜人：選擇一名玩家查看是否也是守夜人';
+            actionsDiv.style.display = 'none';
             
-            area.innerHTML = '<div class="select-grid" id="player-selection"></div>';
-            const grid = document.getElementById('player-selection');
+            title.textContent = '失眠者：查看自己的身份';
             
-            getOtherPlayers(currentPlayer.id).forEach(player => {
-                const btn = document.createElement('button');
-                btn.className = 'select-btn';
-                btn.textContent = player.name;
-                btn.onclick = () => selectTarget(player, btn);
-                grid.appendChild(btn);
+            // 為每位失眠者生成按鈕（隱藏玩家身份）
+            area.innerHTML = '<div style="text-align: center;">';
+            players.forEach((player, index) => {
+                area.innerHTML += `<button class="night-btn" onclick="viewInsomniacIdentity(${index})">失眠者${index + 1} 查看身份</button>`;
             });
+            area.innerHTML += '</div>';
+            
+            // 儲存失眠者玩家
+            state.actionContext = { insomniacPlayers: players };
         }
 
-        function showProphetSelection() {
+        // 單獨查看失眠者身份（不會暴露是誰）
+        function viewInsomniacIdentity(index) {
+            if (!state.actionContext || !state.actionContext.insomniacPlayers) return;
+            
+            const players = state.actionContext.insomniacPlayers;
+            const player = players[index];
+            
+            const resultDiv = document.getElementById('action-result');
+            const contentDiv = document.getElementById('result-content');
+            
+            resultDiv.style.display = 'block';
+            
+            // 只顯示角色，不顯示玩家姓名
+            contentDiv.textContent = `失眠者${index + 1} 查看自己: ${player.currentRole}`;
+            
+            // 記錄行動
+            state.nightResults[player.id] = `失眠者查看: ${player.currentRole}`;
+            player.skillUsed = true;
+            
+            // 隱藏行動按鈕
+            document.getElementById('night-actions-container').style.display = 'none';
+            
+            // 顯示下一角色按鈕
+            const nextBtn = document.querySelector('#night-phase .config-btn.green');
+            nextBtn.style.display = 'inline-block';
+        }
+
+        // 處理先知行動
+        function handleProphetAction(player) {
             const panel = document.getElementById('action-panel');
             const title = document.getElementById('action-title');
             const area = document.getElementById('selection-area');
+            const actionsDiv = document.getElementById('night-actions-container');
             
             panel.style.display = 'block';
-            title.textContent = '預言家：選擇查驗方式';
+            actionsDiv.style.display = 'none';
+            
+            title.textContent = '先知：選擇查驗方式';
             
             area.innerHTML = `
                 <div style="display: flex; gap: 10px; justify-content: center; margin-bottom: 15px;">
@@ -949,6 +1024,9 @@
                 </div>
                 <div id="prophet-selection-area"></div>
             `;
+            
+            // 儲存先知玩家
+            state.actionContext = { prophetPlayer: player };
         }
 
         function setProphetMode(mode) {
@@ -958,72 +1036,156 @@
             if (mode === 'player') {
                 area.innerHTML = '<div class="select-grid" id="player-selection"></div>';
                 const grid = document.getElementById('player-selection');
-                getOtherPlayers(state.players[state.currentNightPlayerIndex].id).forEach(player => {
+                
+                // 選擇其他玩家（排除自己）
+                const otherPlayers = state.players.filter(p => p.id !== state.actionContext.prophetPlayer.id);
+                otherPlayers.forEach(player => {
                     const btn = document.createElement('button');
                     btn.className = 'select-btn';
                     btn.textContent = player.name;
-                    btn.onclick = () => selectTarget(player, btn);
+                    btn.onclick = () => selectTargetForRole(player, btn, '先知');
                     grid.appendChild(btn);
                 });
             } else if (mode === 'center') {
                 area.innerHTML = '<div class="select-grid" id="center-selection"></div>';
                 const grid = document.getElementById('center-selection');
+                
                 state.centerCards.forEach((card, index) => {
                     const btn = document.createElement('button');
                     btn.className = 'select-btn';
                     btn.textContent = `中心牌 ${index + 1}`;
-                    btn.onclick = () => selectTarget(card, btn);
+                    btn.onclick = () => selectTargetForRole(card, btn, '先知');
                     grid.appendChild(btn);
                 });
             }
         }
 
-        function showRobberSelection() {
+        // 處理強盜行動
+        function handleRobberAction(player) {
             const panel = document.getElementById('action-panel');
             const title = document.getElementById('action-title');
             const area = document.getElementById('selection-area');
+            const actionsDiv = document.getElementById('night-actions-container');
             
             panel.style.display = 'block';
+            actionsDiv.style.display = 'none';
+            
             title.textContent = '強盜：選擇一名玩家交換身份';
             
             area.innerHTML = '<div class="select-grid" id="player-selection"></div>';
             const grid = document.getElementById('player-selection');
             
-            getOtherPlayers(state.players[state.currentNightPlayerIndex].id).forEach(player => {
+            // 選擇其他玩家
+            const otherPlayers = state.players.filter(p => p.id !== player.id);
+            otherPlayers.forEach(target => {
                 const btn = document.createElement('button');
                 btn.className = 'select-btn';
-                btn.textContent = player.name;
-                btn.onclick = () => selectTarget(player, btn);
+                btn.textContent = target.name;
+                btn.onclick = () => selectTargetForRole(target, btn, '強盜');
                 grid.appendChild(btn);
             });
+            
+            // 儲存強盜玩家
+            state.actionContext = { robberPlayer: player };
         }
 
-        function showTroublemakerSelection() {
+        // 處理搗蛋鬼行動
+        function handleTroublemakerAction(player) {
             const panel = document.getElementById('action-panel');
             const title = document.getElementById('action-title');
             const area = document.getElementById('selection-area');
+            const actionsDiv = document.getElementById('night-actions-container');
             
             panel.style.display = 'block';
-            title.textContent = '搗蛋鬼：選擇兩名玩家交換身份 (點擊兩次)';
+            actionsDiv.style.display = 'none';
+            
+            title.textContent = '搗蛋鬼：選擇兩名玩家交換身份（點擊兩次）';
             
             area.innerHTML = '<div class="select-grid" id="player-selection"></div><p style="text-align:center; color:#fbc02d;">已選擇: <span id="selected-names">無</span></p>';
             const grid = document.getElementById('player-selection');
             
-            getOtherPlayers(state.players[state.currentNightPlayerIndex].id).forEach(player => {
+            // 選擇其他玩家
+            const otherPlayers = state.players.filter(p => p.id !== player.id);
+            otherPlayers.forEach(target => {
                 const btn = document.createElement('button');
                 btn.className = 'select-btn';
-                btn.textContent = player.name;
-                btn.onclick = () => selectMultiTarget(player, btn, 2);
+                btn.textContent = target.name;
+                btn.onclick = () => selectMultiTargetForRole(target, btn, 2, '搗蛋鬼');
                 grid.appendChild(btn);
             });
+            
+            // 儲存搗蛋鬼玩家
+            state.actionContext = { troublemakerPlayer: player };
         }
 
-        function showDrunkSelection() {
+        // 處理化身幽靈行動
+        function handleDoppelgangerAction(player) {
             const panel = document.getElementById('action-panel');
             const title = document.getElementById('action-title');
             const area = document.getElementById('selection-area');
+            const actionsDiv = document.getElementById('night-actions-container');
             
             panel.style.display = 'block';
+            actionsDiv.style.display = 'none';
+            
+            title.textContent = '化身幽靈：選擇一名玩家複製其身份';
+            
+            area.innerHTML = '<div class="select-grid" id="player-selection"></div>';
+            const grid = document.getElementById('player-selection');
+            
+            // 選擇其他玩家
+            const otherPlayers = state.players.filter(p => p.id !== player.id);
+            otherPlayers.forEach(target => {
+                const btn = document.createElement('button');
+                btn.className = 'select-btn';
+                btn.textContent = target.name;
+                btn.onclick = () => selectTargetForRole(target, btn, '化身幽靈');
+                grid.appendChild(btn);
+            });
+            
+            // 儲存化身幽靈玩家
+            state.actionContext = { doppelgangerPlayer: player };
+        }
+
+        // 處理守夜人行動
+        function handleWatchmanAction(player) {
+            const panel = document.getElementById('action-panel');
+            const title = document.getElementById('action-title');
+            const area = document.getElementById('selection-area');
+            const actionsDiv = document.getElementById('night-actions-container');
+            
+            panel.style.display = 'block';
+            actionsDiv.style.display = 'none';
+            
+            title.textContent = '守夜人：選擇一名玩家查看';
+            
+            area.innerHTML = '<div class="select-grid" id="player-selection"></div>';
+            const grid = document.getElementById('player-selection');
+            
+            // 選擇其他玩家
+            const otherPlayers = state.players.filter(p => p.id !== player.id);
+            otherPlayers.forEach(target => {
+                const btn = document.createElement('button');
+                btn.className = 'select-btn';
+                btn.textContent = target.name;
+                btn.onclick = () => selectTargetForRole(target, btn, '守夜人');
+                grid.appendChild(btn);
+            });
+            
+            // 儲存守夜人玩家
+            state.actionContext = { watchmanPlayer: player };
+        }
+
+        // 處理酒鬼行動
+        function handleDrunkAction(player) {
+            const panel = document.getElementById('action-panel');
+            const title = document.getElementById('action-title');
+            const area = document.getElementById('selection-area');
+            const actionsDiv = document.getElementById('night-actions-container');
+            
+            panel.style.display = 'block';
+            actionsDiv.style.display = 'none';
+            
             title.textContent = '酒鬼：選擇一張中心牌交換';
             
             area.innerHTML = '<div class="select-grid" id="center-selection"></div>';
@@ -1033,20 +1195,15 @@
                 const btn = document.createElement('button');
                 btn.className = 'select-btn';
                 btn.textContent = `中心牌 ${index + 1}`;
-                btn.onclick = () => selectTarget(card, btn);
+                btn.onclick = () => selectTargetForRole(card, btn, '酒鬼');
                 grid.appendChild(btn);
             });
+            
+            // 儲存酒鬼玩家
+            state.actionContext = { drunkPlayer: player };
         }
 
-        function showInsomniacResult(player) {
-            const panel = document.getElementById('action-panel');
-            const title = document.getElementById('action-title');
-            const area = document.getElementById('selection-area');
-            
-            panel.style.display = 'block';
-            title.textContent = '失眠者：查看自己的身份';
-            area.innerHTML = `<p style="font-size: 1.4em; color: #fbc02d;">你目前是: ${player.currentRole}</p>`;
-        }
+        // ==================== 通用行動函式 ====================
 
         function showDefaultAction() {
             const panel = document.getElementById('action-panel');
@@ -1058,8 +1215,8 @@
             area.innerHTML = '<p style="color: #ccc;">此角色沒有需要選擇的行動</p>';
         }
 
-        function selectTarget(target, btnElement) {
-            // Clear previous selection for single-target actions
+        function selectTargetForRole(target, btnElement, role) {
+            // Clear previous selection
             state.selectedTargets = [target];
             
             // Update visual selection
@@ -1068,7 +1225,7 @@
             if (btnElement) btnElement.classList.add('selected');
         }
 
-        function selectMultiTarget(target, btnElement, maxTargets) {
+        function selectMultiTargetForRole(target, btnElement, maxTargets, role) {
             // Check if already selected
             const index = state.selectedTargets.findIndex(t => t.id === target.id);
             
@@ -1092,55 +1249,63 @@
             }
         }
 
+        // 執行行動（通用）
         function executeAction() {
-            const currentPlayer = state.players[state.currentNightPlayerIndex];
-            const role = currentPlayer.currentRole;
             const resultDiv = document.getElementById('action-result');
             const contentDiv = document.getElementById('result-content');
             
             resultDiv.style.display = 'block';
             
+            const currentRole = ROLE_NIGHT_ORDER[state.currentRoleIndex];
             let result = '';
-            const target = state.selectedTargets[0];
             
-            switch (role) {
+            switch (currentRole) {
+                case '化身幽靈':
+                    const doppelgangerTarget = state.selectedTargets[0];
+                    if (doppelgangerTarget) {
+                        result = `化身幽靈複製了 ${doppelgangerTarget.name} 的身份: ${doppelgangerTarget.currentRole}`;
+                    }
+                    break;
+                    
                 case '狼人':
-                    if (target && state.centerCards.includes(target)) {
-                        const cardIndex = state.centerCards.findIndex(c => c.id === target.id);
-                        result = `獨狼查看中心牌 ${cardIndex + 1}: ${target.role} (${getRoleCamp(target.role)}陣營)`;
+                    const wolfTarget = state.selectedTargets[0];
+                    if (wolfTarget && state.centerCards.includes(wolfTarget)) {
+                        const cardIndex = state.centerCards.findIndex(c => c.id === wolfTarget.id);
+                        result = `獨狼查看中心牌 ${cardIndex + 1}: ${wolfTarget.role} (${getRoleCamp(wolfTarget.role)}陣營)`;
                     }
                     break;
                     
-                case '爪牙':
-                    const werewolves = state.players.filter(p => p.currentRole === '狼人');
-                    if (werewolves.length > 0) {
-                        result = `爪牙已知狼人位置`;
-                    } else {
-                        result = `場上沒有狼人！任何1人死亡爪牙即勝！`;
+                case '守夜人':
+                    const watchmanTarget = state.selectedTargets[0];
+                    if (watchmanTarget) {
+                        if (watchmanTarget.currentRole === '守夜人') {
+                            result = `${watchmanTarget.name} 也是守夜人`;
+                        } else {
+                            result = `${watchmanTarget.name}: ${watchmanTarget.currentRole} (${getRoleCamp(watchmanTarget.currentRole)}陣營)`;
+                        }
                     }
-                    break;
-                    
-                case '失眠者':
-                    result = `失眠者查看自己，你是: ${currentPlayer.currentRole}`;
                     break;
                     
                 case '先知':
-                    if (target) {
-                        if (state.centerCards.includes(target)) {
-                            const cardIndex = state.centerCards.findIndex(c => c.id === target.id);
-                            result = `中心牌 ${cardIndex + 1}: ${target.role} (${getRoleCamp(target.role)}陣營)`;
+                    const prophetTarget = state.selectedTargets[0];
+                    if (prophetTarget) {
+                        if (state.centerCards.includes(prophetTarget)) {
+                            const cardIndex = state.centerCards.findIndex(c => c.id === prophetTarget.id);
+                            result = `中心牌 ${cardIndex + 1}: ${prophetTarget.role} (${getRoleCamp(prophetTarget.role)}陣營)`;
                         } else {
-                            result = `${target.name}: ${target.currentRole} (${getRoleCamp(target.currentRole)}陣營)`;
+                            result = `${prophetTarget.name}: ${prophetTarget.currentRole} (${getRoleCamp(prophetTarget.currentRole)}陣營)`;
                         }
                     }
                     break;
                     
                 case '強盜':
-                    if (target) {
+                    const robberTarget = state.selectedTargets[0];
+                    if (robberTarget) {
+                        const currentPlayer = state.actionContext.robberPlayer;
                         const tempRole = currentPlayer.currentRole;
-                        currentPlayer.currentRole = target.currentRole;
-                        target.currentRole = tempRole;
-                        result = `與 ${target.name} 交換身份，你現在是: ${currentPlayer.currentRole}`;
+                        currentPlayer.currentRole = robberTarget.currentRole;
+                        robberTarget.currentRole = tempRole;
+                        result = `與 ${robberTarget.name} 交換身份，你現在是: ${currentPlayer.currentRole}`;
                     }
                     break;
                     
@@ -1158,34 +1323,66 @@
                     break;
                     
                 case '酒鬼':
-                    if (target) {
-                        const cardIndex = state.centerCards.findIndex(c => c.id === target.id);
+                    const drunkTarget = state.selectedTargets[0];
+                    if (drunkTarget) {
+                        const cardIndex = state.centerCards.findIndex(c => c.id === drunkTarget.id);
                         result = `盲換中心牌 ${cardIndex + 1}，隨機得到一張牌`;
                     }
-                    break;
-                    
-                default:
-                    result = `${role}: 沒有特殊行動`;
                     break;
             }
             
             contentDiv.textContent = result;
-            state.nightResults[currentPlayer.id] = result;
-            currentPlayer.skillUsed = true;
             
-            // Show next button
+            // 記錄行動（只記錄擁有該角色的玩家）
+            const playersWithRole = state.players.filter(p => p.currentRole === currentRole && p.skillUsed === false);
+            playersWithRole.forEach(p => {
+                state.nightResults[p.id] = result;
+                p.skillUsed = true;
+            });
+            
+            // 顯示下一角色按鈕
             const nextBtn = document.querySelector('#night-phase .config-btn.green');
             nextBtn.style.display = 'inline-block';
+            
+            // 隱藏行動按鈕
+            document.getElementById('night-actions-container').style.display = 'none';
         }
 
+        // 新增：記錄角色行動（統一處理）
+        function recordRoleAction(role, result, players) {
+            const resultDiv = document.getElementById('action-result');
+            const contentDiv = document.getElementById('result-content');
+            
+            resultDiv.style.display = 'block';
+            contentDiv.textContent = result;
+            
+            // 記錄所有擁有該角色的玩家
+            players.forEach(p => {
+                state.nightResults[p.id] = result;
+                p.skillUsed = true;
+            });
+            
+            // 顯示下一角色按鈕
+            const nextBtn = document.querySelector('#night-phase .config-btn.green');
+            nextBtn.style.display = 'inline-block';
+            
+            // 隱藏行動按鈕
+            document.getElementById('night-actions-container').style.display = 'none';
+        }
+
+        // ==================== 流程控制函式 ====================
+
         function nextNightAction() {
-            // Hide action results, show action buttons again
+            // 增加角色索引
+            state.currentRoleIndex++;
+            
+            // 隱藏結果，顯示行動按鈕
             document.getElementById('night-actions-container').style.display = 'flex';
             document.getElementById('action-panel').style.display = 'none';
             document.getElementById('action-result').style.display = 'none';
             
-            state.currentNightPlayerIndex++;
-            processNextNightPlayer();
+            // 處理下一個角色
+            processNextNightAction();
         }
 
         function endNightPhase() {

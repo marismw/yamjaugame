@@ -1289,7 +1289,8 @@
                 case '先知':
                     const prophetTarget = state.selectedTargets[0];
                     if (prophetTarget) {
-                        if (state.centerCards.includes(prophetTarget)) {
+                        // Check if it's a center card by looking for 'c' prefix in id
+                        if (prophetTarget.id && prophetTarget.id.startsWith('c')) {
                             const cardIndex = state.centerCards.findIndex(c => c.id === prophetTarget.id);
                             result = `中心牌 ${cardIndex + 1}: ${prophetTarget.role} (${getRoleCamp(prophetTarget.role)}陣營)`;
                         } else {
